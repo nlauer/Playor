@@ -1,0 +1,26 @@
+//
+//  NLYoutubeLinksFactory.h
+//  Noctis
+//
+//  Created by Nick Lauer on 12-07-22.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "NLFacebookManager.h"
+
+@protocol YoutubeLinksDelegate <NSObject>
+- (void)receiveYoutubeLinks:(NSArray *)links;
+@end
+
+@interface NLYoutubeLinksFactory : NSObject <FBRequestDelegate, NSURLConnectionDataDelegate>
+
+@property (weak, nonatomic) id <YoutubeLinksDelegate> youtubeLinksDelegate;
+@property (strong, nonatomic) NSMutableArray *youtubeLinksArray;
+@property (strong, nonatomic) NSMutableData *data;
+
++ (NLYoutubeLinksFactory *)sharedInstance;
+
+- (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate;
+
+@end

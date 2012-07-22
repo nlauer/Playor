@@ -19,6 +19,8 @@
 		856AF8E415BC616100529F5C /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E115BC616100529F5C /* FXImageView.m */; };
 		856AF8E515BC616100529F5C /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E315BC616100529F5C /* UIImage+FX.m */; };
 		856AF8E815BC7CD100529F5C /* NLFriendsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */; };
+		856AF8EB15BC8E5200529F5C /* NLYoutubeLinksFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8EA15BC8E5200529F5C /* NLYoutubeLinksFactory.m */; };
+		856AF8EE15BC8EB700529F5C /* NLYoutubeVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8ED15BC8EB700529F5C /* NLYoutubeVideo.m */; };
 		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 85D9419C15BB98B1009EF609 /* FBDialog.bundle */; };
 		85D941AB15BB9EF8009EF609 /* NLFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */; };
@@ -51,6 +53,10 @@
 		856AF8E315BC616100529F5C /* UIImage+FX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+FX.m"; path = "FXImageView/UIImage+FX.m"; sourceTree = "<group>"; };
 		856AF8E615BC7CD100529F5C /* NLFriendsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFriendsDetailViewController.h; sourceTree = "<group>"; };
 		856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFriendsDetailViewController.m; sourceTree = "<group>"; };
+		856AF8E915BC8E5200529F5C /* NLYoutubeLinksFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeLinksFactory.h; sourceTree = "<group>"; };
+		856AF8EA15BC8E5200529F5C /* NLYoutubeLinksFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeLinksFactory.m; sourceTree = "<group>"; };
+		856AF8EC15BC8EB700529F5C /* NLYoutubeVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeVideo.h; sourceTree = "<group>"; };
+		856AF8ED15BC8EB700529F5C /* NLYoutubeVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeVideo.m; sourceTree = "<group>"; };
 		85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfacebook_ios_sdk.a; path = "facebook-ios-sdk/libfacebook_ios_sdk.a"; sourceTree = "<group>"; };
 		85D9419A15BB98B1009EF609 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = "facebook-ios-sdk/Facebook.h"; sourceTree = "<group>"; };
 		85D9419B15BB98B1009EF609 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBConnect.h; path = "facebook-ios-sdk/FBConnect.h"; sourceTree = "<group>"; };
@@ -159,6 +165,8 @@
 			children = (
 				85D941C115BBAACE009EF609 /* NLFacebookFriend.h */,
 				85D941C215BBAACE009EF609 /* NLFacebookFriend.m */,
+				856AF8EC15BC8EB700529F5C /* NLYoutubeVideo.h */,
+				856AF8ED15BC8EB700529F5C /* NLYoutubeVideo.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -254,6 +262,8 @@
 			children = (
 				85D941C415BBAC6C009EF609 /* NLFacebookFriendFactory.h */,
 				85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */,
+				856AF8E915BC8E5200529F5C /* NLYoutubeLinksFactory.h */,
+				856AF8EA15BC8E5200529F5C /* NLYoutubeLinksFactory.m */,
 			);
 			name = Factories;
 			sourceTree = "<group>";
@@ -333,6 +343,8 @@
 				856AF8E415BC616100529F5C /* FXImageView.m in Sources */,
 				856AF8E515BC616100529F5C /* UIImage+FX.m in Sources */,
 				856AF8E815BC7CD100529F5C /* NLFriendsDetailViewController.m in Sources */,
+				856AF8EB15BC8E5200529F5C /* NLYoutubeLinksFactory.m in Sources */,
+				856AF8EE15BC8EB700529F5C /* NLYoutubeVideo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

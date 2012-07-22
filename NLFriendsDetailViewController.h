@@ -8,8 +8,10 @@
 
 #import "NLViewController.h"
 #import "NLFacebookFriend.h"
+#import "NLYoutubeLinksFactory.h"
+#import "iCarousel.h"
 
-@interface NLFriendsDetailViewController : NLViewController
+@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, iCarouselDataSource, iCarouselDelegate>
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend;
 
