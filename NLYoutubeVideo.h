@@ -11,6 +11,7 @@
 @interface NLYoutubeVideo : NSObject
 
 @property (strong, nonatomic) NSURL *videoURL;
+@property (strong, nonatomic) NSURL *thumbnailURL;
 @property (strong, nonatomic) NSString *title;
 
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary;

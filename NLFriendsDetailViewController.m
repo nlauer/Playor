@@ -8,17 +8,21 @@
 
 #import "NLFriendsDetailViewController.h"
 
+#import "NLYoutubeVideo.h"
+#import "FXImageView.h"
+
 @interface NLFriendsDetailViewController ()
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NSArray *youtubeLinksArray;
+@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLFriendsDetailViewController {
     UIActivityIndicatorView *activityIndicator_;
 }
 @synthesize facebookFriend = _facebookFriend;
-@synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray;
+@synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView;
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
@@ -35,7 +39,7 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 164, self.view.frame.size.width, 120)];
+    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44, self.view.frame.size.width, 150)];
     [carouselView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
     [carouselView setTag:1337];
     [self.view addSubview:carouselView];
@@ -50,7 +54,10 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
+    
+    _videoWebView = nil;
+    activityIndicator_ = nil;
+    _iCarousel = nil;
 }
 
 - (void)setupICarousel
@@ -58,7 +65,7 @@
     if (!_iCarousel) {
         UIView *carouselView = [self.view viewWithTag:1337];
         
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 100)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 130)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -74,10 +81,27 @@
 - (void)receiveYoutubeLinks:(NSArray *)links
 {
     if ([links count] == 0) {
-        NSLog(@"%@ has no shared youtube music links", [_facebookFriend name]);
+        UILabel *noContentLabel = [[UILabel alloc] init];
+        [noContentLabel setTextColor:[UIColor whiteColor]];
+        [noContentLabel setText:@"No content available"];
+        [noContentLabel sizeToFit];
+        [noContentLabel setBackgroundColor:[UIColor clearColor]];
+        
+        UIView *carouselView = [self.view viewWithTag:1337];
+        [noContentLabel setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
+        [carouselView addSubview:noContentLabel];
+        
+        [activityIndicator_ stopAnimating];
+        [activityIndicator_ setHidden:YES];
+        return;
     }
     self.youtubeLinksArray = links;
     [self setupICarousel];
+    
+    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 195)];
+    [_videoWebView setBackgroundColor:[UIColor clearColor]];
+    [_videoWebView.scrollView setScrollEnabled:NO];
+    [self.view addSubview:_videoWebView];
     
     [activityIndicator_ stopAnimating];
     [activityIndicator_ setHidden:YES];
@@ -94,14 +118,24 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *titleLabel = nil;
+    FXImageView *thumbnailImageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 100)];
-        [view setBackgroundColor:[UIColor greenColor]];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)];
+        [view setBackgroundColor:[UIColor blackColor]];
+        
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height - 30)];
+        [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [thumbnailImageView setTag:2];
+        [thumbnailImageView setAsynchronous:YES];
+        [thumbnailImageView setReflectionAlpha:0.6];
+        [thumbnailImageView setReflectionGap:0];
+        [thumbnailImageView setReflectionScale:0.4];
+        [view addSubview:thumbnailImageView];
         
         titleLabel = [[UILabel alloc] init];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor blackColor]];
+        [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
@@ -110,11 +144,14 @@
         [view addSubview:titleLabel];
     } else {
         titleLabel = (UILabel *)[view viewWithTag:1];
+        thumbnailImageView = (FXImageView *)[view viewWithTag:2];
     }
+    
+    [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:index] thumbnailURL]];
     
     [titleLabel setText:[[_youtubeLinksArray objectAtIndex:index] title]];
     [titleLabel sizeToFit];
-    [titleLabel setFrame:CGRectMake(10, 10, view.frame.size.width - 20, view.frame.size.height)];
+    [titleLabel setFrame:CGRectMake(10, 100, view.frame.size.width - 20, view.frame.size.height - 100)];
     
     return view;
 }
@@ -138,6 +175,13 @@
             return value;
         }
     }
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+    [_videoWebView loadRequest:nil];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[[_youtubeLinksArray objectAtIndex:carousel.currentItemIndex] videoURL]];
+    [_videoWebView loadRequest:request];
 }
 
 @end

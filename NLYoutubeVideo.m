@@ -9,7 +9,7 @@
 #import "NLYoutubeVideo.h"
 
 @implementation NLYoutubeVideo
-@synthesize videoURL = _videoURL, title = _title;
+@synthesize videoURL = _videoURL, thumbnailURL = _thumbnailURL, title = _title;
 
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary
 {
@@ -17,6 +17,7 @@
     if (self) {
         self.title = [self getVideoTitleFromDictionary:dataDictionary];
         self.videoURL = [self getVideoURLFromDictionary:dataDictionary];
+        self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
     }
     
     return self;
@@ -41,9 +42,15 @@
 
 - (NSURL *)getVideoURLFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *videoID = [[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
-    NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", videoID]];
+    NSString *videoString = [[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
+    NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", videoString]];
     return videoURL;
+}
+
+- (NSURL *)getVideoThumnailURLFromDictionary:(NSDictionary *)dataDictionary
+{
+    NSString *thumbnailString = [[[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
+    return [NSURL URLWithString:thumbnailString];
 }
 
 @end
