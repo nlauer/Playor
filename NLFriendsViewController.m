@@ -7,9 +7,11 @@
 //
 
 #import "NLFriendsViewController.h"
+
 #import "NLFacebookManager.h"
 #import "NLFBLoginViewController.h"
 #import "NLFacebookFriend.h"
+#import "FXImageView.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -59,6 +61,11 @@
 
 - (void)sliderValueChanged:(UISlider *)slider
 {
+    //TODO
+}
+
+- (void)sliderTouchedUp:(UISlider *)slider
+{
     [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
 }
 
@@ -80,16 +87,19 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *nameLabel = nil;
-    UIImageView *profileImageView = nil;
+    FXImageView *profileImageView = nil;
     
     if (view == nil) {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
-        [view setBackgroundColor:[UIColor greenColor]];
+        [view setBackgroundColor:[UIColor clearColor]];
         
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:view.frame];
+        FXImageView *imageView = [[FXImageView alloc] initWithFrame:view.frame];
         [imageView setContentMode:UIViewContentModeScaleAspectFill];
-        [imageView setClipsToBounds:YES];
         [imageView setTag:2];
+        [imageView setAsynchronous:YES];
+        [imageView setReflectionAlpha:0.3];
+        [imageView setReflectionGap:0];
+        [imageView setReflectionScale:0.4];
         [view addSubview:imageView];
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 170, view.frame.size.width, 30)];
@@ -101,13 +111,14 @@
         
     } else {
         nameLabel = (UILabel *)[view viewWithTag:1];
-        profileImageView = (UIImageView *)[view viewWithTag:2];
+        profileImageView = (FXImageView *)[view viewWithTag:2];
     }
     
     [nameLabel setText:[self friendNameForIndex:index]];
-    [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height - 30)];
+    [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height + 20)];
     
     [profileImageView setImage:nil];
+    [profileImageView setImageWithContentsOfURL:[[self.facebookFriends objectAtIndex:index] profilePictureURL]];
     
     return view;
 }
@@ -147,9 +158,9 @@
 - (void)loadPicturesForVisibleViews
 {
     for (UIView *view in [_iCarousel visibleItemViews]) {
-        UIImageView *imageView = (UIImageView *)[view viewWithTag:2];
-        [imageView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[[self.facebookFriends objectAtIndex:[_iCarousel indexOfItemView:view]] profilePictureURL]]]];
-    }
+        FXImageView *imageView = (FXImageView *)[view viewWithTag:2];
+        [imageView setImageWithContentsOfURL:[[self.facebookFriends objectAtIndex:[_iCarousel indexOfItemView:view]] profilePictureURL]];
+    }   
 }
 
 #pragma mark -
@@ -175,6 +186,7 @@
         [facebookFriendSlider setMinimumValue:0];
         [facebookFriendSlider setMaximumValue:[_facebookFriends count]];
         [facebookFriendSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [facebookFriendSlider addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
         [facebookFriendSlider setTag:1337];
         [self.view addSubview:facebookFriendSlider];
     } else {
