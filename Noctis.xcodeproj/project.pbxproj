@@ -14,7 +14,8 @@
 		853FEB2415BB8561002A1EB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2315BB8561002A1EB5 /* main.m */; };
 		853FEB2815BB8561002A1EB5 /* NLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */; };
 		853FEB2B15BB8561002A1EB5 /* NLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2A15BB8561002A1EB5 /* NLViewController.m */; };
-		853FEB2E15BB8561002A1EB5 /* NLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 853FEB2C15BB8561002A1EB5 /* NLViewController.xib */; };
+		853FEB4C15BB8AA1002A1EB5 /* NLFBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB4B15BB8AA1002A1EB5 /* NLFBLoginViewController.m */; };
+		853FEB5015BB8FF6002A1EB5 /* NLFacebookManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB4F15BB8FF6002A1EB5 /* NLFacebookManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,11 +27,14 @@
 		853FEB2115BB8561002A1EB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		853FEB2315BB8561002A1EB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		853FEB2515BB8561002A1EB5 /* Noctis-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Noctis-Prefix.pch"; sourceTree = "<group>"; };
-		853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NLAppDelegate.h; sourceTree = "<group>"; };
-		853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NLAppDelegate.m; sourceTree = "<group>"; };
-		853FEB2915BB8561002A1EB5 /* NLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NLViewController.h; sourceTree = "<group>"; };
-		853FEB2A15BB8561002A1EB5 /* NLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NLViewController.m; sourceTree = "<group>"; };
-		853FEB2D15BB8561002A1EB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NLViewController.xib; sourceTree = "<group>"; };
+		853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NLAppDelegate.h; path = Noctis/NLAppDelegate.h; sourceTree = "<group>"; };
+		853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NLAppDelegate.m; path = Noctis/NLAppDelegate.m; sourceTree = "<group>"; };
+		853FEB2915BB8561002A1EB5 /* NLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NLViewController.h; path = Noctis/NLViewController.h; sourceTree = "<group>"; };
+		853FEB2A15BB8561002A1EB5 /* NLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NLViewController.m; path = Noctis/NLViewController.m; sourceTree = "<group>"; };
+		853FEB4A15BB8AA1002A1EB5 /* NLFBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NLFBLoginViewController.h; path = Noctis/NLFBLoginViewController.h; sourceTree = "<group>"; };
+		853FEB4B15BB8AA1002A1EB5 /* NLFBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NLFBLoginViewController.m; path = Noctis/NLFBLoginViewController.m; sourceTree = "<group>"; };
+		853FEB4E15BB8FF6002A1EB5 /* NLFacebookManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NLFacebookManager.h; path = Noctis/NLFacebookManager.h; sourceTree = "<group>"; };
+		853FEB4F15BB8FF6002A1EB5 /* NLFacebookManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NLFacebookManager.m; path = Noctis/NLFacebookManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +54,16 @@
 		853FEB0815BB8560002A1EB5 = {
 			isa = PBXGroup;
 			children = (
-				853FEB1D15BB8561002A1EB5 /* Noctis */,
+				853FEB4D15BB8FE1002A1EB5 /* Managers */,
+				853FEB3715BB88D5002A1EB5 /* Categories */,
+				853FEB3615BB88D0002A1EB5 /* Views */,
+				853FEB3515BB88CB002A1EB5 /* Models */,
+				853FEB3415BB88BD002A1EB5 /* View Controllers */,
+				853FEB2915BB8561002A1EB5 /* NLViewController.h */,
+				853FEB2A15BB8561002A1EB5 /* NLViewController.m */,
+				853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */,
+				853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */,
+				853FEB1E15BB8561002A1EB5 /* Supporting Files */,
 				853FEB1615BB8561002A1EB5 /* Frameworks */,
 				853FEB1415BB8561002A1EB5 /* Products */,
 			);
@@ -74,19 +87,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		853FEB1D15BB8561002A1EB5 /* Noctis */ = {
-			isa = PBXGroup;
-			children = (
-				853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */,
-				853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */,
-				853FEB2915BB8561002A1EB5 /* NLViewController.h */,
-				853FEB2A15BB8561002A1EB5 /* NLViewController.m */,
-				853FEB2C15BB8561002A1EB5 /* NLViewController.xib */,
-				853FEB1E15BB8561002A1EB5 /* Supporting Files */,
-			);
-			path = Noctis;
-			sourceTree = "<group>";
-		};
 		853FEB1E15BB8561002A1EB5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +96,46 @@
 				853FEB2515BB8561002A1EB5 /* Noctis-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = Noctis;
+			sourceTree = "<group>";
+		};
+		853FEB3415BB88BD002A1EB5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB4A15BB8AA1002A1EB5 /* NLFBLoginViewController.h */,
+				853FEB4B15BB8AA1002A1EB5 /* NLFBLoginViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		853FEB3515BB88CB002A1EB5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		853FEB3615BB88D0002A1EB5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		853FEB3715BB88D5002A1EB5 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		853FEB4D15BB8FE1002A1EB5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB4E15BB8FF6002A1EB5 /* NLFacebookManager.h */,
+				853FEB4F15BB8FF6002A1EB5 /* NLFacebookManager.m */,
+			);
+			name = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,7 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				853FEB2215BB8561002A1EB5 /* InfoPlist.strings in Resources */,
-				853FEB2E15BB8561002A1EB5 /* NLViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +203,8 @@
 				853FEB2415BB8561002A1EB5 /* main.m in Sources */,
 				853FEB2815BB8561002A1EB5 /* NLAppDelegate.m in Sources */,
 				853FEB2B15BB8561002A1EB5 /* NLViewController.m in Sources */,
+				853FEB4C15BB8AA1002A1EB5 /* NLFBLoginViewController.m in Sources */,
+				853FEB5015BB8FF6002A1EB5 /* NLFacebookManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,14 +217,6 @@
 				853FEB2115BB8561002A1EB5 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		853FEB2C15BB8561002A1EB5 /* NLViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				853FEB2D15BB8561002A1EB5 /* en */,
-			);
-			name = NLViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

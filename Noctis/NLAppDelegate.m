@@ -8,19 +8,21 @@
 
 #import "NLAppDelegate.h"
 
-#import "NLViewController.h"
+#import "NLFBLoginViewController.h"
 
 @implementation NLAppDelegate
 
 @synthesize window = _window;
-@synthesize viewController = _viewController;
+@synthesize navigationController = _navigationController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[NLViewController alloc] initWithNibName:@"NLViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+    NLFBLoginViewController *fbLoginViewController = [[NLFBLoginViewController alloc] init];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:fbLoginViewController];
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
 }

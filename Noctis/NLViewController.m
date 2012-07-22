@@ -17,7 +17,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	
+    [self.view setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:1.0]];
 }
 
 - (void)viewDidUnload
@@ -28,7 +29,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 @end
