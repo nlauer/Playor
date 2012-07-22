@@ -19,6 +19,10 @@
 		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 85D9419C15BB98B1009EF609 /* FBDialog.bundle */; };
 		85D941AB15BB9EF8009EF609 /* NLFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */; };
+		85D941B915BBA535009EF609 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941B815BBA535009EF609 /* iCarousel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D941BA15BBA5A1009EF609 /* QuartzCore.framework */; };
+		85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C215BBAACE009EF609 /* NLFacebookFriend.m */; };
+		85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +59,13 @@
 		85D941A715BB98B1009EF609 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBJsonWriter.h; path = "facebook-ios-sdk/SBJsonWriter.h"; sourceTree = "<group>"; };
 		85D941A915BB9EF8009EF609 /* NLFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFriendsViewController.h; sourceTree = "<group>"; };
 		85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFriendsViewController.m; sourceTree = "<group>"; };
+		85D941B715BBA535009EF609 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iCarousel.h; path = iCarousel/iCarousel.h; sourceTree = "<group>"; };
+		85D941B815BBA535009EF609 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iCarousel.m; path = iCarousel/iCarousel.m; sourceTree = "<group>"; };
+		85D941BA15BBA5A1009EF609 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		85D941C115BBAACE009EF609 /* NLFacebookFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFacebookFriend.h; sourceTree = "<group>"; };
+		85D941C215BBAACE009EF609 /* NLFacebookFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriend.m; sourceTree = "<group>"; };
+		85D941C415BBAC6C009EF609 /* NLFacebookFriendFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFacebookFriendFactory.h; sourceTree = "<group>"; };
+		85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriendFactory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */,
 				85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */,
 				853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */,
 				853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */,
@@ -79,6 +91,7 @@
 				853FEB4D15BB8FE1002A1EB5 /* Managers */,
 				853FEB3715BB88D5002A1EB5 /* Categories */,
 				853FEB3615BB88D0002A1EB5 /* Views */,
+				85D941C015BBAA76009EF609 /* Factories */,
 				853FEB3515BB88CB002A1EB5 /* Models */,
 				853FEB3415BB88BD002A1EB5 /* View Controllers */,
 				853FEB5415BB92B7002A1EB5 /* Base Classes */,
@@ -99,6 +112,7 @@
 		853FEB1615BB8561002A1EB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				85D941BA15BBA5A1009EF609 /* QuartzCore.framework */,
 				853FEB1715BB8561002A1EB5 /* UIKit.framework */,
 				853FEB1915BB8561002A1EB5 /* Foundation.framework */,
 				853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */,
@@ -132,6 +146,8 @@
 		853FEB3515BB88CB002A1EB5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				85D941C115BBAACE009EF609 /* NLFacebookFriend.h */,
+				85D941C215BBAACE009EF609 /* NLFacebookFriend.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -173,6 +189,7 @@
 		85D9419215BB97F7009EF609 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				85D941B615BBA526009EF609 /* iCarousel */,
 				85D9419915BB989C009EF609 /* facebook-ios-sdk */,
 			);
 			name = Libraries;
@@ -198,6 +215,24 @@
 				85D941A715BB98B1009EF609 /* SBJsonWriter.h */,
 			);
 			name = "facebook-ios-sdk";
+			sourceTree = "<group>";
+		};
+		85D941B615BBA526009EF609 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				85D941B715BBA535009EF609 /* iCarousel.h */,
+				85D941B815BBA535009EF609 /* iCarousel.m */,
+			);
+			name = iCarousel;
+			sourceTree = "<group>";
+		};
+		85D941C015BBAA76009EF609 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				85D941C415BBAC6C009EF609 /* NLFacebookFriendFactory.h */,
+				85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */,
+			);
+			name = Factories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +304,9 @@
 				853FEB7115BB9588002A1EB5 /* NLFacebookManager.m in Sources */,
 				853FEB7415BB9592002A1EB5 /* NLFBLoginViewController.m in Sources */,
 				85D941AB15BB9EF8009EF609 /* NLFriendsViewController.m in Sources */,
+				85D941B915BBA535009EF609 /* iCarousel.m in Sources */,
+				85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */,
+				85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

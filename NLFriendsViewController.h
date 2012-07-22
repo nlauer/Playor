@@ -7,7 +7,9 @@
 //
 
 #import "NLViewController.h"
+#import "iCarousel.h"
+#import "NLFacebookFriendFactory.h"
 
-@interface NLFriendsViewController : NLViewController
+@interface NLFriendsViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, FacebookFriendDelegate>
 
 @end

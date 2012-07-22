@@ -16,7 +16,6 @@ typedef void (^FacebookBlockAfterLogin)();
 
 + (NLFacebookManager *)sharedInstance;
 
-- (BOOL)isSignedInWithFacebook;
 - (void)performBlockAfterFBLogin:(FacebookBlockAfterLogin)block;
 
 

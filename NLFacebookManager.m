@@ -32,7 +32,7 @@ static NLFacebookManager *sharedInstance = NULL;
 {
     self = [super init];
     if (self) {
-        _facebook = [[Facebook alloc] initWithAppId:MY_APP_ID andDelegate:self];
+        [self signInWithFacebook];
     }
     
     return self;
@@ -42,11 +42,12 @@ static NLFacebookManager *sharedInstance = NULL;
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     return ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]);
-    
 }
 
 - (void)signInWithFacebook
 {
+    _facebook = [[Facebook alloc] initWithAppId:MY_APP_ID andDelegate:self];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults objectForKey:@"FBAccessTokenKey"] 
         && [defaults objectForKey:@"FBExpirationDateKey"]) {
@@ -70,6 +71,7 @@ static NLFacebookManager *sharedInstance = NULL;
     }
 }
 
+#pragma mark -
 #pragma mark FBSessionDelegate
 - (void)fbDidLogin
 {
