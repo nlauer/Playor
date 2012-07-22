@@ -20,7 +20,7 @@
     self.title = @"Log In";
     
     UIView *loginExplanationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 80.0f)];
-    [loginExplanationView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
+    [loginExplanationView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
     [self.view addSubview:loginExplanationView];
     
     UILabel *loginExplanationLabel = [[UILabel alloc] init];

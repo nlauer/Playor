@@ -12,13 +12,17 @@
 #import "NLFBLoginViewController.h"
 #import "NLFacebookFriend.h"
 #import "FXImageView.h"
+#import "NLFriendsDetailViewController.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NSArray *facebookFriends;
 @end
 
-@implementation NLFriendsViewController
+@implementation NLFriendsViewController {
+    UISlider *slider_;
+    UILabel *sliderLabel_;
+}
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends;
 
 - (void)viewDidLoad
@@ -59,21 +63,57 @@
     return [((NLFacebookFriend *)[_facebookFriends objectAtIndex:index]) name];
 }
 
-- (void)sliderValueChanged:(UISlider *)slider
-{
-    //TODO
-}
-
-- (void)sliderTouchedUp:(UISlider *)slider
-{
-    [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
-}
-
 - (void)refreshFriendsList
 {
     [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
         [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
     }];
+}
+
+#pragma mark -
+#pragma mark Slider Methods
+
+- (void)updateSliderLabel
+{
+    [sliderLabel_ setText:[self friendNameForIndex:slider_.value]];;
+    [sliderLabel_ sizeToFit];
+    
+    float sliderRange = slider_.frame.size.width - slider_.currentThumbImage.size.width;
+    float sliderOrigin = slider_.frame.origin.x + (slider_.currentThumbImage.size.width / 2.0);
+    float sliderValueToPixels = (slider_.value/slider_.maximumValue * sliderRange) + sliderOrigin;
+    
+    if ((sliderValueToPixels + sliderLabel_.frame.size.width/2) > self.view.frame.size.width) {
+        sliderValueToPixels = floorf(self.view.frame.size.width - 10 - sliderLabel_.frame.size.width/2);
+    } else if ((sliderValueToPixels - sliderLabel_.frame.size.width/2) < 0) {
+        sliderValueToPixels = floorf(10 + sliderLabel_.frame.size.width/2);
+    }
+    
+    [sliderLabel_ setCenter:CGPointMake(sliderValueToPixels, slider_.frame.origin.y - 30)];
+}
+
+- (void)sliderValueChanged:(UISlider *)slider
+{
+    [self updateSliderLabel];
+}
+
+- (void)sliderTouchedDown:(UISlider *)slider
+{
+    if (!sliderLabel_) {
+        sliderLabel_ = [[UILabel alloc] init];
+        [sliderLabel_ setTextColor:[UIColor whiteColor]];
+        [sliderLabel_ setTextAlignment:UITextAlignmentCenter];
+        [sliderLabel_ setBackgroundColor:[UIColor clearColor]];
+        [self.view addSubview:sliderLabel_];
+    } else {
+        [sliderLabel_ setHidden:NO];
+    }
+    [self updateSliderLabel];
+}
+
+- (void)sliderTouchedUp:(UISlider *)slider
+{
+    [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
+    [sliderLabel_ setHidden:YES];
 }
 
 #pragma mark -
@@ -123,6 +163,12 @@
     return view;
 }
 
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+{
+    NLFriendsDetailViewController *friendsDetailViewController = [[NLFriendsDetailViewController alloc] initWithFacebookFriend:[_facebookFriends objectAtIndex:index]];
+    [self.navigationController pushViewController:friendsDetailViewController animated:YES];
+}
+
 - (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
     //customize carousel display
@@ -146,8 +192,7 @@
 
 - (void)carouselDidEndDecelerating:(iCarousel *)carousel
 {
-    UISlider *slider = (UISlider *)[self.view viewWithTag:1337];
-    [slider setValue:carousel.currentItemIndex animated:YES];
+    [slider_ setValue:carousel.currentItemIndex animated:YES];
 }
 
 -(void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
@@ -170,7 +215,7 @@
     self.facebookFriends = [friends sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
     
     if (!_iCarousel) {
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f, self.view.frame.size.width, 200)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f + 10.0, self.view.frame.size.width, 200)];
         [carousel setType:iCarouselTypeCoverFlow];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -181,17 +226,16 @@
         [_iCarousel reloadData];
     }
     
-    if (![self.view viewWithTag:1337]) {
-        UISlider *facebookFriendSlider = [[UISlider alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - 40, self.view.frame.size.width - 20, 20)];
-        [facebookFriendSlider setMinimumValue:0];
-        [facebookFriendSlider setMaximumValue:[_facebookFriends count]];
-        [facebookFriendSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-        [facebookFriendSlider addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
-        [facebookFriendSlider setTag:1337];
-        [self.view addSubview:facebookFriendSlider];
+    if (!slider_) {
+        slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
+        [slider_ setMinimumValue:0];
+        [slider_ setMaximumValue:([_facebookFriends count]-1)];
+        [slider_ addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
+        [slider_ addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
+        [self.view addSubview:slider_];
     } else {
-        UISlider *slider = (UISlider *)[self.view viewWithTag:1337];
-        [slider setMaximumValue:[_facebookFriends count]];
+        [slider_ setMaximumValue:([_facebookFriends count]-1)];
     }
 }
 

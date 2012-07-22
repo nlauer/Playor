@@ -45,7 +45,7 @@ static NLFacebookFriendFactory *sharedInstance = NULL;
     for (NSDictionary *friend in items) {
         NSNumber *fbid = [friend objectForKey:@"id"];
         NSString *name = [friend objectForKey:@"name"];
-        NSString *pictureURL = [[[[friend objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"] stringByReplacingOccurrencesOfString:@"_q" withString:@"_o"];
+        NSString *pictureURL = [[[[friend objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"] stringByReplacingOccurrencesOfString:@"_q.jpg" withString:@"_o.jpg"];
         
         NLFacebookFriend *facebookFriend = [[NLFacebookFriend alloc] initWithID:fbid name:name andPicture:[NSURL URLWithString:pictureURL]];
         [_friendsArray addObject:facebookFriend];

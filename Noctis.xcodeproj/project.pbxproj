@@ -18,6 +18,7 @@
 		853FEB7415BB9592002A1EB5 /* NLFBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB7315BB9592002A1EB5 /* NLFBLoginViewController.m */; };
 		856AF8E415BC616100529F5C /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E115BC616100529F5C /* FXImageView.m */; };
 		856AF8E515BC616100529F5C /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E315BC616100529F5C /* UIImage+FX.m */; };
+		856AF8E815BC7CD100529F5C /* NLFriendsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */; };
 		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 85D9419C15BB98B1009EF609 /* FBDialog.bundle */; };
 		85D941AB15BB9EF8009EF609 /* NLFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */; };
@@ -48,6 +49,8 @@
 		856AF8E115BC616100529F5C /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FXImageView.m; path = FXImageView/FXImageView.m; sourceTree = "<group>"; };
 		856AF8E215BC616100529F5C /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+FX.h"; path = "FXImageView/UIImage+FX.h"; sourceTree = "<group>"; };
 		856AF8E315BC616100529F5C /* UIImage+FX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+FX.m"; path = "FXImageView/UIImage+FX.m"; sourceTree = "<group>"; };
+		856AF8E615BC7CD100529F5C /* NLFriendsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFriendsDetailViewController.h; sourceTree = "<group>"; };
+		856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFriendsDetailViewController.m; sourceTree = "<group>"; };
 		85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfacebook_ios_sdk.a; path = "facebook-ios-sdk/libfacebook_ios_sdk.a"; sourceTree = "<group>"; };
 		85D9419A15BB98B1009EF609 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = "facebook-ios-sdk/Facebook.h"; sourceTree = "<group>"; };
 		85D9419B15BB98B1009EF609 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBConnect.h; path = "facebook-ios-sdk/FBConnect.h"; sourceTree = "<group>"; };
@@ -145,6 +148,8 @@
 				853FEB7315BB9592002A1EB5 /* NLFBLoginViewController.m */,
 				85D941A915BB9EF8009EF609 /* NLFriendsViewController.h */,
 				85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */,
+				856AF8E615BC7CD100529F5C /* NLFriendsDetailViewController.h */,
+				856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 				85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */,
 				856AF8E415BC616100529F5C /* FXImageView.m in Sources */,
 				856AF8E515BC616100529F5C /* UIImage+FX.m in Sources */,
+				856AF8E815BC7CD100529F5C /* NLFriendsDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
