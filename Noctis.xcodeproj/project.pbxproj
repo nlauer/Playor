@@ -1,0 +1,282 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1715BB8561002A1EB5 /* UIKit.framework */; };
+		853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1915BB8561002A1EB5 /* Foundation.framework */; };
+		853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */; };
+		853FEB2215BB8561002A1EB5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 853FEB2015BB8561002A1EB5 /* InfoPlist.strings */; };
+		853FEB2415BB8561002A1EB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2315BB8561002A1EB5 /* main.m */; };
+		853FEB2815BB8561002A1EB5 /* NLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */; };
+		853FEB2B15BB8561002A1EB5 /* NLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2A15BB8561002A1EB5 /* NLViewController.m */; };
+		853FEB2E15BB8561002A1EB5 /* NLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 853FEB2C15BB8561002A1EB5 /* NLViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		853FEB1315BB8561002A1EB5 /* Noctis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noctis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		853FEB1715BB8561002A1EB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		853FEB1915BB8561002A1EB5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		853FEB1F15BB8561002A1EB5 /* Noctis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Noctis-Info.plist"; sourceTree = "<group>"; };
+		853FEB2115BB8561002A1EB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		853FEB2315BB8561002A1EB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		853FEB2515BB8561002A1EB5 /* Noctis-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Noctis-Prefix.pch"; sourceTree = "<group>"; };
+		853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NLAppDelegate.h; sourceTree = "<group>"; };
+		853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NLAppDelegate.m; sourceTree = "<group>"; };
+		853FEB2915BB8561002A1EB5 /* NLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NLViewController.h; sourceTree = "<group>"; };
+		853FEB2A15BB8561002A1EB5 /* NLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NLViewController.m; sourceTree = "<group>"; };
+		853FEB2D15BB8561002A1EB5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NLViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		853FEB1015BB8561002A1EB5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */,
+				853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */,
+				853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		853FEB0815BB8560002A1EB5 = {
+			isa = PBXGroup;
+			children = (
+				853FEB1D15BB8561002A1EB5 /* Noctis */,
+				853FEB1615BB8561002A1EB5 /* Frameworks */,
+				853FEB1415BB8561002A1EB5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		853FEB1415BB8561002A1EB5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB1315BB8561002A1EB5 /* Noctis.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		853FEB1615BB8561002A1EB5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB1715BB8561002A1EB5 /* UIKit.framework */,
+				853FEB1915BB8561002A1EB5 /* Foundation.framework */,
+				853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		853FEB1D15BB8561002A1EB5 /* Noctis */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */,
+				853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */,
+				853FEB2915BB8561002A1EB5 /* NLViewController.h */,
+				853FEB2A15BB8561002A1EB5 /* NLViewController.m */,
+				853FEB2C15BB8561002A1EB5 /* NLViewController.xib */,
+				853FEB1E15BB8561002A1EB5 /* Supporting Files */,
+			);
+			path = Noctis;
+			sourceTree = "<group>";
+		};
+		853FEB1E15BB8561002A1EB5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				853FEB1F15BB8561002A1EB5 /* Noctis-Info.plist */,
+				853FEB2015BB8561002A1EB5 /* InfoPlist.strings */,
+				853FEB2315BB8561002A1EB5 /* main.m */,
+				853FEB2515BB8561002A1EB5 /* Noctis-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		853FEB1215BB8561002A1EB5 /* Noctis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853FEB3115BB8561002A1EB5 /* Build configuration list for PBXNativeTarget "Noctis" */;
+			buildPhases = (
+				853FEB0F15BB8561002A1EB5 /* Sources */,
+				853FEB1015BB8561002A1EB5 /* Frameworks */,
+				853FEB1115BB8561002A1EB5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Noctis;
+			productName = Noctis;
+			productReference = 853FEB1315BB8561002A1EB5 /* Noctis.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		853FEB0A15BB8560002A1EB5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = NL;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 853FEB0D15BB8560002A1EB5 /* Build configuration list for PBXProject "Noctis" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 853FEB0815BB8560002A1EB5;
+			productRefGroup = 853FEB1415BB8561002A1EB5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				853FEB1215BB8561002A1EB5 /* Noctis */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		853FEB1115BB8561002A1EB5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				853FEB2215BB8561002A1EB5 /* InfoPlist.strings in Resources */,
+				853FEB2E15BB8561002A1EB5 /* NLViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		853FEB0F15BB8561002A1EB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				853FEB2415BB8561002A1EB5 /* main.m in Sources */,
+				853FEB2815BB8561002A1EB5 /* NLAppDelegate.m in Sources */,
+				853FEB2B15BB8561002A1EB5 /* NLViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		853FEB2015BB8561002A1EB5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				853FEB2115BB8561002A1EB5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		853FEB2C15BB8561002A1EB5 /* NLViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				853FEB2D15BB8561002A1EB5 /* en */,
+			);
+			name = NLViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		853FEB2F15BB8561002A1EB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		853FEB3015BB8561002A1EB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		853FEB3215BB8561002A1EB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Noctis/Noctis-Prefix.pch";
+				INFOPLIST_FILE = "Noctis/Noctis-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		853FEB3315BB8561002A1EB5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Noctis/Noctis-Prefix.pch";
+				INFOPLIST_FILE = "Noctis/Noctis-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		853FEB0D15BB8560002A1EB5 /* Build configuration list for PBXProject "Noctis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853FEB2F15BB8561002A1EB5 /* Debug */,
+				853FEB3015BB8561002A1EB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		853FEB3115BB8561002A1EB5 /* Build configuration list for PBXNativeTarget "Noctis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853FEB3215BB8561002A1EB5 /* Debug */,
+				853FEB3315BB8561002A1EB5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 853FEB0A15BB8560002A1EB5 /* Project object */;
+}
