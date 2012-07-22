@@ -12,12 +12,13 @@
 
 @synthesize name = _name, ID = _ID, profilePictureURL = _profilePictureURL;
 
-- (id)initWithID:(NSNumber *)ID andName:(NSString *)name
+- (id)initWithID:(NSNumber *)ID name:(NSString *)name andPicture:(NSURL *)picture
 {
     self = [super init];
     if (self) {
         self.ID = ID;
         self.name = name;
+        self.profilePictureURL = picture;
     }
     
     return self;

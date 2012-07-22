@@ -14,6 +14,6 @@
 @property (strong, nonatomic) NSNumber *ID;
 @property (strong, nonatomic) NSURL *profilePictureURL;
 
-- (id)initWithID:(NSNumber *)ID andName:(NSString *)name;
+- (id)initWithID:(NSNumber *)ID name:(NSString *)name andPicture:(NSURL *)picture;
 
 @end

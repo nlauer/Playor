@@ -47,7 +47,9 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    
+    if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
+        [[[NLFacebookManager sharedInstance] facebook] extendAccessTokenIfNeeded];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -29,7 +29,7 @@ static NLFacebookFriendFactory *sharedInstance = NULL;
 {
     _friendsArray = [[NSMutableArray alloc] init];
     self.facebookFriendDelegate = delegate;
-    [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:@"me/friends" andDelegate:self];
+    [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:@"/me/friends?fields=name,picture,id" andDelegate:self];
 }
 
 #pragma mark -
@@ -45,8 +45,9 @@ static NLFacebookFriendFactory *sharedInstance = NULL;
     for (NSDictionary *friend in items) {
         NSNumber *fbid = [friend objectForKey:@"id"];
         NSString *name = [friend objectForKey:@"name"];
+        NSString *pictureURL = [[[[friend objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"] stringByReplacingOccurrencesOfString:@"_q" withString:@"_o"];
         
-        NLFacebookFriend *facebookFriend = [[NLFacebookFriend alloc] initWithID:fbid andName:name];
+        NLFacebookFriend *facebookFriend = [[NLFacebookFriend alloc] initWithID:fbid name:name andPicture:[NSURL URLWithString:pictureURL]];
         [_friendsArray addObject:facebookFriend];
     }
     [_facebookFriendDelegate receiveFacebookFriends:_friendsArray];

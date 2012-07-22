@@ -32,7 +32,14 @@ static NLFacebookManager *sharedInstance = NULL;
 {
     self = [super init];
     if (self) {
-        [self signInWithFacebook];
+        _facebook = [[Facebook alloc] initWithAppId:MY_APP_ID andDelegate:self];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if ([defaults objectForKey:@"FBAccessTokenKey"] 
+            && [defaults objectForKey:@"FBExpirationDateKey"]) {
+            _facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+            _facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+        }
     }
     
     return self;
@@ -40,21 +47,11 @@ static NLFacebookManager *sharedInstance = NULL;
 
 - (BOOL)isSignedInWithFacebook
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]);
+    return [_facebook isSessionValid];
 }
 
 - (void)signInWithFacebook
 {
-    _facebook = [[Facebook alloc] initWithAppId:MY_APP_ID andDelegate:self];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"] 
-        && [defaults objectForKey:@"FBExpirationDateKey"]) {
-        _facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        _facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-    }
-    
     if (![_facebook isSessionValid]) {
         NSArray *params = [NSArray arrayWithObjects:@"read_stream", @"friends_likes",nil];
         [_facebook authorize:params];
@@ -63,7 +60,7 @@ static NLFacebookManager *sharedInstance = NULL;
 
 - (void)performBlockAfterFBLogin:(FacebookBlockAfterLogin)block
 {
-    if (![self isSignedInWithFacebook]) {
+    if (![_facebook isSessionValid]) {
         block_ = block;
         [self signInWithFacebook];
     } else {
