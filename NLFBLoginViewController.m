@@ -37,8 +37,15 @@
     [signInWithFacebookButton setFrame:CGRectMake(20, self.view.frame.size.height - 100 - 44, 280, 44.0)];
     [signInWithFacebookButton setTitle:@"Sign In With Facebook" forState:UIControlStateNormal];
      [signInWithFacebookButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [signInWithFacebookButton addTarget:[NLFacebookManager sharedInstance] action:@selector(signInWithFacebook) forControlEvents:UIControlEventTouchUpInside];
+    [signInWithFacebookButton addTarget:self action:@selector(signInWithFacebook) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signInWithFacebookButton];
+}
+
+- (void)signInWithFacebook
+{
+    [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 @end

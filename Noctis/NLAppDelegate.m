@@ -8,7 +8,8 @@
 
 #import "NLAppDelegate.h"
 
-#import "NLFBLoginViewController.h"
+#import "NLFriendsViewController.h"
+#import "NLFacebookManager.h"
 
 @implementation NLAppDelegate
 
@@ -19,8 +20,8 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    NLFBLoginViewController *fbLoginViewController = [[NLFBLoginViewController alloc] init];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:fbLoginViewController];
+    NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
@@ -46,12 +47,17 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[[NLFacebookManager sharedInstance] facebook] extendAccessTokenIfNeeded];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [[[NLFacebookManager sharedInstance] facebook] handleOpenURL:url]; 
 }
 
 @end
