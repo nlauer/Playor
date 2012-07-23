@@ -10,6 +10,6 @@
 #import "iCarousel.h"
 #import "NLFacebookFriendFactory.h"
 
-@interface NLFriendsViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, FacebookFriendDelegate>
+@interface NLFriendsViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, FacebookFriendDelegate, UISearchBarDelegate>
 
 @end

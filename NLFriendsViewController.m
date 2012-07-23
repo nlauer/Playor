@@ -17,23 +17,27 @@
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NSArray *facebookFriends;
+@property (strong, nonatomic) NSArray *carouselArray;
 @end
 
 @implementation NLFriendsViewController {
     UISlider *slider_;
     UILabel *sliderLabel_;
+    BOOL shouldBeginEditing_;
 }
-@synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends;
+@synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.title = @"Friends";
+    shouldBeginEditing_ = YES;
     
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
     [searchBar setBarStyle:UIBarStyleBlack];
     [searchBar setPlaceholder:@"Search Friends"];
+    [searchBar setDelegate:self];
     [self.view addSubview:searchBar];
     
     UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshFriendsList)];
@@ -67,7 +71,6 @@
         [carousel setDelegate:self];
         [self setICarousel:carousel];
         [self.view addSubview:carousel];
-        [self loadPicturesForVisibleViews];
     } else {
         [_iCarousel reloadData];
     }
@@ -75,19 +78,19 @@
     if (!slider_) {
         slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
         [slider_ setMinimumValue:0];
-        [slider_ setMaximumValue:([_facebookFriends count]-1)];
+        [slider_ setMaximumValue:([_carouselArray count]-1)];
         [slider_ addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
         [slider_ addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
         [self.view addSubview:slider_];
     } else {
-        [slider_ setMaximumValue:([_facebookFriends count]-1)];
+        [slider_ setMaximumValue:([_carouselArray count]-1)];
     }
 }
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
-    return [((NLFacebookFriend *)[_facebookFriends objectAtIndex:index]) name];
+    return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
 }
 
 - (void)refreshFriendsList
@@ -148,7 +151,7 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return [_facebookFriends count];
+    return [_carouselArray count];
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
@@ -160,14 +163,14 @@
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         [view setBackgroundColor:[UIColor clearColor]];
         
-        FXImageView *imageView = [[FXImageView alloc] initWithFrame:view.frame];
-        [imageView setContentMode:UIViewContentModeScaleAspectFill];
-        [imageView setTag:2];
-        [imageView setAsynchronous:YES];
-        [imageView setReflectionAlpha:0.3];
-        [imageView setReflectionGap:0];
-        [imageView setReflectionScale:0.4];
-        [view addSubview:imageView];
+        profileImageView = [[FXImageView alloc] initWithFrame:view.frame];
+        [profileImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [profileImageView setTag:2];
+        [profileImageView setAsynchronous:YES];
+        [profileImageView setReflectionAlpha:0.3];
+        [profileImageView setReflectionGap:0];
+        [profileImageView setReflectionScale:0.4];
+        [view addSubview:profileImageView];
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 170, view.frame.size.width, 30)];
         [nameLabel setTextAlignment:UITextAlignmentCenter];
@@ -185,14 +188,14 @@
     [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height + 20)];
     
     [profileImageView setImage:nil];
-    [profileImageView setImageWithContentsOfURL:[[self.facebookFriends objectAtIndex:index] profilePictureURL]];
+    [profileImageView setImageWithContentsOfURL:[[_carouselArray objectAtIndex:index] profilePictureURL]];
     
     return view;
 }
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    NLFriendsDetailViewController *friendsDetailViewController = [[NLFriendsDetailViewController alloc] initWithFacebookFriend:[_facebookFriends objectAtIndex:index]];
+    NLFriendsDetailViewController *friendsDetailViewController = [[NLFriendsDetailViewController alloc] initWithFacebookFriend:[_carouselArray objectAtIndex:index]];
     [self.navigationController pushViewController:friendsDetailViewController animated:YES];
 }
 
@@ -217,22 +220,14 @@
     }
 }
 
-- (void)carouselDidEndDecelerating:(iCarousel *)carousel
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
 {
     [slider_ setValue:carousel.currentItemIndex animated:YES];
 }
 
--(void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    [self loadPicturesForVisibleViews];
-}
-
-- (void)loadPicturesForVisibleViews
-{
-    for (UIView *view in [_iCarousel visibleItemViews]) {
-        FXImageView *imageView = (FXImageView *)[view viewWithTag:2];
-        [imageView setImageWithContentsOfURL:[[self.facebookFriends objectAtIndex:[_iCarousel indexOfItemView:view]] profilePictureURL]];
-    }   
+    return nil;
 }
 
 #pragma mark -
@@ -240,7 +235,75 @@
 - (void)receiveFacebookFriends:(NSArray *)friends
 {
     self.facebookFriends = [friends sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+    self.carouselArray = _facebookFriends;
     [self setupICarousel];
+}
+
+#pragma mark -
+#pragma mark UISearchBarDelegate
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (![searchBar isFirstResponder]) {
+        shouldBeginEditing_ = NO;
+        
+        _carouselArray = _facebookFriends;
+        
+        [_iCarousel setCurrentItemIndex:0];
+        [_iCarousel reloadData];
+        
+        [slider_ setValue:0];
+        [slider_ setMaximumValue:([_carouselArray count]-1)];
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    
+    if (_carouselArray != _facebookFriends) {
+        _carouselArray = _facebookFriends;
+        
+        [searchBar setText:@""];
+        
+        [_iCarousel setCurrentItemIndex:0];
+        [_iCarousel reloadData];
+        
+        [slider_ setValue:0];
+        [slider_ setMaximumValue:([_carouselArray count]-1)];
+    }
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    
+    if ([searchBar.text isEqualToString:@""]) {
+        _carouselArray = _facebookFriends;
+    } else {
+        _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
+    }
+    [_iCarousel reloadData];
+    [_iCarousel setCurrentItemIndex:0];
+    
+    [slider_ setMaximumValue:([_carouselArray count]-1)];
+    [slider_ setValue:0];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    [searchBar setShowsCancelButton:NO animated:YES];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    BOOL boolToReturn = shouldBeginEditing_;
+    shouldBeginEditing_ = YES;
+    return boolToReturn;
 }
 
 @end
