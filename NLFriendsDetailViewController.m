@@ -44,7 +44,9 @@
     [carouselView setTag:1337];
     [self.view addSubview:carouselView];
     
-    [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+//    [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+    [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+    
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicator_ setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
     [carouselView addSubview:activityIndicator_];
@@ -108,6 +110,13 @@
 }
 
 #pragma mark -
+#pragma mark YoutubeLinksFromFBLikesDelegate
+- (void)receiveYoutubeLinksFromFBLikes:(NSArray *)links
+{
+    [self receiveYoutubeLinks:links];
+}
+
+#pragma mark -
 #pragma mark ICarousel Methods
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
@@ -147,6 +156,7 @@
         thumbnailImageView = (FXImageView *)[view viewWithTag:2];
     }
     
+    [thumbnailImageView setImage:nil];
     [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:index] thumbnailURL]];
     
     [titleLabel setText:[[_youtubeLinksArray objectAtIndex:index] title]];

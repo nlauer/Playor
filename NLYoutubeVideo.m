@@ -23,34 +23,36 @@
     return self;
 }
 
+#pragma mark -
+#pragma mark DataDictionary
+
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary
 {
-    return [((NSString *)[[[[[dataDictonary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"]) isEqualToString:@"Music"];
+    return [((NSString *)[[[[dataDictonary objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"]) isEqualToString:@"Music"];
 }
 
 - (NSString *)getVideoCategoryFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *category = [[[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"];
+    NSString *category = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"];
     return category;
 }
 
 - (NSString *)getVideoTitleFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *title = [[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"media$title"] objectForKey:@"$t"];
+    NSString *title = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$title"] objectForKey:@"$t"];
     return title;
 }
 
 - (NSURL *)getVideoURLFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *videoString = [[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
+    NSString *videoString = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
     NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", videoString]];
     return videoURL;
 }
 
 - (NSURL *)getVideoThumnailURLFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *thumbnailString = [[[[[dataDictionary objectForKey:@"entry"] objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
+    NSString *thumbnailString = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
     return [NSURL URLWithString:thumbnailString];
 }
-
 @end

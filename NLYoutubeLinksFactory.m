@@ -8,6 +8,7 @@
 
 #import "NLYoutubeLinksFactory.h"
 #import "NLYoutubeVideo.h"
+#import "NSObject+SBJSON.h"
 
 @implementation NLYoutubeLinksFactory {
     int numberOfActiveConnections_;
@@ -31,10 +32,10 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
     self.youtubeLinksDelegate = delegate;
-    numberOfActiveConnections_ = 0;
     _data = [[NSMutableData alloc] init];
+    numberOfActiveConnections_ = 0;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
-    NSString *graphPath = [NSString stringWithFormat:@"%@/links", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/links?limit=10", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 
@@ -60,8 +61,12 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
         if ([link rangeOfString:@"www.youtube.com/watch?v="].length > 0) {
             NSString *videoID = [self getVideoIdFromYoutubeLink:link];
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://gdata.youtube.com/feeds/api/videos/%@?v=2&alt=json", videoID]]];
-            [NSURLConnection connectionWithRequest:request delegate:self];
-            numberOfActiveConnections_++;
+            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+            if (!connection) {
+                NSLog(@"couldnt create connection");
+            } else {
+                numberOfActiveConnections_++;
+            }
         }
     }
     [self sendYoutubeLinks];
@@ -82,13 +87,14 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSError *e;
-    NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingAllowFragments error:&e];
+    NSDictionary *dataDictionary = [_data JSONValue];
     if (dataDictionary) {
         if ([NLYoutubeVideo isMusicLinkForDataDictionary:dataDictionary]) {
-            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:dataDictionary];
+            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:[dataDictionary objectForKey:@"entry"]];
             [_youtubeLinksArray addObject:youtubeVideo];
         }
+    } else {
+        NSLog(@"failed to create data dictionary for YoutubeLinksFactory");
     }
     
     numberOfActiveConnections_--;

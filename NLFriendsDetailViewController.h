@@ -9,9 +9,10 @@
 #import "NLViewController.h"
 #import "NLFacebookFriend.h"
 #import "NLYoutubeLinksFactory.h"
+#import "NLYoutubeLinksFromFBLikesFactory.h"
 #import "iCarousel.h"
 
-@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, iCarouselDataSource, iCarouselDelegate>
+@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, iCarouselDataSource, iCarouselDelegate, YoutubeLinksFromFBLikesDelegate>
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend;
 
