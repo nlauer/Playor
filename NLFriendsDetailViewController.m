@@ -100,10 +100,9 @@
     self.youtubeLinksArray = links;
     [self setupICarousel];
     
-    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 195)];
+    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, -44, self.view.frame.size.width, 195)];
     [_videoWebView setBackgroundColor:[UIColor clearColor]];
     [_videoWebView.scrollView setScrollEnabled:NO];
-    [self.view addSubview:_videoWebView];
     
     [activityIndicator_ stopAnimating];
     [activityIndicator_ setHidden:YES];
@@ -187,11 +186,14 @@
     }
 }
 
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
     [_videoWebView loadRequest:nil];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[[_youtubeLinksArray objectAtIndex:carousel.currentItemIndex] videoURL]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[[_youtubeLinksArray objectAtIndex:index] videoURL]];
     [_videoWebView loadRequest:request];
+    if (![[self.view subviews] containsObject:_videoWebView]) {
+        [self.view addSubview:_videoWebView];
+    }
 }
 
 @end

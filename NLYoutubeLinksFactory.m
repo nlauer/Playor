@@ -61,7 +61,8 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
         if ([link rangeOfString:@"www.youtube.com/watch?v="].length > 0) {
             NSString *videoID = [self getVideoIdFromYoutubeLink:link];
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://gdata.youtube.com/feeds/api/videos/%@?v=2&alt=json", videoID]]];
-            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+            NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
+            NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
             if (!connection) {
                 NSLog(@"couldnt create connection");
             } else {
@@ -80,36 +81,22 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 }
 
 #pragma mark -
-#pragma mark NSURLConnectionDataDelegate
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+#pragma mark URLConnectionManagerDelegate
+- (void)receiveFinishedData:(NSData *)data
 {
-    [_data appendData:data];
-}
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSDictionary *dataDictionary = [_data JSONValue];
+    NSDictionary *dataDictionary = [data JSONValue];
     if (dataDictionary) {
-        if ([NLYoutubeVideo isMusicLinkForDataDictionary:dataDictionary]) {
-            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:[dataDictionary objectForKey:@"entry"]];
+        NSArray *entries = [[dataDictionary objectForKey:@"feed"] objectForKey:@"entry"];
+        for (NSDictionary *feedEntry in entries) {
+            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:feedEntry];
             [_youtubeLinksArray addObject:youtubeVideo];
         }
     } else {
-        NSLog(@"failed to create data dictionary for YoutubeLinksFactory");
+        NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }
     
     numberOfActiveConnections_--;
     [self sendYoutubeLinks];
-    
-    _data = nil;
-    _data = [[NSMutableData alloc] init];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    numberOfActiveConnections_--;
-    [self sendYoutubeLinks];
-    
-    NSLog(@"error requesting youtube info:%@", error);
 }
 
 @end

@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "NLFacebookManager.h"
+#import "NLURLConnectionManager.h"
 
 @protocol YoutubeLinksDelegate <NSObject>
 - (void)receiveYoutubeLinks:(NSArray *)links;
 @end
 
-@interface NLYoutubeLinksFactory : NSObject <FBRequestDelegate, NSURLConnectionDataDelegate>
+@interface NLYoutubeLinksFactory : NSObject <FBRequestDelegate, URLConnectionManagerDelegate>
 
 @property (weak, nonatomic) id <YoutubeLinksDelegate> youtubeLinksDelegate;
 @property (strong, nonatomic) NSMutableArray *youtubeLinksArray;

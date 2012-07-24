@@ -21,8 +21,6 @@
 @end
 
 @implementation NLFriendsViewController {
-    UISlider *slider_;
-    UILabel *sliderLabel_;
     BOOL shouldBeginEditing_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
@@ -74,18 +72,6 @@
     } else {
         [_iCarousel reloadData];
     }
-    
-    if (!slider_) {
-        slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
-        [slider_ setMinimumValue:0];
-        [slider_ setMaximumValue:([_carouselArray count]-1)];
-        [slider_ addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
-        [slider_ addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
-        [self.view addSubview:slider_];
-    } else {
-        [slider_ setMaximumValue:([_carouselArray count]-1)];
-    }
 }
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
@@ -98,52 +84,6 @@
     [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
         [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
     }];
-}
-
-#pragma mark -
-#pragma mark Slider Methods
-
-- (void)updateSliderLabel
-{
-    [sliderLabel_ setText:[self friendNameForIndex:slider_.value]];;
-    [sliderLabel_ sizeToFit];
-    
-    float sliderRange = slider_.frame.size.width - slider_.currentThumbImage.size.width;
-    float sliderOrigin = slider_.frame.origin.x + (slider_.currentThumbImage.size.width / 2.0);
-    float sliderValueToPixels = (slider_.value/slider_.maximumValue * sliderRange) + sliderOrigin;
-    
-    if ((sliderValueToPixels + sliderLabel_.frame.size.width/2) > self.view.frame.size.width) {
-        sliderValueToPixels = floorf(self.view.frame.size.width - 10 - sliderLabel_.frame.size.width/2);
-    } else if ((sliderValueToPixels - sliderLabel_.frame.size.width/2) < 0) {
-        sliderValueToPixels = floorf(10 + sliderLabel_.frame.size.width/2);
-    }
-    
-    [sliderLabel_ setCenter:CGPointMake(floorf(sliderValueToPixels), slider_.frame.origin.y - 30)];
-}
-
-- (void)sliderValueChanged:(UISlider *)slider
-{
-    [self updateSliderLabel];
-}
-
-- (void)sliderTouchedDown:(UISlider *)slider
-{
-    if (!sliderLabel_) {
-        sliderLabel_ = [[UILabel alloc] init];
-        [sliderLabel_ setTextColor:[UIColor whiteColor]];
-        [sliderLabel_ setTextAlignment:UITextAlignmentCenter];
-        [sliderLabel_ setBackgroundColor:[UIColor clearColor]];
-        [self.view addSubview:sliderLabel_];
-    } else {
-        [sliderLabel_ setHidden:NO];
-    }
-    [self updateSliderLabel];
-}
-
-- (void)sliderTouchedUp:(UISlider *)slider
-{
-    [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
-    [sliderLabel_ setHidden:YES];
 }
 
 #pragma mark -
@@ -220,11 +160,6 @@
     }
 }
 
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
-{
-    [slider_ setValue:carousel.currentItemIndex animated:YES];
-}
-
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     return nil;
@@ -250,9 +185,6 @@
         
         [_iCarousel setCurrentItemIndex:0];
         [_iCarousel reloadData];
-        
-        [slider_ setValue:0];
-        [slider_ setMaximumValue:([_carouselArray count]-1)];
     }
 }
 
@@ -267,9 +199,6 @@
         
         [_iCarousel setCurrentItemIndex:0];
         [_iCarousel reloadData];
-        
-        [slider_ setValue:0];
-        [slider_ setMaximumValue:([_carouselArray count]-1)];
     }
 }
 
@@ -284,9 +213,6 @@
     }
     [_iCarousel reloadData];
     [_iCarousel setCurrentItemIndex:0];
-    
-    [slider_ setMaximumValue:([_carouselArray count]-1)];
-    [slider_ setValue:0];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar

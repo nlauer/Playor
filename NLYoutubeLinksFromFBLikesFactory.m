@@ -14,7 +14,7 @@
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
 }
-@synthesize youtubeLinksFromFBLikesDelegate = _youtubeLinksFromFBLikesDelegate, data = _data;
+@synthesize youtubeLinksFromFBLikesDelegate = _youtubeLinksFromFBLikesDelegate;
 @synthesize youtubeLinksArray = _youtubeLinksArray;
 
 static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
@@ -33,10 +33,9 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
     self.youtubeLinksFromFBLikesDelegate = delegate;
-    _data = [[NSMutableData alloc] init];
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
-    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=3", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=10", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 
@@ -60,33 +59,22 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     for (NSDictionary *musicLikes in items) {
         NSString *name = [[musicLikes objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://gdata.youtube.com/feeds/api/videos?q=%@&orderby=relevance&max-results=3&v=2&alt=json&category=music&format=1", name]]];
-        NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+        NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
+        NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {
             NSLog(@"couldnt create connection");
         } else {
             numberOfActiveConnections_++;
         }
     }
-}
-
-#pragma mark -
-#pragma mark NSURLConnectionDataDelegate
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    NSLog(@"error requesting youtube data from facebook likes:%@", error);
-    numberOfActiveConnections_--;
     [self sendYoutubeLinks];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+#pragma mark -
+#pragma mark URLConnectionManagerDelegate
+- (void)receiveFinishedData:(NSData *)data
 {
-    [_data appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSDictionary *dataDictionary = [_data JSONValue];
+    NSDictionary *dataDictionary = [data JSONValue];
     if (dataDictionary) {
         NSArray *entries = [[dataDictionary objectForKey:@"feed"] objectForKey:@"entry"];
         for (NSDictionary *feedEntry in entries) {
@@ -94,14 +82,11 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
             [_youtubeLinksArray addObject:youtubeVideo];
         }
     } else {
-        NSLog(@"failed to create data dictionary for YoutubeLinksFromFBLikesFactory");
+        NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }
     
     numberOfActiveConnections_--;
     [self sendYoutubeLinks];
-    
-    _data = nil;
-    _data = [[NSMutableData alloc] init];
 }
 
 @end
