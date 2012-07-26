@@ -10,6 +10,7 @@
 
 #import "NLFriendsViewController.h"
 #import "NLFacebookManager.h"
+#import "NLPlaylistBarViewController.h"
 
 @implementation NLAppDelegate
 
@@ -22,8 +23,12 @@
     // Override point for customization after application launch.
     NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
+    
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.window.rootViewController = self.navigationController;
+    [self.window makeKeyAndVisible];
+    
+    [self.window addSubview:[[NLPlaylistBarViewController sharedInstance] view]];
     [self.window makeKeyAndVisible];
     return YES;
 }

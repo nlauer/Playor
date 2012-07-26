@@ -35,7 +35,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     self.youtubeLinksFromFBLikesDelegate = delegate;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
-    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=10", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/music", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 

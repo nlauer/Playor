@@ -55,4 +55,11 @@
     NSString *thumbnailString = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
     return [NSURL URLWithString:thumbnailString];
 }
+
+#pragma mark -
+#pragma mark PlaylistItemDelegate
+- (NSURL *)getPictureURL
+{
+    return self.thumbnailURL;
+}
 @end

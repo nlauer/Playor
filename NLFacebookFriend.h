@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NLPlaylistBarViewController.h"
 
-@interface NLFacebookFriend : NSObject
+@interface NLFacebookFriend : NSObject <PlaylistItemDelegate>
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSNumber *ID;

@@ -13,6 +13,8 @@
 #import "NLFacebookFriend.h"
 #import "FXImageView.h"
 #import "NLFriendsDetailViewController.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NLPlaylistBarViewController.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -146,7 +148,7 @@
     {
         case iCarouselOptionWrap:
         {
-            return NO;
+            return YES;
         }
         case iCarouselOptionSpacing:
         {
@@ -163,6 +165,20 @@
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     return nil;
+}
+
+- (void)carouselDidScroll:(iCarousel *)carousel
+{
+    for (UIGestureRecognizer *recognizer in [[carousel currentItemView] gestureRecognizers]) {
+        [[carousel currentItemView] removeGestureRecognizer:recognizer];
+    }
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeFriendView:)];
+    [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
+    [[carousel currentItemView] addGestureRecognizer:swipeRecognizer];
 }
 
 #pragma mark -
@@ -230,6 +246,33 @@
     BOOL boolToReturn = shouldBeginEditing_;
     shouldBeginEditing_ = YES;
     return boolToReturn;
+}
+
+#pragma mark -
+#pragma mark Panning and Playlist Methods
+- (void)swipeFriendView:(UISwipeGestureRecognizer *)swipeRecognizer
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
+        [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y + 220)];
+        [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(0.3, 0.3)];
+        [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
+    } completion:^(BOOL finished) {
+        [self performSelectorInBackground:@selector(addFriendToPlaylistFromCarousel) withObject:nil];
+        [UIView animateWithDuration:0.5 animations:^{
+            [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y - 220)];
+            [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+            [[swipeRecognizer.view viewWithTag:1] setHidden:NO];
+            [self.view setUserInteractionEnabled:YES];
+        }];
+    }];
+}
+
+- (void)addFriendToPlaylistFromCarousel
+{
+    int index = [_iCarousel currentItemIndex];
+    NLFacebookFriend *facebookFriend = [_facebookFriends objectAtIndex:index];
+    [[NLPlaylistBarViewController sharedInstance] receiveFacebookFriend:facebookFriend];
 }
 
 @end

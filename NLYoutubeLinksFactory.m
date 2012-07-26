@@ -14,7 +14,6 @@
     int numberOfActiveConnections_;
 }
 @synthesize youtubeLinksDelegate = _youtubeLinksDelegate, youtubeLinksArray = _youtubeLinksArray;
-@synthesize data = _data;
 
 static NLYoutubeLinksFactory *sharedInstance = NULL;
 
@@ -32,7 +31,6 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
     self.youtubeLinksDelegate = delegate;
-    _data = [[NSMutableData alloc] init];
     numberOfActiveConnections_ = 0;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     NSString *graphPath = [NSString stringWithFormat:@"%@/links?limit=10", friendID];
@@ -84,15 +82,14 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 #pragma mark URLConnectionManagerDelegate
 - (void)receiveFinishedData:(NSData *)data
 {
-    NSDictionary *dataDictionary = [data JSONValue];
+    NSDictionary *dataDictionary = [[data JSONValue] objectForKey:@"entry"];
     if (dataDictionary) {
-        NSArray *entries = [[dataDictionary objectForKey:@"feed"] objectForKey:@"entry"];
-        for (NSDictionary *feedEntry in entries) {
-            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:feedEntry];
+        if ([NLYoutubeVideo isMusicLinkForDataDictionary:dataDictionary]) {
+            NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:dataDictionary];
             [_youtubeLinksArray addObject:youtubeVideo];
         }
     } else {
-        NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }
     
     numberOfActiveConnections_--;

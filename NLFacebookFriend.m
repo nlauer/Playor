@@ -24,4 +24,11 @@
     return self;
 }
 
+#pragma mark -
+#pragma mark PlaylistItemDelegate
+- (NSURL *)getPictureURL
+{
+    return self.profilePictureURL;
+}
+
 @end

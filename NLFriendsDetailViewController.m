@@ -20,6 +20,7 @@
 
 @implementation NLFriendsDetailViewController {
     UIActivityIndicatorView *activityIndicator_;
+    int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
 @synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView;
@@ -39,13 +40,18 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44, self.view.frame.size.width, 150)];
+    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44 - 80, self.view.frame.size.width, 150)];
     [carouselView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
     [carouselView setTag:1337];
     [self.view addSubview:carouselView];
     
-//    [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+    numberOfActiveFactories = 0;
+    
+    [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+    numberOfActiveFactories ++;
+    
     [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
+    numberOfActiveFactories++;
     
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicator_ setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
@@ -82,7 +88,10 @@
 #pragma mark YoutubeLinksDelegate
 - (void)receiveYoutubeLinks:(NSArray *)links
 {
-    if ([links count] == 0) {
+    numberOfActiveFactories--;
+    
+    if ([links count] == 0 && !_youtubeLinksArray && numberOfActiveFactories == 0) {
+        //both returns were empty, no content
         UILabel *noContentLabel = [[UILabel alloc] init];
         [noContentLabel setTextColor:[UIColor whiteColor]];
         [noContentLabel setText:@"No content available"];
@@ -97,15 +106,22 @@
         [activityIndicator_ setHidden:YES];
         return;
     }
-    self.youtubeLinksArray = links;
-    [self setupICarousel];
-    
-    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, -44, self.view.frame.size.width, 195)];
-    [_videoWebView setBackgroundColor:[UIColor clearColor]];
-    [_videoWebView.scrollView setScrollEnabled:NO];
-    
-    [activityIndicator_ stopAnimating];
-    [activityIndicator_ setHidden:YES];
+    if (!_youtubeLinksArray && [links count] > 0) {
+        //one return was filled
+        self.youtubeLinksArray = links;
+        [self setupICarousel];
+        
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, -44, self.view.frame.size.width, 195)];
+        [_videoWebView setBackgroundColor:[UIColor clearColor]];
+        [_videoWebView.scrollView setScrollEnabled:NO];
+        
+        [activityIndicator_ stopAnimating];
+        [activityIndicator_ setHidden:YES];
+    } else {
+        //both returns were filled, append content
+        _youtubeLinksArray = [_youtubeLinksArray arrayByAddingObjectsFromArray:links];
+        [_iCarousel reloadData];
+    }
 }
 
 #pragma mark -
@@ -194,6 +210,47 @@
     if (![[self.view subviews] containsObject:_videoWebView]) {
         [self.view addSubview:_videoWebView];
     }
+}
+
+- (void)carouselDidScroll:(iCarousel *)carousel
+{
+    for (UIGestureRecognizer *recognizer in [[carousel currentItemView] gestureRecognizers]) {
+        [[carousel currentItemView] removeGestureRecognizer:recognizer];
+    }
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
+    [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
+    [[carousel currentItemView] addGestureRecognizer:swipeRecognizer];
+}
+
+#pragma mark -
+#pragma mark Panning and Playlist Methods
+- (void)swipeVideoView:(UISwipeGestureRecognizer *)swipeRecognizer
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
+        [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y + 120)];
+        [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(0.3, 0.3)];
+        [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
+    } completion:^(BOOL finished) {
+        [self performSelectorInBackground:@selector(addVideoToPlaylistFromCarousel) withObject:nil];
+        [UIView animateWithDuration:0.5 animations:^{
+            [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y - 120)];
+            [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
+            [[swipeRecognizer.view viewWithTag:1] setHidden:NO];
+            [self.view setUserInteractionEnabled:YES];
+        }];
+    }];
+}
+
+- (void)addVideoToPlaylistFromCarousel
+{
+    int index = [_iCarousel currentItemIndex];
+    NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
+    [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
 }
 
 @end
