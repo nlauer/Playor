@@ -10,6 +10,7 @@
 
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
+#import "NLPlaylistBarViewController.h"
 
 @interface NLFriendsDetailViewController ()
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
@@ -40,6 +41,9 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"MPAVControllerPlaybackStateChangedNotification" object:nil];
+    
     UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44 - 80, self.view.frame.size.width, 150)];
     [carouselView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
     [carouselView setTag:1337];
@@ -63,9 +67,12 @@
 {
     [super viewDidUnload];
     
+    [_videoWebView setDelegate:nil];
     _videoWebView = nil;
     activityIndicator_ = nil;
     _iCarousel = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setupICarousel
@@ -74,13 +81,44 @@
         UIView *carouselView = [self.view viewWithTag:1337];
         
         iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 130)];
-        [carousel setType:iCarouselTypeLinear];
+        [carousel setType:iCarouselTypeCoverFlow];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
         [self setICarousel:carousel];
         [carouselView addSubview:carousel];
     } else {
         [_iCarousel reloadData];
+    }
+}
+
+- (void)loadNewVideoWithIndex:(int)index
+{
+    [_videoWebView loadRequest:nil];
+    NSString *youTubeVideoHTML = @"<html><head>\
+    <body style='margin:0'>\
+    <embed id='yt' src='%@' type='application/x-shockwave-flash' \
+    width='%0.0f' height='%0.0f'></embed>\
+    </body></html>";
+    
+    // Populate HTML with the URL and requested frame size
+    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_youtubeLinksArray objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
+    
+    // Load the html into the webview
+    [_videoWebView loadHTMLString:html baseURL:nil];
+    [_videoWebView setDelegate:self];
+    
+    if (![[self.view subviews] containsObject:_videoWebView]) {
+        [self.view addSubview:_videoWebView];
+    }
+}
+
+#pragma mark -
+#pragma mark Playlist Methods
+- (void)playbackStateDidChange:(NSNotification *)note
+{
+    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
+    if (playbackState == 0) {
+        NSLog(@"video ended");
     }
 }
 
@@ -111,7 +149,7 @@
         self.youtubeLinksArray = links;
         [self setupICarousel];
         
-        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, -44, self.view.frame.size.width, 195)];
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
         [_videoWebView setBackgroundColor:[UIColor clearColor]];
         [_videoWebView.scrollView setScrollEnabled:NO];
         
@@ -204,12 +242,7 @@
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    [_videoWebView loadRequest:nil];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[[_youtubeLinksArray objectAtIndex:index] videoURL]];
-    [_videoWebView loadRequest:request];
-    if (![[self.view subviews] containsObject:_videoWebView]) {
-        [self.view addSubview:_videoWebView];
-    }
+    [self loadNewVideoWithIndex:index];
 }
 
 - (void)carouselDidScroll:(iCarousel *)carousel
@@ -237,7 +270,7 @@
         [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
     } completion:^(BOOL finished) {
         [self performSelectorInBackground:@selector(addVideoToPlaylistFromCarousel) withObject:nil];
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y - 120)];
             [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
             [[swipeRecognizer.view viewWithTag:1] setHidden:NO];
@@ -251,6 +284,32 @@
     int index = [_iCarousel currentItemIndex];
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
+}
+
+#pragma mark -
+#pragma mark UIWebViewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    UIButton *b = [self findButtonInView:webView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (UIButton *)findButtonInView:(UIView *)view {
+    UIButton *button = nil;
+    
+    if ([view isMemberOfClass:[UIButton class]]) {
+        return (UIButton *)view;
+    }
+    
+    if (view.subviews && [view.subviews count] > 0) {
+        for (UIView *subview in view.subviews) {
+            button = [self findButtonInView:subview];
+            if (button) return button;
+        }
+    }
+    
+    return button;
 }
 
 @end

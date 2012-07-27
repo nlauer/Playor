@@ -42,21 +42,17 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [super viewDidLoad];
 	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 60, self.view.frame.size.width, 80)];
-    [self.view setBackgroundColor:[UIColor darkGrayColor]];
-    
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, self.view.frame.size.height - 20)];
-    [carouselView setBackgroundColor:[UIColor grayColor]];
-    [carouselView setTag:1337];
-    [self.view addSubview:carouselView];
+    [self.view setBackgroundColor:[UIColor grayColor]];
     
     UILabel *infoLabel = [[UILabel alloc] init];
     [infoLabel setBackgroundColor:[UIColor clearColor]];
-    [infoLabel setText:@"Swipe friends or songs down"];
+    [infoLabel setText:@"Swipe items down to add to playlist"];
+    [infoLabel setFont:[UIFont systemFontOfSize:14]];
     [infoLabel setTextColor:[UIColor whiteColor]];
     [infoLabel sizeToFit];
     [infoLabel setTag:69];
-    [infoLabel setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
-    [carouselView addSubview:infoLabel];
+    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+    [self.view addSubview:infoLabel];
 }
 
 - (void)viewDidUnload
@@ -67,19 +63,20 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)updateICarousel
 {
     if (!_iCarousel) {
-        UIView *carouselView = [self.view viewWithTag:1337];
-        [[carouselView viewWithTag:69] removeFromSuperview];
+        [[self.view viewWithTag:69] removeFromSuperview];
         
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, carouselView.frame.size.height - 20)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, self.view.frame.size.height - 20)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
         [carousel setContentOffset:CGSizeMake(0, 0)];
         [self setICarousel:carousel];
-        [carouselView addSubview:carousel];
+        [self.view addSubview:carousel];
     } else {
         [_iCarousel insertItemAtIndex:[_playlistItems count]-1 animated:YES];
-        [_iCarousel scrollToItemAtIndex:[_playlistItems count]-1 animated:YES];
+        if ([_iCarousel currentItemIndex] != [_playlistItems count]-1) {
+            [_iCarousel scrollToItemAtIndex:[_playlistItems count]-1 animated:YES];
+        }
     }
 }
 
@@ -158,6 +155,9 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (![_playlistItems containsObject:facebookFriend]) {
         [_playlistItems addObject:facebookFriend];
         [self updateICarousel];
+    } else {
+        int index = [_playlistItems indexOfObject:facebookFriend];
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
     }
 }
 
@@ -166,6 +166,9 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (![_playlistItems containsObject:video]) {
         [_playlistItems addObject:video];
         [self updateICarousel];
+    } else {
+        int index = [_playlistItems indexOfObject:video];
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
     }
 }
 

@@ -46,7 +46,7 @@
 - (NSURL *)getVideoURLFromDictionary:(NSDictionary *)dataDictionary
 {
     NSString *videoString = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
-    NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", videoString]];
+    NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoString]];
     return videoURL;
 }
 
