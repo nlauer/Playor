@@ -57,8 +57,8 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 {
     NSDictionary *items = [(NSDictionary *)result objectForKey:@"data"];
     for (NSDictionary *musicLikes in items) {
-        NSString *name = [[musicLikes objectForKey:@"name"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://gdata.youtube.com/feeds/api/videos?q=%@&orderby=relevance&max-results=3&v=2&alt=json&category=music&format=1", name]]];
+        NSString *name = [musicLikes objectForKey:@"name"];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:@"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=3&v=2&alt=json&category=Music&format=1", name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {

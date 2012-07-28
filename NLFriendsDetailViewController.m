@@ -12,6 +12,8 @@
 #import "FXImageView.h"
 #import "NLPlaylistBarViewController.h"
 
+#define timeBetweenVideos 3.0
+
 @interface NLFriendsDetailViewController ()
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -22,6 +24,8 @@
 @implementation NLFriendsDetailViewController {
     UIActivityIndicatorView *activityIndicator_;
     int numberOfActiveFactories;
+    int timerRepeats;
+    NSTimer *playlistTimer_;
 }
 @synthesize facebookFriend = _facebookFriend;
 @synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView;
@@ -40,6 +44,7 @@
 {
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
+    timerRepeats = 0;
     
     NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
     [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"MPAVControllerPlaybackStateChangedNotification" object:nil];
@@ -71,7 +76,10 @@
     _videoWebView = nil;
     activityIndicator_ = nil;
     _iCarousel = nil;
-    
+}
+
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -81,7 +89,7 @@
         UIView *carouselView = [self.view viewWithTag:1337];
         
         iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 130)];
-        [carousel setType:iCarouselTypeCoverFlow];
+        [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
         [self setICarousel:carousel];
@@ -114,11 +122,49 @@
 
 #pragma mark -
 #pragma mark Playlist Methods
+- (void)playNextVideoAfterDelay
+{
+    playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
+    UILabel *timeUntilNextVideoStartsLabel;
+    if (![self.view viewWithTag:9999]) {
+        timeUntilNextVideoStartsLabel = [[UILabel alloc] init];
+        [timeUntilNextVideoStartsLabel sizeToFit];
+        [timeUntilNextVideoStartsLabel setTag:9999];
+        [timeUntilNextVideoStartsLabel setCenter:CGPointMake(self.view.frame.size.width/2, 40)];
+        [timeUntilNextVideoStartsLabel setTextColor:[UIColor whiteColor]];
+        [timeUntilNextVideoStartsLabel setTextAlignment:UITextAlignmentCenter];
+        [timeUntilNextVideoStartsLabel setBackgroundColor:[UIColor clearColor]];
+        [self.view addSubview:timeUntilNextVideoStartsLabel];
+    } else {
+        timeUntilNextVideoStartsLabel = (UILabel *)[self.view viewWithTag:9999];
+    }
+    [timeUntilNextVideoStartsLabel setText:[NSString stringWithFormat:@"Next Video Starts in %d", timeBetweenVideos]];
+    
+    int newIndex = [_iCarousel currentItemIndex] + 1;
+    if (newIndex < [_youtubeLinksArray count]) {
+        [_iCarousel scrollToItemAtIndex:newIndex animated:YES];
+    }
+}
+
+- (void)playNextVideo:(NSTimer *)timer
+{
+    timerRepeats++;
+    if (timerRepeats >= timeBetweenVideos) {
+        [timer invalidate];
+        timerRepeats = 0;
+        [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
+    } else {
+        UILabel *timeUntilNextVideoStartsLabel = (UILabel *)[self.view viewWithTag:9999];
+        [timeUntilNextVideoStartsLabel setText:[NSString stringWithFormat:@"Next Video Starts in %d", (timeBetweenVideos-timerRepeats)]];
+        [timeUntilNextVideoStartsLabel setNeedsDisplay];
+    }
+}
+
 - (void)playbackStateDidChange:(NSNotification *)note
 {
     int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
     if (playbackState == 0) {
-        NSLog(@"video ended");
+        [self playNextVideoAfterDelay];
     }
 }
 

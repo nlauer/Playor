@@ -66,7 +66,7 @@
 {
     if (!_iCarousel) {
         iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f + 10.0, self.view.frame.size.width, 200)];
-        [carousel setType:iCarouselTypeCoverFlow];
+        [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
         [self setICarousel:carousel];
@@ -148,7 +148,7 @@
     {
         case iCarouselOptionWrap:
         {
-            return YES;
+            return NO;
         }
         case iCarouselOptionSpacing:
         {
