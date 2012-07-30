@@ -61,8 +61,21 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [infoLabel setTextColor:[UIColor whiteColor]];
     [infoLabel sizeToFit];
     [infoLabel setTag:69];
-    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10 - 32)];
     [self.view addSubview:infoLabel];
+    
+    UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
+    [playlistTitleView setBackgroundColor:[UIColor colorWithWhite:0.15 alpha:1.0]];
+    [self.view addSubview:playlistTitleView];
+    
+    UILabel *playlistTitleLabel = [[UILabel alloc] init];
+    [playlistTitleLabel setBackgroundColor:[UIColor clearColor]];
+    [playlistTitleLabel setText:@"MY PLAYLIST"];
+    [playlistTitleLabel setFont:[UIFont systemFontOfSize:14]];
+    [playlistTitleLabel setTextColor:[UIColor whiteColor]];
+    [playlistTitleLabel sizeToFit];
+    [playlistTitleLabel setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel.frame.size.height/2, playlistTitleLabel.frame.size.width, playlistTitleLabel.frame.size.height)];
+    [playlistTitleView addSubview:playlistTitleLabel];
 }
 
 - (void)viewDidUnload
@@ -89,6 +102,13 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)loadNewVideoWithIndex:(int)index
 {
+    if (![[self.view subviews] containsObject:_videoWebView]) {
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+        [_videoWebView setBackgroundColor:[UIColor clearColor]];
+        [_videoWebView.scrollView setScrollEnabled:NO];
+        [self.view addSubview:_videoWebView];
+    }
+    
     [_videoWebView loadRequest:nil];
     NSString *youTubeVideoHTML = @"<html><head>\
     <body style='margin:0'>\
@@ -102,13 +122,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     // Load the html into the webview
     [_videoWebView loadHTMLString:html baseURL:nil];
     [_videoWebView setDelegate:self];
-    
-    if (![[self.view subviews] containsObject:_videoWebView]) {
-        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-        [_videoWebView setBackgroundColor:[UIColor clearColor]];
-        [_videoWebView.scrollView setScrollEnabled:NO];
-        [self.view addSubview:_videoWebView];
-    }
 }
 
 #pragma mark -
@@ -173,6 +186,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     
     [imageView setImage:nil];
     [imageView setImageWithContentsOfURL:[[_playlistItems objectAtIndex:index] getPictureURL]];
+    [view setUserInteractionEnabled:YES];
     
     return view;
 }

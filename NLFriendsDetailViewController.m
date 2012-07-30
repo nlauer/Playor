@@ -43,8 +43,8 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44 - 80, self.view.frame.size.width, 150)];
-    [carouselView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
+    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 100 - 150- 44 - 10, self.view.frame.size.width, 150)];
+    [carouselView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
     [carouselView setTag:1337];
     [self.view addSubview:carouselView];
     
