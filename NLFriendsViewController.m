@@ -258,7 +258,8 @@
         [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(0.3, 0.3)];
         [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
     } completion:^(BOOL finished) {
-        [self performSelectorInBackground:@selector(addFriendToPlaylistFromCarousel) withObject:nil];
+//        [self performSelectorInBackground:@selector(addFriendToPlaylistFromCarousel) withObject:nil];
+        [self addFriendToPlaylistFromCarousel];
         [UIView animateWithDuration:0.2 animations:^{
             [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y - 220)];
             [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];

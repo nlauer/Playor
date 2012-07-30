@@ -24,8 +24,6 @@
 @implementation NLFriendsDetailViewController {
     UIActivityIndicatorView *activityIndicator_;
     int numberOfActiveFactories;
-    int timerRepeats;
-    NSTimer *playlistTimer_;
 }
 @synthesize facebookFriend = _facebookFriend;
 @synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView;
@@ -44,10 +42,6 @@
 {
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
-    timerRepeats = 0;
-    
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"MPAVControllerPlaybackStateChangedNotification" object:nil];
     
     UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 150 - 44 - 80, self.view.frame.size.width, 150)];
     [carouselView setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:1.0]];
@@ -78,11 +72,6 @@
     _iCarousel = nil;
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)setupICarousel
 {
     if (!_iCarousel) {
@@ -101,6 +90,13 @@
 
 - (void)loadNewVideoWithIndex:(int)index
 {
+    if (![[self.view subviews] containsObject:_videoWebView]) {
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+        [_videoWebView setBackgroundColor:[UIColor clearColor]];
+        [_videoWebView.scrollView setScrollEnabled:NO];
+        [self.view addSubview:_videoWebView];
+    }
+    
     [_videoWebView loadRequest:nil];
     NSString *youTubeVideoHTML = @"<html><head>\
     <body style='margin:0'>\
@@ -114,58 +110,6 @@
     // Load the html into the webview
     [_videoWebView loadHTMLString:html baseURL:nil];
     [_videoWebView setDelegate:self];
-    
-    if (![[self.view subviews] containsObject:_videoWebView]) {
-        [self.view addSubview:_videoWebView];
-    }
-}
-
-#pragma mark -
-#pragma mark Playlist Methods
-- (void)playNextVideoAfterDelay
-{
-    playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
-    UILabel *timeUntilNextVideoStartsLabel;
-    if (![self.view viewWithTag:9999]) {
-        timeUntilNextVideoStartsLabel = [[UILabel alloc] init];
-        [timeUntilNextVideoStartsLabel sizeToFit];
-        [timeUntilNextVideoStartsLabel setTag:9999];
-        [timeUntilNextVideoStartsLabel setCenter:CGPointMake(self.view.frame.size.width/2, 40)];
-        [timeUntilNextVideoStartsLabel setTextColor:[UIColor whiteColor]];
-        [timeUntilNextVideoStartsLabel setTextAlignment:UITextAlignmentCenter];
-        [timeUntilNextVideoStartsLabel setBackgroundColor:[UIColor clearColor]];
-        [self.view addSubview:timeUntilNextVideoStartsLabel];
-    } else {
-        timeUntilNextVideoStartsLabel = (UILabel *)[self.view viewWithTag:9999];
-    }
-    [timeUntilNextVideoStartsLabel setText:[NSString stringWithFormat:@"Next Video Starts in %d", timeBetweenVideos]];
-    
-    int newIndex = [_iCarousel currentItemIndex] + 1;
-    if (newIndex < [_youtubeLinksArray count]) {
-        [_iCarousel scrollToItemAtIndex:newIndex animated:YES];
-    }
-}
-
-- (void)playNextVideo:(NSTimer *)timer
-{
-    timerRepeats++;
-    if (timerRepeats >= timeBetweenVideos) {
-        [timer invalidate];
-        timerRepeats = 0;
-        [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
-    } else {
-        UILabel *timeUntilNextVideoStartsLabel = (UILabel *)[self.view viewWithTag:9999];
-        [timeUntilNextVideoStartsLabel setText:[NSString stringWithFormat:@"Next Video Starts in %d", (timeBetweenVideos-timerRepeats)]];
-        [timeUntilNextVideoStartsLabel setNeedsDisplay];
-    }
-}
-
-- (void)playbackStateDidChange:(NSNotification *)note
-{
-    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
-    if (playbackState == 0) {
-        [self playNextVideoAfterDelay];
-    }
 }
 
 #pragma mark -
@@ -194,10 +138,6 @@
         //one return was filled
         self.youtubeLinksArray = links;
         [self setupICarousel];
-        
-        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-        [_videoWebView setBackgroundColor:[UIColor clearColor]];
-        [_videoWebView.scrollView setScrollEnabled:NO];
         
         [activityIndicator_ stopAnimating];
         [activityIndicator_ setHidden:YES];

@@ -7,15 +7,24 @@
 //
 
 #import "NLPlaylistBarViewController.h"
+
+#import "NLFacebookFriend.h"
+#import "NLYoutubeVideo.h"
 #import "FXImageView.h"
+
+#define timeBetweenVideos 3.0
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NSMutableArray *playlistItems;
+@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
-@implementation NLPlaylistBarViewController
-@synthesize iCarousel = _iCarousel, playlistItems = _playlistItems;
+@implementation NLPlaylistBarViewController {
+    int timerRepeats;
+    NSTimer *playlistTimer_;
+}
+@synthesize iCarousel = _iCarousel, playlistItems = _playlistItems, videoWebView = _videoWebView;
 
 static NLPlaylistBarViewController *sharedInstance = NULL;
 
@@ -41,7 +50,8 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 60, self.view.frame.size.width, 80)];
+    timerRepeats = 0;
+	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 100, self.view.frame.size.width, 120)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
     UILabel *infoLabel = [[UILabel alloc] init];
@@ -65,7 +75,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (!_iCarousel) {
         [[self.view viewWithTag:69] removeFromSuperview];
         
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, self.view.frame.size.height - 20)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -74,11 +84,64 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [self.view addSubview:carousel];
     } else {
         [_iCarousel insertItemAtIndex:[_playlistItems count]-1 animated:YES];
-        if ([_iCarousel currentItemIndex] != [_playlistItems count]-1) {
-            [_iCarousel scrollToItemAtIndex:[_playlistItems count]-1 animated:YES];
-        }
     }
 }
+
+- (void)loadNewVideoWithIndex:(int)index
+{
+    [_videoWebView loadRequest:nil];
+    NSString *youTubeVideoHTML = @"<html><head>\
+    <body style='margin:0'>\
+    <embed id='yt' src='%@' type='application/x-shockwave-flash' \
+    width='%0.0f' height='%0.0f'></embed>\
+    </body></html>";
+    
+    // Populate HTML with the URL and requested frame size
+    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_playlistItems objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
+    
+    // Load the html into the webview
+    [_videoWebView loadHTMLString:html baseURL:nil];
+    [_videoWebView setDelegate:self];
+    
+    if (![[self.view subviews] containsObject:_videoWebView]) {
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+        [_videoWebView setBackgroundColor:[UIColor clearColor]];
+        [_videoWebView.scrollView setScrollEnabled:NO];
+        [self.view addSubview:_videoWebView];
+    }
+}
+
+#pragma mark -
+#pragma mark Playlist Methods
+- (void)playNextVideoAfterDelay
+{
+    playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
+    
+    int newIndex = [_iCarousel currentItemIndex] + 1;
+    if (newIndex < [_playlistItems count]) {
+        [_iCarousel scrollToItemAtIndex:newIndex animated:YES];
+    }
+}
+
+- (void)playNextVideo:(NSTimer *)timer
+{
+    timerRepeats++;
+    if (timerRepeats >= timeBetweenVideos) {
+        [timer invalidate];
+        timerRepeats = 0;
+        [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
+    }
+}
+
+- (void)playbackStateDidChange:(NSNotification *)note
+{
+    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
+    if (playbackState == 0) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [self playNextVideoAfterDelay];
+    }
+}
+
 
 #pragma mark -
 #pragma mark iCarousel methods
@@ -92,7 +155,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     FXImageView *imageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 60)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
@@ -147,18 +210,56 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }
 }
 
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+{
+    [self loadNewVideoWithIndex:index];
+}
+
+#pragma mark -
+#pragma mark YoutubeLinksFromFBLikesDelegate
+
+- (void)receiveYoutubeLinksFromFBLikes:(NSArray *)links
+{
+    for (NLYoutubeVideo *video in links) {
+        [self receiveYoutubeVideo:video];
+    }
+}
+
+#pragma mark -
+#pragma mark UIWebViewDelegate
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"MPAVControllerPlaybackStateChangedNotification" object:nil];
+    
+    UIButton *b = [self findButtonInView:webView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (UIButton *)findButtonInView:(UIView *)view {
+    UIButton *button = nil;
+    
+    if ([view isMemberOfClass:[UIButton class]]) {
+        return (UIButton *)view;
+    }
+    
+    if (view.subviews && [view.subviews count] > 0) {
+        for (UIView *subview in view.subviews) {
+            button = [self findButtonInView:subview];
+            if (button) return button;
+        }
+    }
+    
+    return button;
+}
+
 #pragma mark -
 #pragma mark Receiving and Deleting Methods
 
 - (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
-    if (![_playlistItems containsObject:facebookFriend]) {
-        [_playlistItems addObject:facebookFriend];
-        [self updateICarousel];
-    } else {
-        int index = [_playlistItems indexOfObject:facebookFriend];
-        [_iCarousel scrollToItemAtIndex:index animated:YES];
-    }
+    [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:facebookFriend.ID andDelegate:self];
 }
 
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video

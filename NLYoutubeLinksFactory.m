@@ -33,7 +33,7 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
     self.youtubeLinksDelegate = delegate;
     numberOfActiveConnections_ = 0;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
-    NSString *graphPath = [NSString stringWithFormat:@"%@/links?limit=10", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/links?limit=15", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 

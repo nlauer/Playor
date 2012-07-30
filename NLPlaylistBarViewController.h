@@ -9,13 +9,14 @@
 #import "NLViewController.h"
 
 #import "iCarousel.h"
+#import "NLYoutubeLinksFromFBLikesFactory.h"
 @class NLFacebookFriend, NLYoutubeVideo;
 
 @protocol PlaylistItemDelegate <NSObject>
 - (NSURL *)getPictureURL;
 @end
 
-@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource>
+@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, YoutubeLinksFromFBLikesDelegate, UIWebViewDelegate>
 
 + (NLPlaylistBarViewController *)sharedInstance;
 
