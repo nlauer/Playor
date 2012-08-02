@@ -40,9 +40,6 @@
     [searchBar setDelegate:self];
     [self.view addSubview:searchBar];
     
-    UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshFriendsList)];
-    [self.navigationItem setRightBarButtonItem:refresh];
-    
     if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
         [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
             [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
@@ -79,13 +76,6 @@
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
     return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
-}
-
-- (void)refreshFriendsList
-{
-    [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
-        [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
-    }];
 }
 
 #pragma mark -

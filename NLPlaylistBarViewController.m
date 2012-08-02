@@ -8,6 +8,7 @@
 
 #import "NLPlaylistBarViewController.h"
 
+#import "NLPlaylistPlayerViewController.h"
 #import "NLFacebookFriend.h"
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
@@ -23,6 +24,7 @@
 @implementation NLPlaylistBarViewController {
     int timerRepeats;
     NSTimer *playlistTimer_;
+    BOOL isPlayerMode_;
 }
 @synthesize iCarousel = _iCarousel, playlistItems = _playlistItems, videoWebView = _videoWebView;
 
@@ -51,6 +53,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [super viewDidLoad];
     timerRepeats = 0;
+    isPlayerMode_ = NO;
 	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 100, self.view.frame.size.width, 120)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
@@ -89,6 +92,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [[self.view viewWithTag:69] removeFromSuperview];
         
         iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+        [carousel setCenterItemWhenSelected:NO];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -126,13 +130,47 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 #pragma mark -
 #pragma mark Playlist Methods
+
+- (void)startPlayerWithIndex:(int)index
+{
+    isPlayerMode_ = YES;
+    [self setupPlaylistPlayer];
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        [self.view setFrame:CGRectMake(0, 20, screenBounds.size.width, screenBounds.size.height - 20)];
+    } completion:^(BOOL finished) {
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
+    }];
+}
+
+- (void)stopPlayer
+{
+    isPlayerMode_ = NO;
+    [self removePlaylistPlayer];
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [self.view setFrame:CGRectMake(0, self.view.frame.size.height- 100, self.view.frame.size.width, 120)];
+    } completion:nil];
+}
+
+- (void)setupPlaylistPlayer
+{
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 460 -44 - 10, 300, 44)];
+    [button addTarget:self action:@selector(stopPlayer) forControlEvents:UIControlEventTouchUpInside];
+    [button setBackgroundColor:[UIColor greenColor]];
+    [self.view addSubview:button];
+}
+
+- (void)removePlaylistPlayer
+{
+    
+}
+
 - (void)playNextVideoAfterDelay
 {
-    playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
-    
     int newIndex = [_iCarousel currentItemIndex] + 1;
     if (newIndex < [_playlistItems count]) {
         [_iCarousel scrollToItemAtIndex:newIndex animated:YES];
+        playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
     }
 }
 
@@ -226,7 +264,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    [self loadNewVideoWithIndex:index];
+    isPlayerMode_ ? [self loadNewVideoWithIndex:index] : [self startPlayerWithIndex:index];
 }
 
 #pragma mark -
