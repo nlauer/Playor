@@ -8,7 +8,6 @@
 
 #import "NLPlaylistBarViewController.h"
 
-#import "NLPlaylistPlayerVideoView.h"
 #import "NLFacebookFriend.h"
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
@@ -54,7 +53,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [super viewDidLoad];
     timerRepeats = 0;
     isPlayerMode_ = NO;
-	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 100, self.view.frame.size.width, 120)];
+	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 108, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
     UILabel *infoLabel = [[UILabel alloc] init];
@@ -74,7 +73,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     UILabel *playlistTitleLabel = [[UILabel alloc] init];
     [playlistTitleLabel setBackgroundColor:[UIColor clearColor]];
     [playlistTitleLabel setText:@"MY PLAYLIST"];
-    [playlistTitleLabel setFont:[UIFont systemFontOfSize:14]];
+    [playlistTitleLabel setFont:[UIFont systemFontOfSize:16]];
     [playlistTitleLabel setTextColor:[UIColor whiteColor]];
     [playlistTitleLabel sizeToFit];
     [playlistTitleLabel setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel.frame.size.height/2, playlistTitleLabel.frame.size.width, playlistTitleLabel.frame.size.height)];
@@ -93,11 +92,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         
         iCarousel *carousel;
         if (isPlayerMode_) {
-            carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 140)];
+            carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44 + 10, self.view.frame.size.width, 140)];
         } else {
             carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
         }
-        [carousel setCenterItemWhenSelected:NO];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -139,7 +137,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (isPlayerMode_) {
         return CGRectMake(0, 20, screenBounds.size.width, screenBounds.size.height - 20);
     } else {
-        return CGRectMake(0, screenBounds.size.height - 20 - 100, screenBounds.size.width, 120);
+        return CGRectMake(0, screenBounds.size.height - 128, screenBounds.size.width, 128);
     }
 }
 
@@ -174,7 +172,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [self removePlaylistPlayer];
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, [self getViewFrame].size.height)];
     } completion:^(BOOL finished){
         [self renewCarouselWithIndex:[_iCarousel currentItemIndex]];
@@ -190,21 +188,18 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)setupPlaylistPlayer
 {
     isPlayerMode_ = YES;
-    [_iCarousel setCenterItemWhenSelected:YES];
     
     // Temporary button
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 460 -44 - 10, 300, 44)];
     [button addTarget:self action:@selector(stopPlayer) forControlEvents:UIControlEventTouchUpInside];
     [button setBackgroundColor:[UIColor greenColor]];
+    [button setTag:6969];
     [self.view addSubview:button];
 }
 
 - (void)removePlaylistPlayer
 {
     isPlayerMode_ = NO;
-    [_iCarousel setCenterItemWhenSelected:NO];
-    
-    [[self.view viewWithTag:6969] removeFromSuperview];
 }
 
 - (void)playNextVideoAfterDelay
@@ -248,7 +243,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     FXImageView *imageView = nil;
     
     if (view == nil) {
-        view = isPlayerMode_ ? [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)] : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
+        view = isPlayerMode_ ? [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)] : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
@@ -283,7 +278,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return isPlayerMode_ ? value*1.05 : value;
+            return value*1.05;
         }
         default:
         {
@@ -369,10 +364,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)deletePlaylistItem:(UISwipeGestureRecognizer *)swipeRecognizer
 {
+    [self.view setUserInteractionEnabled:NO];
     UIView *playlistItemView = swipeRecognizer.view;
     [UIView animateWithDuration:0.3 animations:^{
         [playlistItemView setCenter:CGPointMake(playlistItemView.center.x, playlistItemView.center.y - playlistItemView.frame.size.height - 30)];
     } completion:^(BOOL finished) {
+        [self.view setUserInteractionEnabled:YES];
         int index = [_iCarousel indexOfItemView:playlistItemView];
         [_playlistItems removeObjectAtIndex:index];
         [_iCarousel removeItemAtIndex:index animated:YES];

@@ -62,7 +62,7 @@
 - (void)setupICarousel
 {
     if (!_iCarousel) {
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f + 10.0, self.view.frame.size.width, 200)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f + 10.0, self.view.frame.size.width, 170)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -92,7 +92,7 @@
     FXImageView *profileImageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 170.0f, 170.0f)];
         [view setBackgroundColor:[UIColor clearColor]];
         
         profileImageView = [[FXImageView alloc] initWithFrame:view.frame];
