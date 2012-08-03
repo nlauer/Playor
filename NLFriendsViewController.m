@@ -55,7 +55,7 @@
         NLFBLoginViewController *loginViewController = [[NLFBLoginViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginViewController];
         [nav.navigationBar setBarStyle:UIBarStyleBlack];
-        [self presentViewController:nav animated:YES completion:nil];
+        [[NLPlaylistBarViewController sharedInstance] presentViewController:nav animated:YES completion:nil];
     }
 }
 

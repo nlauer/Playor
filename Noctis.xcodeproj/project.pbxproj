@@ -36,7 +36,6 @@
 		856AF91D15BE52A100529F5C /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91115BE52A100529F5C /* SBJsonWriter.m */; };
 		856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91F15BE650400529F5C /* NLURLConnectionManager.m */; };
 		856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */; };
-		85A6306C15CA267700617E71 /* NLPlaylistPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85A6306B15CA267700617E71 /* NLPlaylistPlayerViewController.m */; };
 		85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CA415CA36FD00C17639 /* NLPlaylist.m */; };
 		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 85D9419C15BB98B1009EF609 /* FBDialog.bundle */; };
@@ -105,8 +104,6 @@
 		856AF91F15BE650400529F5C /* NLURLConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLURLConnectionManager.m; sourceTree = "<group>"; };
 		856AF96315C0C59300529F5C /* NLPlaylistBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistBarViewController.h; sourceTree = "<group>"; };
 		856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistBarViewController.m; sourceTree = "<group>"; };
-		85A6306A15CA267700617E71 /* NLPlaylistPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistPlayerViewController.h; sourceTree = "<group>"; };
-		85A6306B15CA267700617E71 /* NLPlaylistPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistPlayerViewController.m; sourceTree = "<group>"; };
 		85B55CA315CA36FD00C17639 /* NLPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylist.h; sourceTree = "<group>"; };
 		85B55CA415CA36FD00C17639 /* NLPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylist.m; sourceTree = "<group>"; };
 		85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfacebook_ios_sdk.a; path = "facebook-ios-sdk/libfacebook_ios_sdk.a"; sourceTree = "<group>"; };
@@ -204,8 +201,6 @@
 				856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */,
 				856AF96315C0C59300529F5C /* NLPlaylistBarViewController.h */,
 				856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */,
-				85A6306A15CA267700617E71 /* NLPlaylistPlayerViewController.h */,
-				85A6306B15CA267700617E71 /* NLPlaylistPlayerViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -443,7 +438,6 @@
 				856AF91D15BE52A100529F5C /* SBJsonWriter.m in Sources */,
 				856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */,
 				856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */,
-				85A6306C15CA267700617E71 /* NLPlaylistPlayerViewController.m in Sources */,
 				85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

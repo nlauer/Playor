@@ -8,7 +8,7 @@
 
 #import "NLPlaylistBarViewController.h"
 
-#import "NLPlaylistPlayerViewController.h"
+#import "NLPlaylistPlayerVideoView.h"
 #import "NLFacebookFriend.h"
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
@@ -91,7 +91,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (!_iCarousel) {
         [[self.view viewWithTag:69] removeFromSuperview];
         
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+        iCarousel *carousel;
+        if (isPlayerMode_) {
+            carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 140)];
+        } else {
+            carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+        }
         [carousel setCenterItemWhenSelected:NO];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
@@ -128,32 +133,66 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [_videoWebView setDelegate:self];
 }
 
+- (CGRect)getViewFrame
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (isPlayerMode_) {
+        return CGRectMake(0, 20, screenBounds.size.width, screenBounds.size.height - 20);
+    } else {
+        return CGRectMake(0, screenBounds.size.height - 20 - 100, screenBounds.size.width, 120);
+    }
+}
+
 #pragma mark -
 #pragma mark Playlist Methods
 
+- (void)renewCarouselWithIndex:(int)index
+{
+    [_iCarousel removeFromSuperview];
+    _iCarousel = nil;
+    [self updateICarousel];
+    [_iCarousel scrollToItemAtIndex:index animated:NO];
+}
+
 - (void)startPlayerWithIndex:(int)index
 {
-    isPlayerMode_ = YES;
     [self setupPlaylistPlayer];
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        [self.view setFrame:CGRectMake(0, 20, screenBounds.size.width, screenBounds.size.height - 20)];
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, self.view.frame.size.height)];
     } completion:^(BOOL finished) {
-        [_iCarousel scrollToItemAtIndex:index animated:YES];
+        [self renewCarouselWithIndex:index];
+        [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+            [self.view setFrame:[self getViewFrame]];
+        } completion:^(BOOL finished) {
+            [self.view setUserInteractionEnabled:YES];
+        }];
     }];
 }
 
 - (void)stopPlayer
 {
-    isPlayerMode_ = NO;
     [self removePlaylistPlayer];
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        [self.view setFrame:CGRectMake(0, self.view.frame.size.height- 100, self.view.frame.size.width, 120)];
-    } completion:nil];
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, [self getViewFrame].size.height)];
+    } completion:^(BOOL finished){
+        [self renewCarouselWithIndex:[_iCarousel currentItemIndex]];
+        
+        [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+            [self.view setFrame:[self getViewFrame]];
+        } completion:^(BOOL finished) {
+            [self.view setUserInteractionEnabled:YES];
+        }];
+    }];
 }
 
 - (void)setupPlaylistPlayer
 {
+    isPlayerMode_ = YES;
+    [_iCarousel setCenterItemWhenSelected:YES];
+    
+    // Temporary button
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 460 -44 - 10, 300, 44)];
     [button addTarget:self action:@selector(stopPlayer) forControlEvents:UIControlEventTouchUpInside];
     [button setBackgroundColor:[UIColor greenColor]];
@@ -162,7 +201,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)removePlaylistPlayer
 {
+    isPlayerMode_ = NO;
+    [_iCarousel setCenterItemWhenSelected:NO];
     
+    [[self.view viewWithTag:6969] removeFromSuperview];
 }
 
 - (void)playNextVideoAfterDelay
@@ -206,7 +248,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     FXImageView *imageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
+        view = isPlayerMode_ ? [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)] : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
@@ -241,7 +283,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return value;
+            return isPlayerMode_ ? value*1.05 : value;
         }
         default:
         {

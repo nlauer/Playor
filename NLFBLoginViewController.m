@@ -10,6 +10,7 @@
 
 #import "NLFacebookManager.h"
 #import "NLFacebookFriendFactory.h"
+#import "NLAppDelegate.h"
 
 @implementation NLFBLoginViewController
 
@@ -54,7 +55,7 @@
 - (void)signInWithFacebook
 {
     [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
-        UINavigationController *navController = (UINavigationController *)[self presentingViewController];
+        UINavigationController *navController = [((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) navigationController];
         [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:navController.topViewController];
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
