@@ -9,5 +9,6 @@
 #import "NLPlaylist.h"
 
 @implementation NLPlaylist
+@synthesize name = _name, videos = _videos;
 
 @end

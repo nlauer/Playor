@@ -12,6 +12,8 @@
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
 #import "NLVideoInfoView.h"
+#import "NLPlaylistEditorViewController.h"
+#import "NLAppDelegate.h"
 
 #define timeBetweenVideos 5.0
 
@@ -25,6 +27,7 @@
     int timerRepeats;
     NSTimer *playlistTimer_;
     BOOL isPlayerMode_;
+    BOOL isShowingEditor_;
 }
 @synthesize iCarousel = _iCarousel, playlistItems = _playlistItems, videoWebView = _videoWebView;
 
@@ -60,6 +63,7 @@ typedef enum {
     [super viewDidLoad];
     timerRepeats = 0;
     isPlayerMode_ = NO;
+    isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 108, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
@@ -85,11 +89,23 @@ typedef enum {
     [playlistTitleLabel sizeToFit];
     [playlistTitleLabel setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel.frame.size.height/2, playlistTitleLabel.frame.size.width, playlistTitleLabel.frame.size.height)];
     [playlistTitleView addSubview:playlistTitleLabel];
+    
+    UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
+    [playlistEditorButton setBackgroundColor:[UIColor greenColor]];
+    [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
+    [playlistTitleView addSubview:playlistEditorButton];
 }
 
-- (void)viewDidUnload
+- (void)togglePlaylistEditor
 {
-    [super viewDidUnload];
+    if (!isShowingEditor_) {
+        NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
+        [((NLAppDelegate *)[[UIApplication sharedApplication] delegate]).navigationController.topViewController presentViewController:nav animated:YES completion:nil];
+    } else {
+        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]).navigationController.topViewController presentedViewController] dismissViewControllerAnimated:YES completion:nil];
+    }
+    isShowingEditor_ = !isShowingEditor_;
 }
 
 - (void)updateICarousel
