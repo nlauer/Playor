@@ -11,8 +11,9 @@
 #import "NLFacebookFriend.h"
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
+#import "NLVideoInfoView.h"
 
-#define timeBetweenVideos 3.0
+#define timeBetweenVideos 5.0
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -47,6 +48,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }
     return self;
 }
+
+typedef enum {
+    COUNTDOWN_LABEL = 11,
+    PLAYER_BAR,
+    VIDEO_INFO,
+} PlayerViews;
 
 - (void)viewDidLoad
 {
@@ -144,6 +151,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark -
 #pragma mark Playlist Methods
 
+// Renew the carousel when switching into player mode because the views are different sizes
 - (void)renewCarouselWithIndex:(int)index
 {
     [_iCarousel removeFromSuperview];
@@ -152,30 +160,85 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [_iCarousel scrollToItemAtIndex:index animated:NO];
 }
 
+// Handles the animation of switching to the player video and plays the video that the user pressed
 - (void)startPlayerWithIndex:(int)index
 {
-    [self setupPlaylistPlayer];
+    isPlayerMode_ = YES;
+    
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, self.view.frame.size.height)];
     } completion:^(BOOL finished) {
         [self renewCarouselWithIndex:index];
-        [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+        [self setupPlaylistPlayer];
+        [UIView animateWithDuration:0.8 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [self.view setFrame:[self getViewFrame]];
         } completion:^(BOOL finished) {
+            [self playVideoAfterDelay:index];
             [self.view setUserInteractionEnabled:YES];
         }];
     }];
 }
 
+// Handles setup of the extra views that are required for player mode
+- (void)setupPlaylistPlayer
+{
+    CGRect frame = [self getViewFrame];
+    
+    UIToolbar *playerBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, frame.size.height - 44, frame.size.width, 44)];
+    [playerBar setBarStyle:UIBarStyleBlack];
+    [playerBar setTag:PLAYER_BAR];
+    [self.view addSubview:playerBar];
+    
+    UIBarButtonItem *leftSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *rewindButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(rewindPlayer)];
+    UIBarButtonItem *stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopPlayer)];
+    UIBarButtonItem *playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPlayer)];
+    UIBarButtonItem *fastForwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward target:self action:@selector(fastForwardPlayer)];
+    UIBarButtonItem *rightSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [playerBar setItems:[NSArray arrayWithObjects:leftSpacer, rewindButton, stopButton, playButton, fastForwardButton, rightSpacer, nil]];
+    
+    NLVideoInfoView *videoInfoView = [[NLVideoInfoView alloc] initWithFrame:CGRectMake(0, _iCarousel.frame.origin.y + _iCarousel.frame.size.height + 10, frame.size.width, frame.size.height - playerBar.frame.size.height -10 - _iCarousel.frame.size.height - _iCarousel.frame.origin.y - 10)];
+    [videoInfoView setTag:VIDEO_INFO];
+    [self updateVideoInfoView];
+    
+    [self.view addSubview:videoInfoView];
+}
+
+- (void)updateVideoInfoView
+{
+    [((NLVideoInfoView *)[self.view viewWithTag:VIDEO_INFO]) updateViewWithVideo:[_playlistItems objectAtIndex:[_iCarousel currentItemIndex]]];
+}
+
+// Cleans up the views that were added for player mode
+- (void)removePlaylistPlayer
+{
+    [self stopCountdownTimer];
+    for (int i = COUNTDOWN_LABEL; i <= VIDEO_INFO; i++) {
+        [[self.view viewWithTag:i] removeFromSuperview];
+    }
+}
+
+- (void)stopCountdownTimer
+{
+    [playlistTimer_ invalidate];
+    playlistTimer_ = nil;
+    timerRepeats = 0;
+    [((UILabel *)[self.view viewWithTag:COUNTDOWN_LABEL]) setHidden:YES];
+}
+
+#pragma mark Player Bar Methods
+
+// Exit player mode
 - (void)stopPlayer
 {
-    [self removePlaylistPlayer];
+    isPlayerMode_ = NO;
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.8 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, [self getViewFrame].size.height)];
     } completion:^(BOOL finished){
         [self renewCarouselWithIndex:[_iCarousel currentItemIndex]];
+        [self removePlaylistPlayer];
         
         [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
             [self.view setFrame:[self getViewFrame]];
@@ -185,28 +248,48 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }];
 }
 
-- (void)setupPlaylistPlayer
+- (void)rewindPlayer
 {
-    isPlayerMode_ = YES;
+    [self playVideoAfterDelay:[_iCarousel currentItemIndex] -1];
+}
+
+- (void)fastForwardPlayer
+{
+    [self playVideoAfterDelay:[_iCarousel currentItemIndex] +1];
+}
+
+- (void)playPlayer
+{
+    [self playVideoAfterDelay:[_iCarousel currentItemIndex]];
+    // change play button to pause button
+}
+
+#pragma mark Playing Videos
+
+- (void)playVideoAfterDelay:(int)index
+{
+    CGRect frame = [self getViewFrame];
+    UILabel *countdownLabel;
+    if (![self.view viewWithTag:COUNTDOWN_LABEL]) {
+        countdownLabel = [[UILabel alloc] init];
+        [countdownLabel setTag:COUNTDOWN_LABEL];
+        [countdownLabel setTextColor:[UIColor whiteColor]];
+        [countdownLabel setBackgroundColor:[UIColor clearColor]];
+        [countdownLabel setFrame:CGRectMake(10, frame.size.height - 44 - 44 - 10, frame.size.width - 20, 44)];
+        [countdownLabel setTextAlignment:UITextAlignmentCenter];
+        [self.view addSubview:countdownLabel];
+    } else {
+        countdownLabel = (UILabel *)[self.view viewWithTag:COUNTDOWN_LABEL];
+        [countdownLabel setHidden:NO];
+    }
+    [countdownLabel setText:[NSString stringWithFormat:@"Video starts in %d", (int)timeBetweenVideos]];
     
-    // Temporary button
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 460 -44 - 10, 300, 44)];
-    [button addTarget:self action:@selector(stopPlayer) forControlEvents:UIControlEventTouchUpInside];
-    [button setBackgroundColor:[UIColor greenColor]];
-    [button setTag:6969];
-    [self.view addSubview:button];
-}
-
-- (void)removePlaylistPlayer
-{
-    isPlayerMode_ = NO;
-}
-
-- (void)playNextVideoAfterDelay
-{
-    int newIndex = [_iCarousel currentItemIndex] + 1;
-    if (newIndex < [_playlistItems count]) {
-        [_iCarousel scrollToItemAtIndex:newIndex animated:YES];
+    if (index < [_playlistItems count]) {
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
+        if (playlistTimer_) {
+            [playlistTimer_ invalidate];
+            timerRepeats = 0;
+        }
         playlistTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(playNextVideo:) userInfo:nil repeats:YES];
     }
 }
@@ -214,9 +297,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)playNextVideo:(NSTimer *)timer
 {
     timerRepeats++;
+    int timeUntil = timeBetweenVideos - timerRepeats;
+    [((UILabel *)[self.view viewWithTag:COUNTDOWN_LABEL]) setText:[NSString stringWithFormat:@"Video starts in %d", timeUntil]];
     if (timerRepeats >= timeBetweenVideos) {
-        [timer invalidate];
-        timerRepeats = 0;
+        [self stopCountdownTimer];
         [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
     }
 }
@@ -226,7 +310,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
     if (playbackState == 0) {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
-        [self playNextVideoAfterDelay];
+        [self playVideoAfterDelay:([_iCarousel currentItemIndex] + 1)];
     }
 }
 
@@ -301,7 +385,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    isPlayerMode_ ? [self loadNewVideoWithIndex:index] : [self startPlayerWithIndex:index];
+    isPlayerMode_ ? [self playVideoAfterDelay:index] : [self startPlayerWithIndex:index];
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+    [self updateVideoInfoView];
 }
 
 #pragma mark -
@@ -349,6 +438,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
     [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:facebookFriend.ID andDelegate:self];
+    //Need to get the shared videos here too
 }
 
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
