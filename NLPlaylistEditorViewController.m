@@ -10,6 +10,7 @@
 
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
+#import "NLPlaylist.h"
 
 @interface NLPlaylistEditorViewController ()
 @property (strong, nonatomic) UITableView *tableView;
@@ -50,7 +51,10 @@
 
 - (void)addNewPlaylist
 {
-    // add a new playlist here, prompt the user to enter a name
+    NLPlaylist *playlist = [[NLPlaylist alloc] init];
+    [playlist setName:@"NEW PLAYLIST"];
+    [[NLPlaylistManager sharedInstance] addPlaylist:playlist];
+    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[[[NLPlaylistManager sharedInstance] playlists] count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -
@@ -67,6 +71,7 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
+    cell.textLabel.text = [[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row] name];
     return cell;
 }
 
@@ -75,6 +80,12 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor darkGrayColor]];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
 }
 
 @end

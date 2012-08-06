@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NLPlaylistBarViewController.h"
 
-@interface NLYoutubeVideo : NSObject <PlaylistItemDelegate>
+@interface NLYoutubeVideo : NSObject <PlaylistItemDelegate, NSCoding>
 
 @property (strong, nonatomic) NSURL *videoURL;
 @property (strong, nonatomic) NSURL *thumbnailURL;

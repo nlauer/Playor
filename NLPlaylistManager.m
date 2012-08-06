@@ -9,6 +9,7 @@
 #import "NLPlaylistManager.h"
 
 #import "NLPlaylist.h"
+#import "NLPlaylistBarViewController.h"
 
 @implementation NLPlaylistManager
 @synthesize playlists = _playlists;
@@ -45,12 +46,18 @@ static NLPlaylistManager *sharedInstance = NULL;
 
 - (void)loadPlaylistsFromFile
 {
-    _playlists = [[NSMutableArray alloc] initWithContentsOfFile:[self playlistsSaveFilePath]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self playlistsSaveFilePath]]) {
+        NSData *data = [[NSMutableData alloc] initWithContentsOfFile:[self playlistsSaveFilePath]];
+        _playlists = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    } else {
+        _playlists = [[NSMutableArray alloc] init];
+    }
 }
 
 - (void)savePlaylistsToFile
 {
-    [_playlists writeToFile:[self playlistsSaveFilePath] atomically:YES];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_playlists];
+    [data writeToFile:[self playlistsSaveFilePath] atomically:YES];
 }
 
 - (void)addPlaylist:(NLPlaylist *)playlist
@@ -63,6 +70,28 @@ static NLPlaylistManager *sharedInstance = NULL;
 {
     [_playlists removeObject:playlist];
     [self savePlaylistsToFile];
+}
+
+- (NLPlaylist *)getCurrentPlaylist
+{
+    int currentPlaylistIndex;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"]) {
+        currentPlaylistIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"] integerValue];
+    } else {
+        currentPlaylistIndex = 0;
+    }
+    if (currentPlaylistIndex >= [_playlists count]) {
+        NLPlaylist *playlist = [[NLPlaylist alloc] init];
+        [_playlists addObject:playlist];
+    }
+    
+    return [_playlists objectAtIndex:currentPlaylistIndex];
+}
+
+- (void)setCurrentPlaylist:(int)index
+{
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:index] forKey:@"currentIndex"];
+    [[NLPlaylistBarViewController sharedInstance] updatePlaylist:[_playlists objectAtIndex:index]];
 }
 
 @end

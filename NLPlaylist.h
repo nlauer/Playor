@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NLPlaylist : NSObject
+@interface NLPlaylist : NSObject <NSCoding>
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *videos;

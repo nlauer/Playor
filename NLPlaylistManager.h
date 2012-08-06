@@ -8,10 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+@class NLPlaylist;
+
 @interface NLPlaylistManager : NSObject
 
 @property (strong, nonatomic) NSMutableArray *playlists;
 
 + (NLPlaylistManager *)sharedInstance;
+
+- (void)loadPlaylistsFromFile;
+- (void)savePlaylistsToFile;
+- (void)addPlaylist:(NLPlaylist *)playlist;
+- (void)removePlaylist:(NLPlaylist *)playlist;
+- (NLPlaylist *)getCurrentPlaylist;
+- (void)setCurrentPlaylist:(int)index;
 
 @end

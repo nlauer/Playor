@@ -10,7 +10,7 @@
 
 #import "iCarousel.h"
 #import "NLYoutubeLinksFromFBLikesFactory.h"
-@class NLFacebookFriend, NLYoutubeVideo;
+@class NLFacebookFriend, NLYoutubeVideo, NLPlaylist;
 
 @protocol PlaylistItemDelegate <NSObject>
 - (NSURL *)getPictureURL;
@@ -22,5 +22,6 @@
 
 - (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend;
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video;
+- (void)updatePlaylist:(NLPlaylist *)playlist;
 
 @end

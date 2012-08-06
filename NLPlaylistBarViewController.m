@@ -14,12 +14,14 @@
 #import "NLVideoInfoView.h"
 #import "NLPlaylistEditorViewController.h"
 #import "NLAppDelegate.h"
+#import "NLPlaylist.h"
+#import "NLPlaylistManager.h"
 
 #define timeBetweenVideos 5.0
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
-@property (strong, nonatomic) NSMutableArray *playlistItems;
+@property (strong, nonatomic) NLPlaylist *playlist;
 @property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
@@ -28,8 +30,9 @@
     NSTimer *playlistTimer_;
     BOOL isPlayerMode_;
     BOOL isShowingEditor_;
+    UILabel *playlistTitleLabel_;
 }
-@synthesize iCarousel = _iCarousel, playlistItems = _playlistItems, videoWebView = _videoWebView;
+@synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
 
 static NLPlaylistBarViewController *sharedInstance = NULL;
 
@@ -47,7 +50,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     self = [super init];
     if (self) {
-        self.playlistItems = [[NSMutableArray alloc] init];
+        _playlist = [[NLPlaylistManager sharedInstance] getCurrentPlaylist];
     }
     return self;
 }
@@ -81,19 +84,23 @@ typedef enum {
     [playlistTitleView setBackgroundColor:[UIColor colorWithWhite:0.15 alpha:1.0]];
     [self.view addSubview:playlistTitleView];
     
-    UILabel *playlistTitleLabel = [[UILabel alloc] init];
-    [playlistTitleLabel setBackgroundColor:[UIColor clearColor]];
-    [playlistTitleLabel setText:@"MY PLAYLIST"];
-    [playlistTitleLabel setFont:[UIFont systemFontOfSize:16]];
-    [playlistTitleLabel setTextColor:[UIColor whiteColor]];
-    [playlistTitleLabel sizeToFit];
-    [playlistTitleLabel setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel.frame.size.height/2, playlistTitleLabel.frame.size.width, playlistTitleLabel.frame.size.height)];
-    [playlistTitleView addSubview:playlistTitleLabel];
+    playlistTitleLabel_ = [[UILabel alloc] init];
+    [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
+    [playlistTitleLabel_ setText:_playlist.name];
+    [playlistTitleLabel_ setFont:[UIFont systemFontOfSize:16]];
+    [playlistTitleLabel_ setTextColor:[UIColor whiteColor]];
+    [playlistTitleLabel_ sizeToFit];
+    [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
+    [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
     [playlistEditorButton setBackgroundColor:[UIColor greenColor]];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
+    
+    if ([_playlist.videos count] > 0) {
+        [self updateICarousel];
+    }
 }
 
 - (void)togglePlaylistEditor
@@ -126,8 +133,15 @@ typedef enum {
         [self setICarousel:carousel];
         [self.view addSubview:carousel];
     } else {
-        [_iCarousel insertItemAtIndex:[_playlistItems count]-1 animated:YES];
+        [_iCarousel insertItemAtIndex:[_playlist.videos count]-1 animated:YES];
     }
+}
+
+- (void)updatePlaylist:(NLPlaylist *)playlist
+{
+    _playlist = playlist;
+    [_iCarousel reloadData];
+    [playlistTitleLabel_ setText:playlist.name];
 }
 
 - (void)loadNewVideoWithIndex:(int)index
@@ -147,7 +161,7 @@ typedef enum {
     </body></html>";
     
     // Populate HTML with the URL and requested frame size
-    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_playlistItems objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
+    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_playlist.videos objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
     
     // Load the html into the webview
     [_videoWebView loadHTMLString:html baseURL:nil];
@@ -182,12 +196,12 @@ typedef enum {
     isPlayerMode_ = YES;
     
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, self.view.frame.size.height)];
     } completion:^(BOOL finished) {
         [self renewCarouselWithIndex:index];
         [self setupPlaylistPlayer];
-        [UIView animateWithDuration:0.8 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [self.view setFrame:[self getViewFrame]];
         } completion:^(BOOL finished) {
             [self playVideoAfterDelay:index];
@@ -223,7 +237,7 @@ typedef enum {
 
 - (void)updateVideoInfoView
 {
-    [((NLVideoInfoView *)[self.view viewWithTag:VIDEO_INFO]) updateViewWithVideo:[_playlistItems objectAtIndex:[_iCarousel currentItemIndex]]];
+    [((NLVideoInfoView *)[self.view viewWithTag:VIDEO_INFO]) updateViewWithVideo:[_playlist.videos objectAtIndex:[_iCarousel currentItemIndex]]];
 }
 
 // Cleans up the views that were added for player mode
@@ -250,13 +264,13 @@ typedef enum {
 {
     isPlayerMode_ = NO;
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.8 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + self.view.frame.size.height - 20, self.view.frame.size.width, [self getViewFrame].size.height)];
     } completion:^(BOOL finished){
         [self renewCarouselWithIndex:[_iCarousel currentItemIndex]];
         [self removePlaylistPlayer];
         
-        [UIView animateWithDuration:0.6 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationCurveEaseOut animations:^{
             [self.view setFrame:[self getViewFrame]];
         } completion:^(BOOL finished) {
             [self.view setUserInteractionEnabled:YES];
@@ -300,7 +314,7 @@ typedef enum {
     }
     [countdownLabel setText:[NSString stringWithFormat:@"Video starts in %d", (int)timeBetweenVideos]];
     
-    if (index < [_playlistItems count]) {
+    if (index < [_playlist.videos count]) {
         [_iCarousel scrollToItemAtIndex:index animated:YES];
         if (playlistTimer_) {
             [playlistTimer_ invalidate];
@@ -335,7 +349,7 @@ typedef enum {
 #pragma mark iCarousel methods
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return [_playlistItems count];
+    return [_playlist.videos count];
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
@@ -360,7 +374,7 @@ typedef enum {
     }
     
     [imageView setImage:nil];
-    [imageView setImageWithContentsOfURL:[[_playlistItems objectAtIndex:index] getPictureURL]];
+    [imageView setImageWithContentsOfURL:[[_playlist.videos objectAtIndex:index] getPictureURL]];
     [view setUserInteractionEnabled:YES];
     
     return view;
@@ -406,7 +420,9 @@ typedef enum {
 
 - (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
 {
-    [self updateVideoInfoView];
+    if (isPlayerMode_) {
+        [self updateVideoInfoView];
+    }
 }
 
 #pragma mark -
@@ -459,11 +475,11 @@ typedef enum {
 
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
-    if (![_playlistItems containsObject:video]) {
-        [_playlistItems addObject:video];
+    if (![_playlist.videos containsObject:video]) {
+        [_playlist.videos addObject:video];
         [self updateICarousel];
     } else {
-        int index = [_playlistItems indexOfObject:video];
+        int index = [_playlist.videos indexOfObject:video];
         [_iCarousel scrollToItemAtIndex:index animated:YES];
     }
 }
@@ -477,7 +493,7 @@ typedef enum {
     } completion:^(BOOL finished) {
         [self.view setUserInteractionEnabled:YES];
         int index = [_iCarousel indexOfItemView:playlistItemView];
-        [_playlistItems removeObjectAtIndex:index];
+        [_playlist.videos removeObjectAtIndex:index];
         [_iCarousel removeItemAtIndex:index animated:YES];
     }];
 }

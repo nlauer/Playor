@@ -62,4 +62,27 @@
 {
     return self.thumbnailURL;
 }
+
+#pragma mark -
+#pragma mark NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        _videoURL = [aDecoder decodeObjectForKey:@"videoURL"];
+        _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
+        _title = [aDecoder decodeObjectForKey:@"title"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_videoURL forKey:@"videoURL"];
+    [aCoder encodeObject:_thumbnailURL forKey:@"thumbnailURL"];
+    [aCoder encodeObject:_title forKey:@"title"];
+}
+
 @end
