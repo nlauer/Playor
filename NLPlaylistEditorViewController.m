@@ -33,7 +33,7 @@
     [super viewDidLoad];
     
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44)];
-    [self.view setBackgroundColor:[UIColor lightGrayColor]];
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
     
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.title = @"Editor";
@@ -57,6 +57,11 @@
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[[[NLPlaylistManager sharedInstance] playlists] count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+- (int)selectedPlaylistIndex
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"] integerValue];
+}
+
 #pragma mark -
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -73,6 +78,29 @@
     }
     cell.textLabel.text = [[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row] name];
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BOOL canEdit = (indexPath.row == 0) ? NO : YES;
+    return canEdit;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (editingStyle) {
+        case UITableViewCellEditingStyleDelete:
+            [[NLPlaylistManager sharedInstance] removePlaylist:[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row]];
+            if ([self selectedPlaylistIndex] == indexPath.row) {
+                [[NLPlaylistManager sharedInstance] setCurrentPlaylist:0];
+            }
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        case UITableViewCellEditingStyleInsert:
+            break;
+        case UITableViewCellEditingStyleNone:
+            break;
+    }
 }
 
 #pragma mark -

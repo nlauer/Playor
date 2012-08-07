@@ -16,7 +16,7 @@
     self = [super init];
     if (self) {
         self.videos = [[NSMutableArray alloc] init];
-        self.name = @"MY PLAYLIST";
+        self.name = @"ALL SONGS";
     }
     
     return self;
