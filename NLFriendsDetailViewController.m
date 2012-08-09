@@ -43,9 +43,10 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, 10.0, self.view.frame.size.width, 150)];
+    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44)];
     [carouselView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
     [carouselView setTag:1337];
+    [carouselView setClipsToBounds:YES];
     [self.view addSubview:carouselView];
     
     numberOfActiveFactories = 0;
@@ -77,8 +78,9 @@
     if (!_iCarousel) {
         UIView *carouselView = [self.view viewWithTag:1337];
         
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 130)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:carouselView.frame];
         [carousel setType:iCarouselTypeLinear];
+        [carousel setVertical:YES];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
         [self setICarousel:carousel];
@@ -169,16 +171,14 @@
     FXImageView *thumbnailImageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)];
-        [view setBackgroundColor:[UIColor blackColor]];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width, 90)];
+        [view setBackgroundColor:[UIColor darkGrayColor]];
+        [view setUserInteractionEnabled:YES];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height - 30)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, view.frame.origin.y, view.frame.size.width - 160, view.frame.size.height)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];
-        [thumbnailImageView setReflectionAlpha:0.6];
-        [thumbnailImageView setReflectionGap:0];
-        [thumbnailImageView setReflectionScale:0.4];
         [view addSubview:thumbnailImageView];
         
         titleLabel = [[UILabel alloc] init];
@@ -188,8 +188,11 @@
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
         [titleLabel setLineBreakMode:UILineBreakModeWordWrap];
-        [titleLabel setTextAlignment:UITextAlignmentCenter];
         [view addSubview:titleLabel];
+        
+        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
+        [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
+        [view addGestureRecognizer:swipeRecognizer];
     } else {
         titleLabel = (UILabel *)[view viewWithTag:1];
         thumbnailImageView = (FXImageView *)[view viewWithTag:2];
@@ -199,8 +202,7 @@
     [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:index] thumbnailURL]];
     
     [titleLabel setText:[[_youtubeLinksArray objectAtIndex:index] title]];
-    [titleLabel sizeToFit];
-    [titleLabel setFrame:CGRectMake(10, 100, view.frame.size.width - 20, view.frame.size.height - 100)];
+    [titleLabel setFrame:CGRectMake(thumbnailImageView.frame.origin.x + thumbnailImageView.frame.size.width + 10, 10, view.frame.size.width - thumbnailImageView.frame.origin.x - thumbnailImageView.frame.size.width - 20, view.frame.size.height - 20)];
     
     return view;
 }
@@ -233,16 +235,10 @@
 
 - (void)carouselDidScroll:(iCarousel *)carousel
 {
-    for (UIGestureRecognizer *recognizer in [[carousel currentItemView] gestureRecognizers]) {
-        [[carousel currentItemView] removeGestureRecognizer:recognizer];
+    //Make all views swipable
+    for (UIView *view in [carousel visibleItemViews]) {
+        [view setUserInteractionEnabled:YES];
     }
-}
-
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
-{
-    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
-    [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
-    [[carousel currentItemView] addGestureRecognizer:swipeRecognizer];
 }
 
 #pragma mark -
@@ -250,24 +246,20 @@
 - (void)swipeVideoView:(UISwipeGestureRecognizer *)swipeRecognizer
 {
     [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
-        [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y + 120)];
-        [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(0.3, 0.3)];
-        [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
+        [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2 + 100, swipeRecognizer.view.center.y)];
     } completion:^(BOOL finished) {
-        [self performSelectorInBackground:@selector(addVideoToPlaylistFromCarousel) withObject:nil];
+        [self addVideoToPlaylistFromCarouselForView:swipeRecognizer.view];
         [UIView animateWithDuration:0.2 animations:^{
-            [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, swipeRecognizer.view.center.y - 120)];
-            [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
-            [[swipeRecognizer.view viewWithTag:1] setHidden:NO];
+            [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2, swipeRecognizer.view.center.y)];
             [self.view setUserInteractionEnabled:YES];
         }];
     }];
 }
 
-- (void)addVideoToPlaylistFromCarousel
+- (void)addVideoToPlaylistFromCarouselForView:(UIView *)view
 {
-    int index = [_iCarousel currentItemIndex];
+    int index = [_iCarousel indexOfItemView:view];
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
 }

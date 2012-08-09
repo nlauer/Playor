@@ -90,7 +90,7 @@ typedef enum {
     
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
     [infoLabel setBackgroundColor:[UIColor clearColor]];
-    [infoLabel setText:@"Swipe down on friends to add to playlist, swipe up on playlist items to remove"];
+    [infoLabel setText:@"Swipe right on songs to add to playlist, swipe up on playlist items to remove"];
     [infoLabel setTextAlignment:UITextAlignmentCenter];
     [infoLabel setNumberOfLines:2];
     [infoLabel setLineBreakMode:UILineBreakModeWordWrap];
@@ -378,6 +378,7 @@ typedef enum {
     if (view == nil) {
         view = isPlayerMode_ ? [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 130)] : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
+        [view setUserInteractionEnabled:YES];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
         [imageView setAsynchronous:YES];
@@ -498,6 +499,7 @@ typedef enum {
     if (![_playlist.videos containsObject:video]) {
         [_playlist.videos addObject:video];
         [self updateICarousel];
+        [_iCarousel scrollToItemAtIndex:[_playlist.videos count] - 1 animated:YES];
     } else {
         int index = [_playlist.videos indexOfObject:video];
         [_iCarousel scrollToItemAtIndex:index animated:YES];
