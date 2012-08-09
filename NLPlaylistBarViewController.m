@@ -70,16 +70,6 @@ typedef enum {
 	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 108, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
-    UILabel *infoLabel = [[UILabel alloc] init];
-    [infoLabel setBackgroundColor:[UIColor clearColor]];
-    [infoLabel setText:@"Swipe items down to add to playlist"];
-    [infoLabel setFont:[UIFont systemFontOfSize:14]];
-    [infoLabel setTextColor:[UIColor whiteColor]];
-    [infoLabel sizeToFit];
-    [infoLabel setTag:69];
-    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10 - 32)];
-    [self.view addSubview:infoLabel];
-    
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
     [playlistTitleView setBackgroundColor:[UIColor colorWithWhite:0.15 alpha:1.0]];
     [self.view addSubview:playlistTitleView];
@@ -98,9 +88,34 @@ typedef enum {
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
+    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
+    [infoLabel setBackgroundColor:[UIColor clearColor]];
+    [infoLabel setText:@"Swipe down on friends to add to playlist, swipe up on playlist items to remove"];
+    [infoLabel setTextAlignment:UITextAlignmentCenter];
+    [infoLabel setNumberOfLines:2];
+    [infoLabel setLineBreakMode:UILineBreakModeWordWrap];
+    [infoLabel setFont:[UIFont systemFontOfSize:14]];
+    [infoLabel setTextColor:[UIColor whiteColor]];
+    [infoLabel setTag:69];
+    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10 - 32)];
+    [self.view addSubview:infoLabel];
+    
     if ([_playlist.videos count] > 0) {
-        [self updateICarousel];
+        [infoLabel setHidden:YES];
     }
+        
+    iCarousel *carousel;
+    if (isPlayerMode_) {
+        carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44 + 10, self.view.frame.size.width, 140)];
+    } else {
+        carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+    }
+    [carousel setType:iCarouselTypeLinear];
+    [carousel setDataSource:self];
+    [carousel setDelegate:self];
+    [carousel setContentOffset:CGSizeMake(0, 0)];
+    [self setICarousel:carousel];
+    [self.view addSubview:carousel];
 }
 
 - (void)togglePlaylistEditor
@@ -118,8 +133,6 @@ typedef enum {
 - (void)updateICarousel
 {
     if (!_iCarousel) {
-        [[self.view viewWithTag:69] removeFromSuperview];
-        
         iCarousel *carousel;
         if (isPlayerMode_) {
             carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44 + 10, self.view.frame.size.width, 140)];
@@ -139,9 +152,13 @@ typedef enum {
 
 - (void)updatePlaylist:(NLPlaylist *)playlist
 {
-    _playlist = playlist;
-    [_iCarousel reloadData];
-    [playlistTitleLabel_ setText:playlist.name];
+    if (playlist != _playlist) {
+        _playlist = playlist;
+        [[self.view viewWithTag:69] setHidden:([_playlist.videos count] > 0) ? YES : NO];
+        [_iCarousel reloadData];
+        [playlistTitleLabel_ setText:playlist.name];
+    }
+    [_iCarousel scrollToItemAtIndex:0 animated:NO];
 }
 
 - (void)loadNewVideoWithIndex:(int)index
@@ -337,10 +354,12 @@ typedef enum {
 
 - (void)playbackStateDidChange:(NSNotification *)note
 {
-    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
-    if (playbackState == 0) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        [self playVideoAfterDelay:([_iCarousel currentItemIndex] + 1)];
+    if (isPlayerMode_) {
+        int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
+        if (playbackState == 0) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
+            [self playVideoAfterDelay:([_iCarousel currentItemIndex] + 1)];
+        }
     }
 }
 
@@ -475,6 +494,7 @@ typedef enum {
 
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
+    [[self.view viewWithTag:69] setHidden:YES];
     if (![_playlist.videos containsObject:video]) {
         [_playlist.videos addObject:video];
         [self updateICarousel];
