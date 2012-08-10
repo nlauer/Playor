@@ -47,6 +47,7 @@
 		85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D941BA15BBA5A1009EF609 /* QuartzCore.framework */; };
 		85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C215BBAACE009EF609 /* NLFacebookFriend.m */; };
 		85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */; };
+		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +134,8 @@
 		85D941C215BBAACE009EF609 /* NLFacebookFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriend.m; sourceTree = "<group>"; };
 		85D941C415BBAC6C009EF609 /* NLFacebookFriendFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFacebookFriendFactory.h; sourceTree = "<group>"; };
 		85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriendFactory.m; sourceTree = "<group>"; };
+		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
+		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +244,8 @@
 		853FEB3715BB88D5002A1EB5 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				85FB458B15D4CAA200349534 /* NSArray+Videos.h */,
+				85FB458C15D4CAA200349534 /* NSArray+Videos.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -457,6 +462,7 @@
 				85B55CAC15CF2F3300C17639 /* NLVideoInfoView.m in Sources */,
 				85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */,
 				85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */,
+				85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,8 @@
 #import "NLYoutubeVideo.h"
 #import "NSObject+SBJSON.h"
 
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@+-cover+-Cover+-Lyric+-lyric+-interview+-Interview+-remix+-Remix+-acoustic+-Acoustic+-live+-Live+-LIVE&max-results=10&v=2&alt=json&category=Music&format=1"
+
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
 }
@@ -58,7 +60,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     NSDictionary *items = [(NSDictionary *)result objectForKey:@"data"];
     for (NSDictionary *musicLikes in items) {
         NSString *name = [musicLikes objectForKey:@"name"];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:@"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=3&v=2&alt=json&category=Music&format=1", name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {
@@ -77,10 +79,16 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     NSDictionary *dataDictionary = [data JSONValue];
     if (dataDictionary) {
         NSArray *entries = [[dataDictionary objectForKey:@"feed"] objectForKey:@"entry"];
+        NSMutableArray *unsortedYoutubeLinks = [[NSMutableArray alloc] init];
         for (NSDictionary *feedEntry in entries) {
             NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:feedEntry];
-            [_youtubeLinksArray addObject:youtubeVideo];
+            [unsortedYoutubeLinks addObject:youtubeVideo];
         }
+        if ([unsortedYoutubeLinks count] >= 3) {
+            [unsortedYoutubeLinks sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"viewCount" ascending:NO]]];
+            unsortedYoutubeLinks = [NSMutableArray arrayWithArray:[unsortedYoutubeLinks subarrayWithRange:NSMakeRange(0, 3)]];
+        }
+        _youtubeLinksArray = [NSMutableArray arrayWithArray:[_youtubeLinksArray arrayByAddingObjectsFromArray:unsortedYoutubeLinks]];
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }

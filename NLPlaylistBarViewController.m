@@ -16,6 +16,7 @@
 #import "NLAppDelegate.h"
 #import "NLPlaylist.h"
 #import "NLPlaylistManager.h"
+#import "NSArray+Videos.h"
 
 #define timeBetweenVideos 5.0
 
@@ -84,7 +85,7 @@ typedef enum {
     [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
-    [playlistEditorButton setBackgroundColor:[UIColor greenColor]];
+    [playlistEditorButton setBackgroundColor:[UIColor lightGrayColor]];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
@@ -496,12 +497,12 @@ typedef enum {
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
     [[self.view viewWithTag:69] setHidden:YES];
-    if (![_playlist.videos containsObject:video]) {
+    if (![_playlist.videos containsVideo:video]) {
         [_playlist.videos addObject:video];
         [self updateICarousel];
         [_iCarousel scrollToItemAtIndex:[_playlist.videos count] - 1 animated:YES];
     } else {
-        int index = [_playlist.videos indexOfObject:video];
+        int index = [_playlist.videos indexOfVideo:video];
         [_iCarousel scrollToItemAtIndex:index animated:YES];
     }
 }

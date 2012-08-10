@@ -9,7 +9,7 @@
 #import "NLYoutubeVideo.h"
 
 @implementation NLYoutubeVideo
-@synthesize videoURL = _videoURL, thumbnailURL = _thumbnailURL, title = _title;
+@synthesize videoURL = _videoURL, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
 
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary
 {
@@ -18,6 +18,7 @@
         self.title = [self getVideoTitleFromDictionary:dataDictionary];
         self.videoURL = [self getVideoURLFromDictionary:dataDictionary];
         self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
+        self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
     }
     
     return self;
@@ -54,6 +55,12 @@
 {
     NSString *thumbnailString = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
     return [NSURL URLWithString:thumbnailString];
+}
+
+- (int)getVideoViewCountFromDictionary:(NSDictionary *)dataDictionary
+{
+    NSString *viewCount = [[dataDictionary objectForKey:@"yt$statistics"] objectForKey:@"viewCount"];
+    return [viewCount intValue];
 }
 
 #pragma mark -

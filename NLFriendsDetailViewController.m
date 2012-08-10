@@ -43,12 +43,6 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
-    UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44)];
-    [carouselView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
-    [carouselView setTag:1337];
-    [carouselView setClipsToBounds:YES];
-    [self.view addSubview:carouselView];
-    
     numberOfActiveFactories = 0;
     
     [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
@@ -58,25 +52,30 @@
     numberOfActiveFactories++;
     
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [activityIndicator_ setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
-    [carouselView addSubview:activityIndicator_];
+    [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
+    [self.view addSubview:activityIndicator_];
     [activityIndicator_ startAnimating];
+    
+    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+    [_videoWebView setDelegate:self];
+    [self.view addSubview:_videoWebView];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    
-    [_videoWebView setDelegate:nil];
-    _videoWebView = nil;
     activityIndicator_ = nil;
-    _iCarousel = nil;
+    _videoWebView = nil;
 }
 
 - (void)setupICarousel
 {
     if (!_iCarousel) {
-        UIView *carouselView = [self.view viewWithTag:1337];
+        UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height)];
+        [carouselView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
+        [carouselView setTag:1337];
+        [carouselView setClipsToBounds:YES];
+        [self.view addSubview:carouselView];
         
         iCarousel *carousel = [[iCarousel alloc] initWithFrame:carouselView.frame];
         [carousel setType:iCarouselTypeLinear];
@@ -92,13 +91,6 @@
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    if (![[self.view subviews] containsObject:_videoWebView]) {
-        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-        [_videoWebView setBackgroundColor:[UIColor clearColor]];
-        [_videoWebView.scrollView setScrollEnabled:NO];
-        [self.view addSubview:_videoWebView];
-    }
-    
     [_videoWebView loadRequest:nil];
     NSString *youTubeVideoHTML = @"<html><head>\
     <body style='margin:0'>\
@@ -111,7 +103,6 @@
     
     // Load the html into the webview
     [_videoWebView loadHTMLString:html baseURL:nil];
-    [_videoWebView setDelegate:self];
 }
 
 #pragma mark -

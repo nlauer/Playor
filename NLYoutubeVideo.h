@@ -14,6 +14,7 @@
 @property (strong, nonatomic) NSURL *videoURL;
 @property (strong, nonatomic) NSURL *thumbnailURL;
 @property (strong, nonatomic) NSString *title;
+@property int viewCount;
 
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary;
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary;
