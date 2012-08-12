@@ -640,6 +640,8 @@
 
 - (void)setImageWithContentsOfURL:(NSURL *)URL
 {
+    [self setImage:nil];
+    [self setNeedsLayout];
     if (![URL isEqual:_imageContentURL])
     {
         //clear current image

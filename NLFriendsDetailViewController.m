@@ -16,7 +16,7 @@
 
 @interface NLFriendsDetailViewController ()
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
-@property (strong, nonatomic) iCarousel *iCarousel;
+@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *youtubeLinksArray;
 @property (strong, nonatomic) UIWebView *videoWebView;
 @end
@@ -26,7 +26,7 @@
     int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
-@synthesize iCarousel = _iCarousel, youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView;
+@synthesize youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView, tableView = _tableView;
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
@@ -42,6 +42,7 @@
 {
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
+    _youtubeLinksArray = [[NSMutableArray alloc] init];
     
     numberOfActiveFactories = 0;
     
@@ -50,6 +51,12 @@
     
     [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
     numberOfActiveFactories++;
+    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44) style:UITableViewStylePlain];
+    [_tableView setDelegate:self];
+    [_tableView setDataSource:self];
+    [_tableView setRowHeight:90];
+    [self.view addSubview:_tableView];
     
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
@@ -66,27 +73,9 @@
     [super viewDidUnload];
     activityIndicator_ = nil;
     _videoWebView = nil;
-}
-
-- (void)setupICarousel
-{
-    if (!_iCarousel) {
-        UIView *carouselView = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height)];
-        [carouselView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
-        [carouselView setTag:1337];
-        [carouselView setClipsToBounds:YES];
-        [self.view addSubview:carouselView];
-        
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:carouselView.frame];
-        [carousel setType:iCarouselTypeLinear];
-        [carousel setVertical:YES];
-        [carousel setDataSource:self];
-        [carousel setDelegate:self];
-        [self setICarousel:carousel];
-        [carouselView addSubview:carousel];
-    } else {
-        [_iCarousel reloadData];
-    }
+    [_tableView setDelegate:nil];
+    [_tableView setDataSource:nil];
+    _tableView = nil;
 }
 
 - (void)loadNewVideoWithIndex:(int)index
@@ -107,11 +96,23 @@
 
 #pragma mark -
 #pragma mark YoutubeLinksDelegate
+- (void)insertNewLinksIntoTableView:(NSArray *)links
+{
+    _youtubeLinksArray = [_youtubeLinksArray arrayByAddingObjectsFromArray:links];
+    
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    for (NLYoutubeVideo *video in links) {
+        int index = [_youtubeLinksArray indexOfObject:video];
+        [indexPaths addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+    }
+    [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+}
+
 - (void)receiveYoutubeLinks:(NSArray *)links
 {
     numberOfActiveFactories--;
     
-    if ([links count] == 0 && !_youtubeLinksArray && numberOfActiveFactories == 0) {
+    if ([links count] == 0 && [_youtubeLinksArray count] == 0 && numberOfActiveFactories == 0) {
         //both returns were empty, no content
         UILabel *noContentLabel = [[UILabel alloc] init];
         [noContentLabel setTextColor:[UIColor whiteColor]];
@@ -119,26 +120,18 @@
         [noContentLabel sizeToFit];
         [noContentLabel setBackgroundColor:[UIColor clearColor]];
         
-        UIView *carouselView = [self.view viewWithTag:1337];
-        [noContentLabel setCenter:CGPointMake(carouselView.frame.size.width/2, carouselView.frame.size.height/2)];
-        [carouselView addSubview:noContentLabel];
+        [noContentLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+        [self.view addSubview:noContentLabel];
         
         [activityIndicator_ stopAnimating];
         [activityIndicator_ setHidden:YES];
         return;
     }
-    if (!_youtubeLinksArray && [links count] > 0) {
-        //one return was filled
-        self.youtubeLinksArray = links;
-        [self setupICarousel];
-        
+    if ([links count] && !activityIndicator_.hidden> 0) {
         [activityIndicator_ stopAnimating];
         [activityIndicator_ setHidden:YES];
-    } else {
-        //both returns were filled, append content
-        _youtubeLinksArray = [_youtubeLinksArray arrayByAddingObjectsFromArray:links];
-        [_iCarousel reloadData];
     }
+    [self insertNewLinksIntoTableView:links];
 }
 
 #pragma mark -
@@ -149,87 +142,60 @@
 }
 
 #pragma mark -
-#pragma mark ICarousel Methods
+#pragma mark UITableViewDataSource
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_youtubeLinksArray count];
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *cellID = @"friendDetailReuseId";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    
     UILabel *titleLabel = nil;
     FXImageView *thumbnailImageView = nil;
-    
-    if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width, 90)];
-        [view setBackgroundColor:[UIColor darkGrayColor]];
-        [view setUserInteractionEnabled:YES];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, view.frame.origin.y, view.frame.size.width - 160, view.frame.size.height)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width - 160, tableView.rowHeight)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];
-        [view addSubview:thumbnailImageView];
+        [cell addSubview:thumbnailImageView];
         
         titleLabel = [[UILabel alloc] init];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor whiteColor]];
+        [titleLabel setTextColor:[UIColor blackColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
         [titleLabel setLineBreakMode:UILineBreakModeWordWrap];
-        [view addSubview:titleLabel];
+        [cell addSubview:titleLabel];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
         [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
-        [view addGestureRecognizer:swipeRecognizer];
+        [cell addGestureRecognizer:swipeRecognizer];
     } else {
-        titleLabel = (UILabel *)[view viewWithTag:1];
-        thumbnailImageView = (FXImageView *)[view viewWithTag:2];
+        titleLabel = (UILabel *)[cell viewWithTag:1];
+        thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
     }
     
-    [thumbnailImageView setImage:nil];
-    [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:index] thumbnailURL]];
+    [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
     
-    [titleLabel setText:[[_youtubeLinksArray objectAtIndex:index] title]];
-    [titleLabel setFrame:CGRectMake(thumbnailImageView.frame.origin.x + thumbnailImageView.frame.size.width + 10, 10, view.frame.size.width - thumbnailImageView.frame.origin.x - thumbnailImageView.frame.size.width - 20, view.frame.size.height - 20)];
+    [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
+    [titleLabel setFrame:CGRectMake(thumbnailImageView.frame.origin.x + thumbnailImageView.frame.size.width + 10, 10, cell.frame.size.width - thumbnailImageView.frame.origin.x - thumbnailImageView.frame.size.width - 20, _tableView.rowHeight - 20)];
     
-    return view;
+    return cell;
 }
 
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+#pragma mark -
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //customize carousel display
-    switch (option)
-    {
-        case iCarouselOptionWrap:
-        {
-            return NO;
-        }
-        case iCarouselOptionSpacing:
-        {
-            //add a bit of spacing between the item views
-            return value * 1.05f;
-        }
-        default:
-        {
-            return value;
-        }
-    }
-}
-
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
-{
-    [self loadNewVideoWithIndex:index];
-}
-
-- (void)carouselDidScroll:(iCarousel *)carousel
-{
-    //Make all views swipable
-    for (UIView *view in [carousel visibleItemViews]) {
-        [view setUserInteractionEnabled:YES];
-    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self loadNewVideoWithIndex:indexPath.row];
 }
 
 #pragma mark -
@@ -240,7 +206,7 @@
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
         [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2 + 100, swipeRecognizer.view.center.y)];
     } completion:^(BOOL finished) {
-        [self addVideoToPlaylistFromCarouselForView:swipeRecognizer.view];
+        [self addVideoToPlaylistFromCell:(UITableViewCell *)swipeRecognizer.view];
         [UIView animateWithDuration:0.2 animations:^{
             [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2, swipeRecognizer.view.center.y)];
             [self.view setUserInteractionEnabled:YES];
@@ -248,9 +214,9 @@
     }];
 }
 
-- (void)addVideoToPlaylistFromCarouselForView:(UIView *)view
+- (void)addVideoToPlaylistFromCell:(UITableViewCell *)cell
 {
-    int index = [_iCarousel indexOfItemView:view];
+    int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
 }
