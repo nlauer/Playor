@@ -11,7 +11,7 @@
 #import "NLYoutubeVideo.h"
 #import "NSObject+SBJSON.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=10&v=2&alt=json&category=Music&format=1"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=6&v=2&alt=json&category=Music&format=1"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
@@ -37,7 +37,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     self.youtubeLinksFromFBLikesDelegate = delegate;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
-    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=15", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=10", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 

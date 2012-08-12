@@ -56,6 +56,8 @@
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [_tableView setRowHeight:90];
+    [_tableView setBackgroundColor:[UIColor clearColor]];
+    [_tableView setSeparatorColor:[UIColor blackColor]];
     [self.view addSubview:_tableView];
     
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -134,6 +136,11 @@
     [self insertNewLinksIntoTableView:links];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor clearColor]];
+}
+
 #pragma mark -
 #pragma mark YoutubeLinksFromFBLikesDelegate
 - (void)receiveYoutubeLinksFromFBLikes:(NSArray *)links
@@ -167,7 +174,7 @@
         
         titleLabel = [[UILabel alloc] init];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor blackColor]];
+        [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
