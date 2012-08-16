@@ -12,24 +12,24 @@
 #import "NLFacebookManager.h"
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
+#import "NLContainerViewController.h"
 
 @implementation NLAppDelegate
 
 @synthesize window = _window;
-@synthesize navigationController = _navigationController;
+@synthesize containerController = _containerController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
     
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    self.window.rootViewController = self.navigationController;
-    [self.window makeKeyAndVisible];
+    [nav.navigationBar setBarStyle:UIBarStyleBlack];
     
-    [self.window addSubview:[[NLPlaylistBarViewController sharedInstance] view]];
+    _containerController = [[NLContainerViewController alloc] initWithTopViewController:nav andBottomViewController:[NLPlaylistBarViewController sharedInstance]];
+    self.window.rootViewController = _containerController;
     [self.window makeKeyAndVisible];
     return YES;
 }

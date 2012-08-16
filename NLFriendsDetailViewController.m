@@ -83,7 +83,7 @@
     if (videoURL) {
         MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
         [moviePlayer setWantsFullScreenLayout:YES];
-        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) navigationController] presentViewController:moviePlayer animated:YES completion:nil];
+        [self presentViewController:moviePlayer animated:YES completion:nil];
     }
 }
 

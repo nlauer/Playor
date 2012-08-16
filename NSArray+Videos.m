@@ -15,7 +15,7 @@
 {
     BOOL containsVideo = NO;
     for (NLYoutubeVideo *addedVideo in self) {
-        if ([[addedVideo.videoURL absoluteString] isEqualToString:[video.videoURL absoluteString]]) {
+        if ([addedVideo.youtubeID isEqualToString:video.youtubeID]) {
             containsVideo = YES;
         }
     }
@@ -27,7 +27,7 @@
     NSUInteger index = NSNotFound;
     for (int i = 0; i < [self count]; i++) {
         NLYoutubeVideo *addedVideo = [self objectAtIndex:i];
-        if ([[addedVideo.videoURL absoluteString] isEqualToString:[video.videoURL absoluteString]]) {
+        if ([addedVideo.youtubeID isEqualToString:video.youtubeID]) {
             index = i;
         }
     }

@@ -69,7 +69,7 @@ typedef enum {
     timerRepeats = 0;
     isPlayerMode_ = NO;
     isShowingEditor_ = NO;
-	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 108, self.view.frame.size.width, 128)];
+	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 128, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
@@ -125,9 +125,9 @@ typedef enum {
     if (!isShowingEditor_) {
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
-        [((NLAppDelegate *)[[UIApplication sharedApplication] delegate]).navigationController.topViewController presentViewController:nav animated:YES completion:nil];
+        [self presentViewController:nav animated:YES completion:nil];
     } else {
-        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]).navigationController.topViewController presentedViewController] dismissViewControllerAnimated:YES completion:nil];
+        [[self presentedViewController] dismissViewControllerAnimated:YES completion:nil];
     }
     isShowingEditor_ = !isShowingEditor_;
 }
@@ -161,16 +161,6 @@ typedef enum {
         [playlistTitleLabel_ setText:playlist.name];
     }
     [_iCarousel scrollToItemAtIndex:0 animated:NO];
-}
-
-- (void)loadNewVideoWithIndex:(int)index
-{
-    NLYoutubeVideo *playVideo = [_playlist.videos objectAtIndex:index];
-    NSURL *videoURL = [playVideo getVideoURL];
-    if (videoURL) {
-        MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) navigationController] presentViewController:moviePlayer animated:YES completion:nil];
-    }
 }
 
 - (CGRect)getViewFrame
@@ -301,6 +291,18 @@ typedef enum {
 
 #pragma mark Playing Videos
 
+- (void)loadNewVideoWithIndex:(int)index
+{
+    NLYoutubeVideo *playVideo = [_playlist.videos objectAtIndex:index];
+    NSURL *videoURL = [playVideo getVideoURL];
+    if (videoURL) {
+        MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        [moviePlayer.moviePlayer setUseApplicationAudioSession:NO];
+        [self presentViewController:moviePlayer animated:YES completion:nil];
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateDidChange:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
 - (void)playVideoAfterDelay:(int)index
 {
     CGRect frame = [self getViewFrame];
@@ -338,7 +340,6 @@ typedef enum {
         [self stopCountdownTimer];
         [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateDidChange:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
 - (void)playbackStateDidChange:(NSNotification *)note

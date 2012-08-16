@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class NLViewController;
+@class NLViewController, NLContainerViewController;
 
 @interface NLAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) NLContainerViewController *containerController;
 
 @end

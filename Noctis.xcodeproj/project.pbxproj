@@ -50,6 +50,7 @@
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45A815DC8E7800349534 /* HCYoutubeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45A715DC8E7800349534 /* HCYoutubeParser.m */; };
 		85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FB45AD15DC905500349534 /* MediaPlayer.framework */; };
+		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,6 +142,8 @@
 		85FB45A615DC8E7800349534 /* HCYoutubeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCYoutubeParser.h; sourceTree = "<group>"; };
 		85FB45A715DC8E7800349534 /* HCYoutubeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCYoutubeParser.m; sourceTree = "<group>"; };
 		85FB45AD15DC905500349534 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
+		85FB45B415DCB58600349534 /* NLContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLContainerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +215,8 @@
 		853FEB3415BB88BD002A1EB5 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				85FB45B315DCB58600349534 /* NLContainerViewController.h */,
+				85FB45B415DCB58600349534 /* NLContainerViewController.m */,
 				853FEB7215BB9592002A1EB5 /* NLFBLoginViewController.h */,
 				853FEB7315BB9592002A1EB5 /* NLFBLoginViewController.m */,
 				85D941A915BB9EF8009EF609 /* NLFriendsViewController.h */,
@@ -481,6 +486,7 @@
 				85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */,
 				85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */,
 				85FB45A815DC8E7800349534 /* HCYoutubeParser.m in Sources */,
+				85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
