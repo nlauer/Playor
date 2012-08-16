@@ -11,6 +11,7 @@
 
 @interface NLYoutubeVideo : NSObject <PlaylistItemDelegate, NSCoding>
 
+@property (strong, nonatomic) NSString *youtubeID;
 @property (strong, nonatomic) NSURL *videoURL;
 @property (strong, nonatomic) NSURL *thumbnailURL;
 @property (strong, nonatomic) NSString *title;
@@ -18,5 +19,6 @@
 
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary;
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary;
+- (NSURL *)getVideoURL;
 
 @end

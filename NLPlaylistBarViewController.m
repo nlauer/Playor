@@ -17,13 +17,14 @@
 #import "NLPlaylist.h"
 #import "NLPlaylistManager.h"
 #import "NSArray+Videos.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "NLAppDelegate.h"
 
 #define timeBetweenVideos 5.0
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NLPlaylist *playlist;
-@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLPlaylistBarViewController {
@@ -33,7 +34,7 @@
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
 }
-@synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
+@synthesize iCarousel = _iCarousel, playlist = _playlist;
 
 static NLPlaylistBarViewController *sharedInstance = NULL;
 
@@ -164,26 +165,12 @@ typedef enum {
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    if (![[self.view subviews] containsObject:_videoWebView]) {
-        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-        [_videoWebView setBackgroundColor:[UIColor clearColor]];
-        [_videoWebView.scrollView setScrollEnabled:NO];
-        [self.view addSubview:_videoWebView];
+    NLYoutubeVideo *playVideo = [_playlist.videos objectAtIndex:index];
+    NSURL *videoURL = [playVideo getVideoURL];
+    if (videoURL) {
+        MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) navigationController] presentViewController:moviePlayer animated:YES completion:nil];
     }
-    
-    [_videoWebView loadRequest:nil];
-    NSString *youTubeVideoHTML = @"<html><head>\
-    <body style='margin:0'>\
-    <embed id='yt' src='%@' type='application/x-shockwave-flash' \
-    width='%0.0f' height='%0.0f'></embed>\
-    </body></html>";
-    
-    // Populate HTML with the URL and requested frame size
-    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_playlist.videos objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
-    
-    // Load the html into the webview
-    [_videoWebView loadHTMLString:html baseURL:nil];
-    [_videoWebView setDelegate:self];
 }
 
 - (CGRect)getViewFrame
@@ -351,16 +338,14 @@ typedef enum {
         [self stopCountdownTimer];
         [self loadNewVideoWithIndex:[_iCarousel currentItemIndex]];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateDidChange:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
 - (void)playbackStateDidChange:(NSNotification *)note
 {
-    if (isPlayerMode_) {
-        int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
-        if (playbackState == 0) {
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-            [self playVideoAfterDelay:([_iCarousel currentItemIndex] + 1)];
-        }
+    MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
+    if (reason == MPMovieFinishReasonPlaybackEnded) {
+        [self playVideoAfterDelay:([_iCarousel currentItemIndex] + 1)];
     }
 }
 
@@ -436,7 +421,9 @@ typedef enum {
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    isPlayerMode_ ? [self playVideoAfterDelay:index] : [self startPlayerWithIndex:index];
+//    isPlayerMode_ ? 
+    [self loadNewVideoWithIndex:index];
+//    : [self startPlayerWithIndex:index];
 }
 
 - (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
@@ -454,35 +441,6 @@ typedef enum {
     for (NLYoutubeVideo *video in links) {
         [self receiveYoutubeVideo:video];
     }
-}
-
-#pragma mark -
-#pragma mark UIWebViewDelegate
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"MPAVControllerPlaybackStateChangedNotification" object:nil];
-    
-    UIButton *b = [self findButtonInView:webView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-}
-
-- (UIButton *)findButtonInView:(UIView *)view {
-    UIButton *button = nil;
-    
-    if ([view isMemberOfClass:[UIButton class]]) {
-        return (UIButton *)view;
-    }
-    
-    if (view.subviews && [view.subviews count] > 0) {
-        for (UIView *subview in view.subviews) {
-            button = [self findButtonInView:subview];
-            if (button) return button;
-        }
-    }
-    
-    return button;
 }
 
 #pragma mark -

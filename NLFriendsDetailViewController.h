@@ -12,7 +12,7 @@
 #import "NLYoutubeLinksFromFBLikesFactory.h"
 #import "iCarousel.h"
 
-@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, YoutubeLinksFromFBLikesDelegate, UIWebViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, YoutubeLinksFromFBLikesDelegate, UITableViewDelegate, UITableViewDataSource>
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend;
 

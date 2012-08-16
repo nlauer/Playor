@@ -11,6 +11,8 @@
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
 #import "NLPlaylistBarViewController.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "NLAppDelegate.h"
 
 #define timeBetweenVideos 3.0
 
@@ -18,7 +20,6 @@
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *youtubeLinksArray;
-@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLFriendsDetailViewController {
@@ -26,7 +27,7 @@
     int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
-@synthesize youtubeLinksArray = _youtubeLinksArray, videoWebView = _videoWebView, tableView = _tableView;
+@synthesize youtubeLinksArray = _youtubeLinksArray, tableView = _tableView;
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
@@ -64,17 +65,12 @@
     [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
     [self.view addSubview:activityIndicator_];
     [activityIndicator_ startAnimating];
-    
-    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-    [_videoWebView setDelegate:self];
-    [self.view addSubview:_videoWebView];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     activityIndicator_ = nil;
-    _videoWebView = nil;
     [_tableView setDelegate:nil];
     [_tableView setDataSource:nil];
     _tableView = nil;
@@ -82,18 +78,13 @@
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    [_videoWebView loadRequest:nil];
-    NSString *youTubeVideoHTML = @"<html><head>\
-    <body style='margin:0'>\
-    <embed id='yt' src='%@' type='application/x-shockwave-flash' \
-    width='%0.0f' height='%0.0f'></embed>\
-    </body></html>";
-    
-    // Populate HTML with the URL and requested frame size
-    NSString *html = [NSString stringWithFormat:youTubeVideoHTML, [[_youtubeLinksArray objectAtIndex:index] videoURL], _videoWebView.frame.size.width, _videoWebView.frame.size.height];
-    
-    // Load the html into the webview
-    [_videoWebView loadHTMLString:html baseURL:nil];
+    NLYoutubeVideo *playVideo = [_youtubeLinksArray objectAtIndex:index];
+    NSURL *videoURL = [playVideo getVideoURL];
+    if (videoURL) {
+        MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        [moviePlayer setWantsFullScreenLayout:YES];
+        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) navigationController] presentViewController:moviePlayer animated:YES completion:nil];
+    }
 }
 
 #pragma mark -
@@ -226,32 +217,6 @@
     int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
-}
-
-#pragma mark -
-#pragma mark UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    
-    UIButton *b = [self findButtonInView:webView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-}
-
-- (UIButton *)findButtonInView:(UIView *)view {
-    UIButton *button = nil;
-    
-    if ([view isMemberOfClass:[UIButton class]]) {
-        return (UIButton *)view;
-    }
-    
-    if (view.subviews && [view.subviews count] > 0) {
-        for (UIView *subview in view.subviews) {
-            button = [self findButtonInView:subview];
-            if (button) return button;
-        }
-    }
-    
-    return button;
 }
 
 @end

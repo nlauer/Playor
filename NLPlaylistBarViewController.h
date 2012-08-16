@@ -16,7 +16,7 @@
 - (NSURL *)getPictureURL;
 @end
 
-@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, YoutubeLinksFromFBLikesDelegate, UIWebViewDelegate>
+@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, YoutubeLinksFromFBLikesDelegate>
 
 + (NLPlaylistBarViewController *)sharedInstance;
 

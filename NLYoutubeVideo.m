@@ -7,18 +7,24 @@
 //
 
 #import "NLYoutubeVideo.h"
+#import "HCYoutubeParser.h"
 
 @implementation NLYoutubeVideo
-@synthesize videoURL = _videoURL, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
+@synthesize youtubeID = _youtubeID, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
+@synthesize videoURL = _videoURL;
 
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary
 {
     self = [super init];
     if (self) {
-        self.title = [self getVideoTitleFromDictionary:dataDictionary];
-        self.videoURL = [self getVideoURLFromDictionary:dataDictionary];
-        self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
-        self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
+        if (![self isRestrictedForPlaybackForDataDictionary:dataDictionary]) {
+            self.title = [self getVideoTitleFromDictionary:dataDictionary];
+            self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
+            self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
+            self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
+        } else {
+            return nil;
+        }
     }
     
     return self;
@@ -30,6 +36,11 @@
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary
 {
     return [((NSString *)[[[[dataDictonary objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"]) isEqualToString:@"Music"];
+}
+
+- (BOOL)isRestrictedForPlaybackForDataDictionary:(NSDictionary *)dataDictionary
+{
+    return [[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$restriction"] ? YES : NO;
 }
 
 - (NSString *)getVideoCategoryFromDictionary:(NSDictionary *)dataDictionary
@@ -44,11 +55,19 @@
     return title;
 }
 
-- (NSURL *)getVideoURLFromDictionary:(NSDictionary *)dataDictionary
+- (NSString *)getYoutubeIDFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *videoString = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
-    NSURL *videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoString]];
-    return videoURL;
+    NSString *youtubeID = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
+    return youtubeID;
+}
+
+- (NSURL *)getVideoURL
+{
+    if (!_videoURL) {
+        NSURL *videoURL = [HCYoutubeParser h264mediumVideoURLWithYoutubeID:_youtubeID];
+        _videoURL = videoURL;
+    }
+    return _videoURL;
 }
 
 - (NSURL *)getVideoThumnailURLFromDictionary:(NSDictionary *)dataDictionary
@@ -77,9 +96,9 @@
 {
     self = [super init];
     if (self) {
-        _videoURL = [aDecoder decodeObjectForKey:@"videoURL"];
         _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
         _title = [aDecoder decodeObjectForKey:@"title"];
+        _youtubeID = [aDecoder decodeObjectForKey:@"youtubeID"];
     }
     
     return self;
@@ -87,9 +106,9 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:_videoURL forKey:@"videoURL"];
     [aCoder encodeObject:_thumbnailURL forKey:@"thumbnailURL"];
     [aCoder encodeObject:_title forKey:@"title"];
+    [aCoder encodeObject:_youtubeID forKey:@"youtubeID"];
 }
 
 @end

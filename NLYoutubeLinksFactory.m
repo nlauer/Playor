@@ -86,7 +86,9 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
     if (dataDictionary) {
         if ([NLYoutubeVideo isMusicLinkForDataDictionary:dataDictionary]) {
             NLYoutubeVideo *youtubeVideo = [[NLYoutubeVideo alloc] initWithDataDictionary:dataDictionary];
-            [_youtubeLinksArray addObject:youtubeVideo];
+            if (youtubeVideo) {
+                [_youtubeLinksArray addObject:youtubeVideo];
+            }
         }
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
