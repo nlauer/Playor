@@ -14,5 +14,7 @@
 @property (strong, nonatomic) UIViewController *bottomController;
 
 - (id)initWithTopViewController:(UIViewController *)topController andBottomViewController:(UIViewController *)bottomController;
+- (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController;
+- (void)dismissPresentedViewControllerBehindPlaylistBar;
 
 @end

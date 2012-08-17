@@ -11,6 +11,7 @@
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
 #import "NLPlaylist.h"
+#import "NLUtils.h"
 
 @interface NLPlaylistEditorViewController ()
 @property (strong, nonatomic) UITableView *tableView;
@@ -31,8 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44)];
+    [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
@@ -41,7 +41,7 @@
     UIBarButtonItem *addPlaylistButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewPlaylist)];
     [self.navigationItem setRightBarButtonItem:addPlaylistButton];
     
-    _tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [_tableView setBackgroundColor:[UIColor darkGrayColor]];

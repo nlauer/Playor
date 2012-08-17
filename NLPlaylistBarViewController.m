@@ -19,6 +19,7 @@
 #import "NSArray+Videos.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "NLAppDelegate.h"
+#import "NLContainerViewController.h"
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -57,7 +58,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [super viewDidLoad];
     isShowingEditor_ = NO;
-	[self.view setFrame:CGRectMake(0, self.view.frame.size.height- 128, self.view.frame.size.width, 128)];
+	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor grayColor]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
@@ -107,9 +108,9 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (!isShowingEditor_) {
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
-        [self presentViewController:nav animated:YES completion:nil];
+        [((NLContainerViewController *)self.parentViewController) presentViewControllerBehindPlaylistBar:nav];
     } else {
-        [[self presentedViewController] dismissViewControllerAnimated:YES completion:nil];
+        [((NLContainerViewController *)self.parentViewController) dismissPresentedViewControllerBehindPlaylistBar];
     }
     isShowingEditor_ = !isShowingEditor_;
 }
@@ -155,6 +156,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)playbackStateDidChange:(NSNotification *)note
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
     if (reason == MPMovieFinishReasonPlaybackEnded) {
         [self playVideoAfterDelay];

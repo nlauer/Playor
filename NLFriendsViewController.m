@@ -15,6 +15,7 @@
 #import "NLFriendsDetailViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NLPlaylistBarViewController.h"
+#import "NLUtils.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -34,6 +35,7 @@
     self.title = @"Noctis";
     shouldBeginEditing_ = YES;
     [self.view setClipsToBounds:YES];
+    [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
     [searchBar setBarStyle:UIBarStyleBlack];

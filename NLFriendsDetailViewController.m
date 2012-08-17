@@ -13,6 +13,7 @@
 #import "NLPlaylistBarViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "NLAppDelegate.h"
+#import "NLUtils.h"
 
 #define timeBetweenVideos 3.0
 
@@ -43,6 +44,7 @@
 {
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
+    [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     
     numberOfActiveFactories = 0;
@@ -53,7 +55,7 @@
     [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
     numberOfActiveFactories++;
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - [NLPlaylistBarViewController sharedInstance].view.frame.size.height - 44) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [_tableView setRowHeight:90];

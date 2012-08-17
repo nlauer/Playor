@@ -51,6 +51,7 @@
 		85FB45A815DC8E7800349534 /* HCYoutubeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45A715DC8E7800349534 /* HCYoutubeParser.m */; };
 		85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FB45AD15DC905500349534 /* MediaPlayer.framework */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
+		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -144,6 +145,8 @@
 		85FB45AD15DC905500349534 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
 		85FB45B415DCB58600349534 /* NLContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLContainerViewController.m; sourceTree = "<group>"; };
+		85FB45B615DDF3E200349534 /* NLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLUtils.h; sourceTree = "<group>"; };
+		85FB45B715DDF3E200349534 /* NLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +285,8 @@
 				853FEB2A15BB8561002A1EB5 /* NLViewController.m */,
 				853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */,
 				853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */,
+				85FB45B615DDF3E200349534 /* NLUtils.h */,
+				85FB45B715DDF3E200349534 /* NLUtils.m */,
 			);
 			name = "Base Classes";
 			sourceTree = "<group>";
@@ -487,6 +492,7 @@
 				85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */,
 				85FB45A815DC8E7800349534 /* HCYoutubeParser.m in Sources */,
 				85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */,
+				85FB45B815DDF3E200349534 /* NLUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,11 +8,17 @@
 
 #import "NLContainerViewController.h"
 
+#import "NLUtils.h"
+
 @interface NLContainerViewController ()
 
 @end
 
-@implementation NLContainerViewController
+@implementation NLContainerViewController {
+    UIViewController *previousViewController_;
+    UIView *topViewContainer_;
+    UIView *bottomViewContainer_;
+}
 @synthesize topController = _topController, bottomController = _bottomController;
 
 - (id)initWithTopViewController:(UIViewController *)topController andBottomViewController:(UIViewController *)bottomController
@@ -30,19 +36,49 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	[self.view addSubview:_topController.view];
-    [self.view addSubview:_bottomController.view];
+    
+    topViewContainer_ = [[UIView alloc] initWithFrame:[NLUtils getContainerTopControllerFrame]];
+    [topViewContainer_ setClipsToBounds:YES];
+    [self.view addSubview:topViewContainer_];
+    bottomViewContainer_ = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 128, self.view.frame.size.width, 128)];
+    [bottomViewContainer_ setClipsToBounds:YES];
+    [self.view addSubview:bottomViewContainer_];
+	[topViewContainer_ addSubview:_topController.view];
+    [bottomViewContainer_ addSubview:_bottomController.view];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
+    bottomViewContainer_ = nil;
+    topViewContainer_ = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    previousViewController_ = _topController;
+    [self addChildViewController:viewController];
+    _topController = viewController;
+    [_topController.view setFrame:CGRectMake(0, _topController.view.frame.size.height, _topController.view.frame.size.width, _topController.view.frame.size.height)];
+    
+    [self transitionFromViewController:previousViewController_ toViewController:_topController duration:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [_topController.view setFrame:[NLUtils getContainerTopControllerFrame]];
+    } completion:nil];
+}
+
+- (void)dismissPresentedViewControllerBehindPlaylistBar
+{
+    if (previousViewController_) {
+        float previousHeight = previousViewController_.view.frame.size.height;
+        [previousViewController_.view setFrame:CGRectMake(0, previousViewController_.view.frame.origin.y, previousViewController_.view.frame.size.width, 44)];
+        [self transitionFromViewController:_topController toViewController:previousViewController_ duration:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [previousViewController_.view setFrame:CGRectMake(0, previousViewController_.view.frame.origin.y, previousViewController_.view.frame.size.width, previousHeight)];
+            [_topController.view setFrame:CGRectMake(0, _topController.view.frame.size.height, _topController.view.frame.size.width, 0)];
+        } completion:^(BOOL finished) {
+            _topController = previousViewController_;
+            previousViewController_ = nil;
+        }];
+    }
 }
 
 @end
