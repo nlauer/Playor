@@ -83,9 +83,10 @@
     NLYoutubeVideo *playVideo = [_youtubeLinksArray objectAtIndex:index];
     NSURL *videoURL = [playVideo getVideoURL];
     if (videoURL) {
-        MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [moviePlayer setWantsFullScreenLayout:YES];
-        [self presentViewController:moviePlayer animated:YES completion:nil];
+        MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        [moviePlayerViewController.moviePlayer setUseApplicationAudioSession:NO];
+        [self presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+        [moviePlayerViewController shouldAutorotateToInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
     }
 }
 
@@ -129,11 +130,6 @@
     [self insertNewLinksIntoTableView:links];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [cell setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.2]];
-}
-
 #pragma mark -
 #pragma mark YoutubeLinksFromFBLikesDelegate
 - (void)receiveYoutubeLinksFromFBLikes:(NSArray *)links
@@ -143,6 +139,11 @@
 
 #pragma mark -
 #pragma mark UITableViewDataSource
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]]];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -160,7 +161,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 10, cell.frame.size.width - 160, tableView.rowHeight-10)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width - 160, tableView.rowHeight-10)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];
@@ -176,9 +177,14 @@
         [cell addSubview:titleLabel];
         
         CAGradientLayer *topShadow = [CAGradientLayer layer];
-        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 10);
-        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
+        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
+        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
         [cell.layer insertSublayer:topShadow atIndex:0];
+        
+        CAGradientLayer *bottomShadow = [CAGradientLayer layer];
+        bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
+        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
+        [cell.layer insertSublayer:bottomShadow atIndex:0];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
         [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];

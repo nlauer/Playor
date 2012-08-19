@@ -28,7 +28,7 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
     
     [nav.navigationBar setBarStyle:UIBarStyleBlack];
-    UIColor *barColor = [UIColor springGreen];
+    UIColor *barColor = [UIColor navBarTint];
     [[UINavigationBar appearance] setTintColor:barColor];
     [[UISearchBar appearance] setTintColor:barColor];
     

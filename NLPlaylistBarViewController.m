@@ -11,7 +11,6 @@
 #import "NLFacebookFriend.h"
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
-#import "NLVideoInfoView.h"
 #import "NLPlaylistEditorViewController.h"
 #import "NLAppDelegate.h"
 #import "NLPlaylist.h"
@@ -62,14 +61,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [super viewDidLoad];
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]]];
+    [self.view setBackgroundColor:[UIColor playlistBarBackgroundColor]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
     CAGradientLayer *topShadow = [CAGradientLayer layer];
     topShadow.frame = CGRectMake(0, 0, playlistTitleView.frame.size.width, 44);
     topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.9 alpha:0.4f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
     [playlistTitleView.layer insertSublayer:topShadow atIndex:0];
-    [playlistTitleView setBackgroundColor:[UIColor darkSpringGreen]];
+    [playlistTitleView setBackgroundColor:[UIColor blackColor]];
     [self.view addSubview:playlistTitleView];
     
     playlistTitleLabel_ = [[UILabel alloc] init];
@@ -149,6 +148,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         _moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
         [_moviePlayerViewController.moviePlayer setUseApplicationAudioSession:NO];
         [self presentMoviePlayerViewControllerAnimated:_moviePlayerViewController];
+        [_moviePlayerViewController shouldAutorotateToInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
     } else {
         NSLog(@"COULDNT FIND A VIDEO URL");
     }

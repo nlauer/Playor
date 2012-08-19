@@ -12,7 +12,8 @@
 
 + (UIColor *)solidColorWithRed:(float)red green:(float)green blue:(float)blue;
 
-+ (UIColor *)springGreen;
-+ (UIColor *)darkSpringGreen;
++ (UIColor *)navBarTint;
++ (UIColor *)baseViewBackgroundColor;
++ (UIColor *)playlistBarBackgroundColor;
 
 @end

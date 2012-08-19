@@ -8,6 +8,8 @@
 
 #import "NLViewController.h"
 
+#import "UIColor+NLColors.h"
+
 @interface NLViewController ()
 
 @end
@@ -18,7 +20,7 @@
 {
     [super viewDidLoad];
 	
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]]];
+    [self.view setBackgroundColor:[UIColor baseViewBackgroundColor]];
 }
 
 - (void)viewDidUnload

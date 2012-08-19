@@ -110,7 +110,7 @@
         [nameLabel setTextAlignment:UITextAlignmentCenter];
         [nameLabel setBackgroundColor:[UIColor clearColor]];
         [nameLabel setTag:1];
-        [nameLabel setTextColor:[UIColor blackColor]];
+        [nameLabel setTextColor:[UIColor whiteColor]];
         [nameLabel setFont:[UIFont boldSystemFontOfSize:16]];
         [view addSubview:nameLabel];
         

@@ -15,14 +15,19 @@
     return [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:1];
 }
 
-+ (UIColor *)springGreen
++ (UIColor *)navBarTint
 {
-    return [UIColor solidColorWithRed:0 green:205 blue:102];
+    return [UIColor darkGrayColor];
 }
 
-+ (UIColor *)darkSpringGreen
++ (UIColor *)baseViewBackgroundColor
 {
-    return [UIColor solidColorWithRed:0 green:139 blue:69];
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]];
+}
+
++ (UIColor *)playlistBarBackgroundColor
+{
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]];
 }
 
 @end

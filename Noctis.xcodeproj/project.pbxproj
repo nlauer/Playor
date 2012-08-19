@@ -37,7 +37,6 @@
 		856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91F15BE650400529F5C /* NLURLConnectionManager.m */; };
 		856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */; };
 		85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CA415CA36FD00C17639 /* NLPlaylist.m */; };
-		85B55CAC15CF2F3300C17639 /* NLVideoInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CAB15CF2F3300C17639 /* NLVideoInfoView.m */; };
 		85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CAE15CF5D5400C17639 /* NLPlaylistEditorViewController.m */; };
 		85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CB115CF66E200C17639 /* NLPlaylistManager.m */; };
 		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
@@ -52,12 +51,9 @@
 		85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FB45AD15DC905500349534 /* MediaPlayer.framework */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
-		85FB45C815E067AB00349534 /* bg@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45C615E067AA00349534 /* bg@2X.png */; };
 		85FB45C915E067AB00349534 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45C715E067AB00349534 /* bg.png */; };
 		85FB45CC15E06A2100349534 /* playlist_bar@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CA15E06A2100349534 /* playlist_bar@2X.png */; };
 		85FB45CD15E06A2100349534 /* playlist_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CB15E06A2100349534 /* playlist_bar.png */; };
-		85FB45D115E06D7700349534 /* playlist_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CF15E06D7700349534 /* playlist_bg.png */; };
-		85FB45D315E0947E00349534 /* playlist_bg@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45D215E0947E00349534 /* playlist_bg@2X.png */; };
 		85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45D515E0CB7000349534 /* UIColor+NLColors.m */; };
 /* End PBXBuildFile section */
 
@@ -121,8 +117,6 @@
 		856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistBarViewController.m; sourceTree = "<group>"; };
 		85B55CA315CA36FD00C17639 /* NLPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylist.h; sourceTree = "<group>"; };
 		85B55CA415CA36FD00C17639 /* NLPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylist.m; sourceTree = "<group>"; };
-		85B55CAA15CF2F3300C17639 /* NLVideoInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLVideoInfoView.h; sourceTree = "<group>"; };
-		85B55CAB15CF2F3300C17639 /* NLVideoInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLVideoInfoView.m; sourceTree = "<group>"; };
 		85B55CAD15CF5D5400C17639 /* NLPlaylistEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistEditorViewController.h; sourceTree = "<group>"; };
 		85B55CAE15CF5D5400C17639 /* NLPlaylistEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistEditorViewController.m; sourceTree = "<group>"; };
 		85B55CB015CF66E200C17639 /* NLPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistManager.h; sourceTree = "<group>"; };
@@ -154,12 +148,9 @@
 		85FB45B415DCB58600349534 /* NLContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLContainerViewController.m; sourceTree = "<group>"; };
 		85FB45B615DDF3E200349534 /* NLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLUtils.h; sourceTree = "<group>"; };
 		85FB45B715DDF3E200349534 /* NLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLUtils.m; sourceTree = "<group>"; };
-		85FB45C615E067AA00349534 /* bg@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2X.png"; sourceTree = "<group>"; };
 		85FB45C715E067AB00349534 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		85FB45CA15E06A2100349534 /* playlist_bar@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playlist_bar@2X.png"; sourceTree = "<group>"; };
 		85FB45CB15E06A2100349534 /* playlist_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bar.png; sourceTree = "<group>"; };
-		85FB45CF15E06D7700349534 /* playlist_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bg.png; sourceTree = "<group>"; };
-		85FB45D215E0947E00349534 /* playlist_bg@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playlist_bg@2X.png"; sourceTree = "<group>"; };
 		85FB45D415E0CB7000349534 /* UIColor+NLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NLColors.h"; sourceTree = "<group>"; };
 		85FB45D515E0CB7000349534 /* UIColor+NLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NLColors.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,8 +225,6 @@
 		853FEB3415BB88BD002A1EB5 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				85FB45B315DCB58600349534 /* NLContainerViewController.h */,
-				85FB45B415DCB58600349534 /* NLContainerViewController.m */,
 				853FEB7215BB9592002A1EB5 /* NLFBLoginViewController.h */,
 				853FEB7315BB9592002A1EB5 /* NLFBLoginViewController.m */,
 				85D941A915BB9EF8009EF609 /* NLFriendsViewController.h */,
@@ -266,8 +255,6 @@
 		853FEB3615BB88D0002A1EB5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				85B55CAA15CF2F3300C17639 /* NLVideoInfoView.h */,
-				85B55CAB15CF2F3300C17639 /* NLVideoInfoView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -299,6 +286,8 @@
 		853FEB5415BB92B7002A1EB5 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
+				85FB45B315DCB58600349534 /* NLContainerViewController.h */,
+				85FB45B415DCB58600349534 /* NLContainerViewController.m */,
 				853FEB2915BB8561002A1EB5 /* NLViewController.h */,
 				853FEB2A15BB8561002A1EB5 /* NLViewController.m */,
 				853FEB2615BB8561002A1EB5 /* NLAppDelegate.h */,
@@ -414,11 +403,8 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				85FB45D215E0947E00349534 /* playlist_bg@2X.png */,
-				85FB45CF15E06D7700349534 /* playlist_bg.png */,
 				85FB45CA15E06A2100349534 /* playlist_bar@2X.png */,
 				85FB45CB15E06A2100349534 /* playlist_bar.png */,
-				85FB45C615E067AA00349534 /* bg@2X.png */,
 				85FB45C715E067AB00349534 /* bg.png */,
 			);
 			name = Resources;
@@ -477,12 +463,9 @@
 			files = (
 				853FEB2215BB8561002A1EB5 /* InfoPlist.strings in Resources */,
 				85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */,
-				85FB45C815E067AB00349534 /* bg@2X.png in Resources */,
 				85FB45C915E067AB00349534 /* bg.png in Resources */,
 				85FB45CC15E06A2100349534 /* playlist_bar@2X.png in Resources */,
 				85FB45CD15E06A2100349534 /* playlist_bar.png in Resources */,
-				85FB45D115E06D7700349534 /* playlist_bg.png in Resources */,
-				85FB45D315E0947E00349534 /* playlist_bg@2X.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,7 +506,6 @@
 				856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */,
 				856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */,
 				85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */,
-				85B55CAC15CF2F3300C17639 /* NLVideoInfoView.m in Sources */,
 				85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */,
 				85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */,
 				85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */,

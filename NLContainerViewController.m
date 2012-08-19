@@ -9,6 +9,7 @@
 #import "NLContainerViewController.h"
 
 #import "NLUtils.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface NLContainerViewController ()
 
@@ -41,7 +42,7 @@
     [topViewContainer_ setClipsToBounds:YES];
     [self.view addSubview:topViewContainer_];
     bottomViewContainer_ = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 128, self.view.frame.size.width, 128)];
-    [bottomViewContainer_ setClipsToBounds:YES];
+    [bottomViewContainer_ setClipsToBounds:NO];
     [self.view addSubview:bottomViewContainer_];
 	[topViewContainer_ addSubview:_topController.view];
     [bottomViewContainer_ addSubview:_bottomController.view];
