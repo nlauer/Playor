@@ -16,6 +16,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NLPlaylistBarViewController.h"
 #import "NLUtils.h"
+#import "UIColor+NLColors.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -63,7 +64,7 @@
 - (void)setupICarousel
 {
     if (!_iCarousel) {
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10.0f + 10.0, self.view.frame.size.width, 170)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -100,16 +101,17 @@
         [profileImageView setContentMode:UIViewContentModeScaleAspectFill];
         [profileImageView setTag:2];
         [profileImageView setAsynchronous:YES];
-        [profileImageView setReflectionAlpha:0.5];
+        [profileImageView setReflectionAlpha:0.4];
         [profileImageView setReflectionGap:0];
-        [profileImageView setReflectionScale:0.4];
+        [profileImageView setReflectionScale:0.5];
         [view addSubview:profileImageView];
         
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 170, view.frame.size.width, 30)];
+        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 160, view.frame.size.width, 30)];
         [nameLabel setTextAlignment:UITextAlignmentCenter];
         [nameLabel setBackgroundColor:[UIColor clearColor]];
         [nameLabel setTag:1];
         [nameLabel setTextColor:[UIColor blackColor]];
+        [nameLabel setFont:[UIFont boldSystemFontOfSize:16]];
         [view addSubview:nameLabel];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeFriendView:)];
@@ -122,7 +124,7 @@
     }
     
     [nameLabel setText:[self friendNameForIndex:index]];
-    [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height + 20)];
+    [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height + 15)];
     
     [profileImageView setImage:nil];
     [profileImageView setImageWithContentsOfURL:[[_carouselArray objectAtIndex:index] profilePictureURL]];
@@ -174,6 +176,15 @@
         shouldBeginEditing_ = NO;
         
         _carouselArray = _facebookFriends;
+        
+        [_iCarousel setCurrentItemIndex:0];
+        [_iCarousel reloadData];
+    } else {
+        if ([searchBar.text isEqualToString:@""]) {
+            _carouselArray = _facebookFriends;
+        } else {
+            _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
+        }
         
         [_iCarousel setCurrentItemIndex:0];
         [_iCarousel reloadData];

@@ -13,6 +13,7 @@
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
 #import "NLContainerViewController.h"
+#import "UIColor+NLColors.h"
 
 @implementation NLAppDelegate
 
@@ -27,6 +28,9 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
     
     [nav.navigationBar setBarStyle:UIBarStyleBlack];
+    UIColor *barColor = [UIColor springGreen];
+    [[UINavigationBar appearance] setTintColor:barColor];
+    [[UISearchBar appearance] setTintColor:barColor];
     
     _containerController = [[NLContainerViewController alloc] initWithTopViewController:nav andBottomViewController:[NLPlaylistBarViewController sharedInstance]];
     self.window.rootViewController = _containerController;

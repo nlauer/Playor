@@ -641,8 +641,6 @@
 
 - (void)setImageWithContentsOfURL:(NSURL *)URL
 {
-    [self.layer setBorderWidth:3.0];
-    [self.layer setBorderColor:[[UIColor darkGrayColor] CGColor]];
     [self setImage:nil];
     [self setNeedsLayout];
     if (![URL isEqual:_imageContentURL])

@@ -58,6 +58,7 @@
 		85FB45CD15E06A2100349534 /* playlist_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CB15E06A2100349534 /* playlist_bar.png */; };
 		85FB45D115E06D7700349534 /* playlist_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CF15E06D7700349534 /* playlist_bg.png */; };
 		85FB45D315E0947E00349534 /* playlist_bg@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45D215E0947E00349534 /* playlist_bg@2X.png */; };
+		85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45D515E0CB7000349534 /* UIColor+NLColors.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -159,6 +160,8 @@
 		85FB45CB15E06A2100349534 /* playlist_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bar.png; sourceTree = "<group>"; };
 		85FB45CF15E06D7700349534 /* playlist_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bg.png; sourceTree = "<group>"; };
 		85FB45D215E0947E00349534 /* playlist_bg@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playlist_bg@2X.png"; sourceTree = "<group>"; };
+		85FB45D415E0CB7000349534 /* UIColor+NLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NLColors.h"; sourceTree = "<group>"; };
+		85FB45D515E0CB7000349534 /* UIColor+NLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NLColors.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +277,8 @@
 			children = (
 				85FB458B15D4CAA200349534 /* NSArray+Videos.h */,
 				85FB458C15D4CAA200349534 /* NSArray+Videos.m */,
+				85FB45D415E0CB7000349534 /* UIColor+NLColors.h */,
+				85FB45D515E0CB7000349534 /* UIColor+NLColors.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -525,6 +530,7 @@
 				85FB45A815DC8E7800349534 /* HCYoutubeParser.m in Sources */,
 				85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */,
 				85FB45B815DDF3E200349534 /* NLUtils.m in Sources */,
+				85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

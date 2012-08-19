@@ -8,6 +8,6 @@
 
 #import "NLViewController.h"
 
-@interface NLPlaylistEditorViewController : NLViewController <UITableViewDataSource, UITableViewDelegate>
+@interface NLPlaylistEditorViewController : NLViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @end

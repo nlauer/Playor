@@ -22,6 +22,7 @@
 #import "NLContainerViewController.h"
 #import "NLAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIColor+NLColors.h"
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -61,14 +62,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [super viewDidLoad];
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bg"]]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
     CAGradientLayer *topShadow = [CAGradientLayer layer];
-    topShadow.frame = CGRectMake(0, 0, playlistTitleView.frame.size.width, 10);
-    topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
+    topShadow.frame = CGRectMake(0, 0, playlistTitleView.frame.size.width, 44);
+    topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.9 alpha:0.4f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
     [playlistTitleView.layer insertSublayer:topShadow atIndex:0];
-    [playlistTitleView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]]];
+    [playlistTitleView setBackgroundColor:[UIColor darkSpringGreen]];
     [self.view addSubview:playlistTitleView];
     
     playlistTitleLabel_ = [[UILabel alloc] init];
@@ -92,7 +93,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [infoLabel setNumberOfLines:2];
     [infoLabel setLineBreakMode:UILineBreakModeWordWrap];
     [infoLabel setFont:[UIFont systemFontOfSize:14]];
-    [infoLabel setTextColor:[UIColor blackColor]];
+    [infoLabel setTextColor:[UIColor whiteColor]];
     [infoLabel setTag:69];
     [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10 - 32)];
     [self.view addSubview:infoLabel];
@@ -151,13 +152,11 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     } else {
         NSLog(@"COULDNT FIND A VIDEO URL");
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateDidChange:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
 - (void)playVideoAfterDelay
 {
-    [_moviePlayerViewController dismissMoviePlayerViewControllerAnimated];
-    _moviePlayerViewController = nil;
     int index = [_iCarousel currentItemIndex] + 1;
     if (index < [_playlist.videos count]) {
         [_iCarousel scrollToItemAtIndex:index animated:YES];
@@ -165,8 +164,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }
 }
 
-- (void)playbackStateDidChange:(NSNotification *)note
+- (void)playbackDidFinish:(NSNotification *)note
 {
+    [_moviePlayerViewController dismissMoviePlayerViewControllerAnimated];
+    _moviePlayerViewController = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
     if (reason == MPMovieFinishReasonPlaybackEnded) {
@@ -189,6 +190,8 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
         [view setUserInteractionEnabled:YES];
+        [view.layer setBorderWidth:3.0];
+        [view.layer setBorderColor:[[UIColor grayColor] CGColor]];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
         [imageView setAsynchronous:YES];

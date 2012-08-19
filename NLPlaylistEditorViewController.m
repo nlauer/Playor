@@ -35,9 +35,9 @@
     [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    self.title = @"Editor";
+    self.title = @"My Playlists";
     
-    UIBarButtonItem *addPlaylistButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewPlaylist)];
+    UIBarButtonItem *addPlaylistButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(getTitleForNewPlaylist)];
     [self.navigationItem setRightBarButtonItem:addPlaylistButton];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44) style:UITableViewStylePlain];
@@ -48,10 +48,20 @@
     [self.view addSubview:_tableView];
 }
 
-- (void)addNewPlaylist
+- (void)getTitleForNewPlaylist
+{
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"New Playlist" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField * alertTextField = [alert textFieldAtIndex:0];
+    alertTextField.keyboardType = UIKeyboardTypeDefault;
+    alertTextField.placeholder = @"Enter a name";
+    [alert show];
+}
+
+- (void)addNewPlaylistWithName:(NSString *)name
 {
     NLPlaylist *playlist = [[NLPlaylist alloc] init];
-    [playlist setName:@"NEW PLAYLIST"];
+    [playlist setName:name];
     [[NLPlaylistManager sharedInstance] addPlaylist:playlist];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[[[NLPlaylistManager sharedInstance] playlists] count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 }
@@ -59,6 +69,16 @@
 - (int)selectedPlaylistIndex
 {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"] integerValue];
+}
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{ 
+    if (buttonIndex == 1) {
+        [self addNewPlaylistWithName:[[alertView textFieldAtIndex:0] text]];
+    }
 }
 
 #pragma mark -
