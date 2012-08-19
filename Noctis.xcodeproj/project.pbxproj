@@ -52,6 +52,12 @@
 		85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FB45AD15DC905500349534 /* MediaPlayer.framework */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
+		85FB45C815E067AB00349534 /* bg@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45C615E067AA00349534 /* bg@2X.png */; };
+		85FB45C915E067AB00349534 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45C715E067AB00349534 /* bg.png */; };
+		85FB45CC15E06A2100349534 /* playlist_bar@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CA15E06A2100349534 /* playlist_bar@2X.png */; };
+		85FB45CD15E06A2100349534 /* playlist_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CB15E06A2100349534 /* playlist_bar.png */; };
+		85FB45D015E06D7700349534 /* playlist_bg@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CE15E06D7700349534 /* playlist_bg@2X.png */; };
+		85FB45D115E06D7700349534 /* playlist_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45CF15E06D7700349534 /* playlist_bg.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +153,12 @@
 		85FB45B415DCB58600349534 /* NLContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLContainerViewController.m; sourceTree = "<group>"; };
 		85FB45B615DDF3E200349534 /* NLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLUtils.h; sourceTree = "<group>"; };
 		85FB45B715DDF3E200349534 /* NLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLUtils.m; sourceTree = "<group>"; };
+		85FB45C615E067AA00349534 /* bg@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2X.png"; sourceTree = "<group>"; };
+		85FB45C715E067AB00349534 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		85FB45CA15E06A2100349534 /* playlist_bar@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playlist_bar@2X.png"; sourceTree = "<group>"; };
+		85FB45CB15E06A2100349534 /* playlist_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bar.png; sourceTree = "<group>"; };
+		85FB45CE15E06D7700349534 /* playlist_bg@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playlist_bg@2X.png"; sourceTree = "<group>"; };
+		85FB45CF15E06D7700349534 /* playlist_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_bg.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +189,7 @@
 				853FEB3515BB88CB002A1EB5 /* Models */,
 				853FEB3415BB88BD002A1EB5 /* View Controllers */,
 				853FEB5415BB92B7002A1EB5 /* Base Classes */,
+				85FB45BD15E05E4C00349534 /* Resources */,
 				853FEB1E15BB8561002A1EB5 /* Supporting Files */,
 				853FEB1615BB8561002A1EB5 /* Frameworks */,
 				853FEB1415BB8561002A1EB5 /* Products */,
@@ -393,6 +406,19 @@
 			name = HCYoutubeParser;
 			sourceTree = "<group>";
 		};
+		85FB45BD15E05E4C00349534 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				85FB45CE15E06D7700349534 /* playlist_bg@2X.png */,
+				85FB45CF15E06D7700349534 /* playlist_bg.png */,
+				85FB45CA15E06A2100349534 /* playlist_bar@2X.png */,
+				85FB45CB15E06A2100349534 /* playlist_bar.png */,
+				85FB45C615E067AA00349534 /* bg@2X.png */,
+				85FB45C715E067AB00349534 /* bg.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -446,6 +472,12 @@
 			files = (
 				853FEB2215BB8561002A1EB5 /* InfoPlist.strings in Resources */,
 				85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */,
+				85FB45C815E067AB00349534 /* bg@2X.png in Resources */,
+				85FB45C915E067AB00349534 /* bg.png in Resources */,
+				85FB45CC15E06A2100349534 /* playlist_bar@2X.png in Resources */,
+				85FB45CD15E06A2100349534 /* playlist_bar.png in Resources */,
+				85FB45D015E06D7700349534 /* playlist_bg@2X.png in Resources */,
+				85FB45D115E06D7700349534 /* playlist_bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

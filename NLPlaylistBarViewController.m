@@ -20,6 +20,8 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "NLAppDelegate.h"
 #import "NLContainerViewController.h"
+#import "NLAppDelegate.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -59,23 +61,27 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [super viewDidLoad];
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
-    [self.view setBackgroundColor:[UIColor grayColor]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bg"]]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
-    [playlistTitleView setBackgroundColor:[UIColor colorWithWhite:0.15 alpha:1.0]];
+    CAGradientLayer *topShadow = [CAGradientLayer layer];
+    topShadow.frame = CGRectMake(0, 0, playlistTitleView.frame.size.width, 5);
+    topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.7f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
+    [playlistTitleView.layer insertSublayer:topShadow atIndex:0];
+    [playlistTitleView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]]];
     [self.view addSubview:playlistTitleView];
     
     playlistTitleLabel_ = [[UILabel alloc] init];
     [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
     [playlistTitleLabel_ setText:_playlist.name];
-    [playlistTitleLabel_ setFont:[UIFont systemFontOfSize:16]];
-    [playlistTitleLabel_ setTextColor:[UIColor whiteColor]];
+    [playlistTitleLabel_ setFont:[UIFont boldSystemFontOfSize:16]];
+    [playlistTitleLabel_ setTextColor:[UIColor blackColor]];
     [playlistTitleLabel_ sizeToFit];
     [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
     [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
-    [playlistEditorButton setBackgroundColor:[UIColor lightGrayColor]];
+    [playlistEditorButton setBackgroundColor:[UIColor clearColor]];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
@@ -108,9 +114,9 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (!isShowingEditor_) {
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
-        [((NLContainerViewController *)self.parentViewController) presentViewControllerBehindPlaylistBar:nav];
+        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] presentViewControllerBehindPlaylistBar:nav];
     } else {
-        [((NLContainerViewController *)self.parentViewController) dismissPresentedViewControllerBehindPlaylistBar];
+        [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] dismissPresentedViewControllerBehindPlaylistBar];
     }
     isShowingEditor_ = !isShowingEditor_;
 }
@@ -140,6 +146,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     NSURL *videoURL = [playVideo getVideoURL];
     if (videoURL) {
         _moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        [_moviePlayerViewController.moviePlayer setUseApplicationAudioSession:NO];
         [self presentMoviePlayerViewControllerAnimated:_moviePlayerViewController];
     } else {
         NSLog(@"COULDNT FIND A VIDEO URL");
@@ -149,9 +156,13 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)playVideoAfterDelay
 {
+    [_moviePlayerViewController dismissMoviePlayerViewControllerAnimated];
+    _moviePlayerViewController = nil;
     int index = [_iCarousel currentItemIndex] + 1;
-    [_iCarousel scrollToItemAtIndex:index animated:YES];
-    [self performSelector:@selector(loadNewVideoWithIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:1];
+    if (index < [_playlist.videos count]) {
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
+        [self performSelector:@selector(loadNewVideoWithIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:1];
+    }
 }
 
 - (void)playbackStateDidChange:(NSNotification *)note

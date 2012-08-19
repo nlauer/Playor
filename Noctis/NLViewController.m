@@ -18,7 +18,7 @@
 {
     [super viewDidLoad];
 	
-    [self.view setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]]];
 }
 
 - (void)viewDidUnload

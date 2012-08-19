@@ -33,7 +33,6 @@
 {
     [super viewDidLoad];
     [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
-    [self.view setBackgroundColor:[UIColor darkGrayColor]];
     
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     self.title = @"Editor";
@@ -44,7 +43,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
-    [_tableView setBackgroundColor:[UIColor darkGrayColor]];
+    [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorColor:[UIColor blackColor]];
     [self.view addSubview:_tableView];
 }
@@ -75,8 +74,10 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
     cell.textLabel.text = [[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row] name];
+    [cell.textLabel setTextColor:[UIColor whiteColor]];
     return cell;
 }
 
@@ -107,7 +108,7 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor darkGrayColor]];
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

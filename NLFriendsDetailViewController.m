@@ -60,7 +60,7 @@
     [_tableView setDataSource:self];
     [_tableView setRowHeight:90];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    [_tableView setSeparatorColor:[UIColor blackColor]];
+    [_tableView setSeparatorColor:[UIColor darkGrayColor]];
     [self.view addSubview:_tableView];
     
     activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -158,8 +158,9 @@
     FXImageView *thumbnailImageView = nil;
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width - 160, tableView.rowHeight)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width - 160, tableView.rowHeight-2)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];

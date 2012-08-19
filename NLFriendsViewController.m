@@ -31,17 +31,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.title = @"Noctis";
     shouldBeginEditing_ = YES;
     [self.view setClipsToBounds:YES];
     [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 100, 44.0)];
     [searchBar setBarStyle:UIBarStyleBlack];
-    [searchBar setPlaceholder:@"Search Friends"];
+    [searchBar setPlaceholder:@"Search for friends"];
     [searchBar setDelegate:self];
-    [self.view addSubview:searchBar];
+    [self.navigationItem setTitleView:searchBar];
     
     if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
         [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
@@ -65,7 +63,7 @@
 - (void)setupICarousel
 {
     if (!_iCarousel) {
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 44.0f + 10.0, self.view.frame.size.width, 170)];
+        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 10.0f + 10.0, self.view.frame.size.width, 170)];
         [carousel setType:iCarouselTypeLinear];
         [carousel setDataSource:self];
         [carousel setDelegate:self];
@@ -96,7 +94,7 @@
     
     if (view == nil) {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 170.0f, 170.0f)];
-        [view setBackgroundColor:[UIColor clearColor]];
+        [view setBackgroundColor:[UIColor blackColor]];
         
         profileImageView = [[FXImageView alloc] initWithFrame:view.frame];
         [profileImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -150,7 +148,7 @@
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return value * 1.05f;
+            return value * 1.1f;
         }
         default:
         {
@@ -211,12 +209,18 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    [searchBar setShowsCancelButton:YES animated:YES];
+    [searchBar setShowsCancelButton:YES animated:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, searchBar.frame.size.width+100, searchBar.frame.size.height)];
+    }];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
-    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar setShowsCancelButton:NO animated:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, searchBar.frame.size.width-100, searchBar.frame.size.height)];
+    }];
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
