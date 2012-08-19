@@ -71,7 +71,7 @@
     if (previousViewController_) {
         float previousHeight = previousViewController_.view.frame.size.height;
         [previousViewController_.view setFrame:CGRectMake(0, previousViewController_.view.frame.origin.y, previousViewController_.view.frame.size.width, 44)];
-        [self transitionFromViewController:_topController toViewController:previousViewController_ duration:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self transitionFromViewController:_topController toViewController:previousViewController_ duration:0.3 options:UIViewAnimationOptionCurveEaseIn animations:^{
             [previousViewController_.view setFrame:CGRectMake(0, previousViewController_.view.frame.origin.y, previousViewController_.view.frame.size.width, previousHeight)];
             [_topController.view setFrame:CGRectMake(0, _topController.view.frame.size.height, _topController.view.frame.size.width, 0)];
         } completion:^(BOOL finished) {

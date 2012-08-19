@@ -77,7 +77,7 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
     cell.textLabel.text = [[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row] name];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
     return cell;
 }
 

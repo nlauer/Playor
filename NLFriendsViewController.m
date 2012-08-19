@@ -100,7 +100,7 @@
         [profileImageView setContentMode:UIViewContentModeScaleAspectFill];
         [profileImageView setTag:2];
         [profileImageView setAsynchronous:YES];
-        [profileImageView setReflectionAlpha:0.3];
+        [profileImageView setReflectionAlpha:0.5];
         [profileImageView setReflectionGap:0];
         [profileImageView setReflectionScale:0.4];
         [view addSubview:profileImageView];
@@ -109,7 +109,7 @@
         [nameLabel setTextAlignment:UITextAlignmentCenter];
         [nameLabel setBackgroundColor:[UIColor clearColor]];
         [nameLabel setTag:1];
-        [nameLabel setTextColor:[UIColor whiteColor]];
+        [nameLabel setTextColor:[UIColor blackColor]];
         [view addSubview:nameLabel];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeFriendView:)];

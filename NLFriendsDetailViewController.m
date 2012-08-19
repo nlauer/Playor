@@ -58,12 +58,12 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
-    [_tableView setRowHeight:90];
+    [_tableView setRowHeight:100];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    [_tableView setSeparatorColor:[UIColor darkGrayColor]];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tableView];
     
-    activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
     [self.view addSubview:activityIndicator_];
     [activityIndicator_ startAnimating];
@@ -160,7 +160,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, cell.frame.origin.y, cell.frame.size.width - 160, tableView.rowHeight-2)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 10, cell.frame.size.width - 160, tableView.rowHeight-10)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];
@@ -168,12 +168,17 @@
         
         titleLabel = [[UILabel alloc] init];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor whiteColor]];
+        [titleLabel setTextColor:[UIColor blackColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
         [titleLabel setLineBreakMode:UILineBreakModeWordWrap];
         [cell addSubview:titleLabel];
+        
+        CAGradientLayer *topShadow = [CAGradientLayer layer];
+        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 10);
+        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
+        [cell.layer insertSublayer:topShadow atIndex:0];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
         [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
