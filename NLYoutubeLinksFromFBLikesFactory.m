@@ -73,7 +73,6 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 - (void)receiveSearchQueries:(NSArray *)searchQueries
 {
     for (NSString *query in searchQueries) {
-        NSLog(@"SEARCHING:%@",query);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
@@ -102,7 +101,6 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
         }
         if ([unsortedYoutubeLinks count] != 0) {
             [_youtubeLinksArray addObject:[unsortedYoutubeLinks objectAtIndex:0]];
-            NSLog(@"FOUND NAME:%@", [[unsortedYoutubeLinks objectAtIndex:0] title]);
         }
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);

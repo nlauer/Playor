@@ -11,20 +11,15 @@
 
 @implementation NLYoutubeVideo
 @synthesize youtubeID = _youtubeID, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
-@synthesize videoURL = _videoURL;
 
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary
 {
     self = [super init];
     if (self) {
-//        if (![self isRestrictedForPlaybackForDataDictionary:dataDictionary]) {
-            self.title = [self getVideoTitleFromDictionary:dataDictionary];
-            self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
-            self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
-            self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
-//        } else {
-//            return nil;
-//        }
+        self.title = [self getVideoTitleFromDictionary:dataDictionary];
+        self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
+        self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
+        self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
     }
     
     return self;
@@ -59,18 +54,6 @@
 {
     NSString *youtubeID = [[[dataDictionary objectForKey:@"media$group"] objectForKey:@"yt$videoid"] objectForKey:@"$t"];
     return youtubeID;
-}
-
-- (NSURL *)getVideoURL
-{
-    if (!_videoURL) {
-        NSURL *videoURL = [HCYoutubeParser h264mediumVideoURLWithYoutubeID:_youtubeID];
-        _videoURL = videoURL;
-    }
-    if (!_videoURL) {
-        NSLog(@"COULDNT FIND A URL");
-    }
-    return _videoURL;
 }
 
 - (NSURL *)getVideoThumnailURLFromDictionary:(NSDictionary *)dataDictionary

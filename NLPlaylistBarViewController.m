@@ -146,11 +146,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)loadNewVideoWithIndex:(NSNumber *)numberIndex
 {
     NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     
     int index = [numberIndex integerValue];
     [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:@"MPAVMoviePlayerPlaybackDidFinishNotification" object:nil];
 }
 
 - (void)playVideoAfterDelay
@@ -162,23 +161,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }
 }
 
-//- (void)playbackDidFinish:(NSNotification *)note
-//{
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MPAVMoviePlayerPlaybackDidFinishNotification" object:nil];
-//    MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
-//    if (reason == MPMovieFinishReasonPlaybackEnded) {
-//        [self playVideoAfterDelay];
-//    }
-//}
-
-- (void)playbackStateDidChange:(NSNotification *)note
+- (void)videoDidExitFullscreen:(NSNotification *)note
 {
-//    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
-//    NSLog(@"playbackState:%d", playbackState);
-//    if (playbackState == 1) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        [self playVideoAfterDelay];
-//    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self playVideoAfterDelay];
 }
 
 #pragma mark -
