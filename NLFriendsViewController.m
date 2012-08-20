@@ -235,6 +235,14 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
+    
+    if ([searchBar.text isEqualToString:@""]) {
+        _carouselArray = _facebookFriends;
+    } else {
+        _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
+    }
+    [self setupICarousel];
+    [self setupSlider];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar

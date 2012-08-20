@@ -17,14 +17,14 @@
 {
     self = [super init];
     if (self) {
-        if (![self isRestrictedForPlaybackForDataDictionary:dataDictionary]) {
+//        if (![self isRestrictedForPlaybackForDataDictionary:dataDictionary]) {
             self.title = [self getVideoTitleFromDictionary:dataDictionary];
             self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
             self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
             self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
-        } else {
-            return nil;
-        }
+//        } else {
+//            return nil;
+//        }
     }
     
     return self;
@@ -66,6 +66,9 @@
     if (!_videoURL) {
         NSURL *videoURL = [HCYoutubeParser h264mediumVideoURLWithYoutubeID:_youtubeID];
         _videoURL = videoURL;
+    }
+    if (!_videoURL) {
+        NSLog(@"COULDNT FIND A URL");
     }
     return _videoURL;
 }

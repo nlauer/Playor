@@ -11,7 +11,7 @@
 #import "NLURLConnectionManager.h"
 #import "NSObject+SBJSON.h"
 
-#define ITUNES_SEARCH_QUERY @"http://itunes.apple.com/search?term=%@&limit=3&media=music"
+#define ITUNES_SEARCH_QUERY @"http://itunes.apple.com/search?term=%@&limit=4&media=music"
 
 @implementation NLSearchQueriesFactory {
     int numberOfActiveConnections_;

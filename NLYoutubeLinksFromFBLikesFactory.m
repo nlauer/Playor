@@ -12,7 +12,7 @@
 #import "NSObject+SBJSON.h"
 #import "NLSearchQueriesFactory.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@+lyric+-parody&max-results=10&v=2&alt=json"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=1&v=2&alt=json&format=5"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
@@ -100,9 +100,9 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
                 [unsortedYoutubeLinks addObject:youtubeVideo];
             }
         }
-//        [unsortedYoutubeLinks sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"viewCount" ascending:NO]]];
         if ([unsortedYoutubeLinks count] != 0) {
             [_youtubeLinksArray addObject:[unsortedYoutubeLinks objectAtIndex:0]];
+            NSLog(@"FOUND NAME:%@", [[unsortedYoutubeLinks objectAtIndex:0] title]);
         }
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
