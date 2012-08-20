@@ -26,14 +26,14 @@
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NLPlaylist *playlist;
-@property (strong, nonatomic) MPMoviePlayerViewController *moviePlayerViewController;
+@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
 }
-@synthesize iCarousel = _iCarousel, playlist = _playlist, moviePlayerViewController = _moviePlayerViewController;
+@synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
 
 static NLPlaylistBarViewController *sharedInstance = NULL;
 
@@ -107,6 +107,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [carousel setContentOffset:CGSizeMake(0, 0)];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
+    
+    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+    [_videoWebView setDelegate:self];
+    [self.view addSubview:_videoWebView];
 }
 
 - (void)togglePlaylistEditor
@@ -141,18 +145,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)loadNewVideoWithIndex:(NSNumber *)numberIndex
 {
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver:self selector:@selector(playbackStateDidChange:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
     int index = [numberIndex integerValue];
-    NLYoutubeVideo *playVideo = [_playlist.videos objectAtIndex:index];
-    NSURL *videoURL = [playVideo getVideoURL];
-    if (videoURL) {
-        _moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [_moviePlayerViewController.moviePlayer setUseApplicationAudioSession:NO];
-        [self presentMoviePlayerViewControllerAnimated:_moviePlayerViewController];
-        [_moviePlayerViewController shouldAutorotateToInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
-    } else {
-        NSLog(@"COULDNT FIND A VIDEO URL");
-    }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:@"MPAVMoviePlayerPlaybackDidFinishNotification" object:nil];
 }
 
 - (void)playVideoAfterDelay
@@ -164,15 +162,23 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     }
 }
 
-- (void)playbackDidFinish:(NSNotification *)note
+//- (void)playbackDidFinish:(NSNotification *)note
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MPAVMoviePlayerPlaybackDidFinishNotification" object:nil];
+//    MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
+//    if (reason == MPMovieFinishReasonPlaybackEnded) {
+//        [self playVideoAfterDelay];
+//    }
+//}
+
+- (void)playbackStateDidChange:(NSNotification *)note
 {
-    [_moviePlayerViewController dismissMoviePlayerViewControllerAnimated];
-    _moviePlayerViewController = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    MPMovieFinishReason reason = [[note.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue];
-    if (reason == MPMovieFinishReasonPlaybackEnded) {
+//    int playbackState = [[note.userInfo objectForKey:@"MPAVControllerNewStateParameter"] intValue];
+//    NSLog(@"playbackState:%d", playbackState);
+//    if (playbackState == 1) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self playVideoAfterDelay];
-    }
+//    }
 }
 
 #pragma mark -
@@ -295,6 +301,32 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [_playlist.videos removeObjectAtIndex:index];
         [_iCarousel removeItemAtIndex:index animated:YES];
     }];
+}
+
+#pragma mark -
+#pragma mark UIWebViewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    UIButton *b = [self findButtonInView:webView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (UIButton *)findButtonInView:(UIView *)view {
+    UIButton *button = nil;
+    
+    if ([view isMemberOfClass:[UIButton class]]) {
+        [((UIButton *)view) sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    if (view.subviews && [view.subviews count] > 0) {
+        for (UIView *subview in view.subviews) {
+            button = [self findButtonInView:subview];
+            [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+    
+    return button;
 }
 
 @end

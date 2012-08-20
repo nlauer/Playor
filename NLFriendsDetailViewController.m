@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *youtubeLinksArray;
+@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLFriendsDetailViewController {
@@ -28,7 +29,7 @@
     int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
-@synthesize youtubeLinksArray = _youtubeLinksArray, tableView = _tableView;
+@synthesize youtubeLinksArray = _youtubeLinksArray, tableView = _tableView, videoWebView = _videoWebView;
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
@@ -67,6 +68,10 @@
     [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
     [self.view addSubview:activityIndicator_];
     [activityIndicator_ startAnimating];
+    
+    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+    [_videoWebView setDelegate:self];
+    [self.view addSubview:_videoWebView];
 }
 
 - (void)viewDidUnload
@@ -80,14 +85,7 @@
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    NLYoutubeVideo *playVideo = [_youtubeLinksArray objectAtIndex:index];
-    NSURL *videoURL = [playVideo getVideoURL];
-    if (videoURL) {
-        MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [moviePlayerViewController.moviePlayer setUseApplicationAudioSession:NO];
-        [self presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
-        [moviePlayerViewController shouldAutorotateToInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
-    }
+    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_youtubeLinksArray objectAtIndex:index] youtubeID]]]]];
 }
 
 #pragma mark -
@@ -169,7 +167,7 @@
         
         titleLabel = [[UILabel alloc] init];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor blackColor]];
+        [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
         [titleLabel setNumberOfLines:3];
@@ -231,6 +229,32 @@
     int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
+}
+
+#pragma mark -
+#pragma mark UIWebViewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+    UIButton *b = [self findButtonInView:webView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (UIButton *)findButtonInView:(UIView *)view {
+    UIButton *button = nil;
+    
+    if ([view isMemberOfClass:[UIButton class]]) {
+        [((UIButton *)view) sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    if (view.subviews && [view.subviews count] > 0) {
+        for (UIView *subview in view.subviews) {
+            button = [self findButtonInView:subview];
+            [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+    
+    return button;
 }
 
 @end
