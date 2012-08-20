@@ -32,6 +32,15 @@
     [[UINavigationBar appearance] setTintColor:barColor];
     [[UISearchBar appearance] setTintColor:barColor];
     
+    UIImage *minImage = [[UIImage imageNamed:@"slider_minimum"] 
+                         resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    UIImage *maxImage = [[UIImage imageNamed:@"slider_maximum"] 
+                         resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
+    [[UISlider appearance] setMaximumTrackImage:maxImage 
+                                       forState:UIControlStateNormal];
+    [[UISlider appearance] setMinimumTrackImage:minImage 
+                                       forState:UIControlStateNormal];
+    
     _containerController = [[NLContainerViewController alloc] initWithTopViewController:nav andBottomViewController:[NLPlaylistBarViewController sharedInstance]];
     self.window.rootViewController = _containerController;
     [self.window makeKeyAndVisible];

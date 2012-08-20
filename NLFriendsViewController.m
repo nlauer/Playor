@@ -26,6 +26,7 @@
 
 @implementation NLFriendsViewController {
     BOOL shouldBeginEditing_;
+    UISlider *slider_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
@@ -71,13 +72,37 @@
         [self setICarousel:carousel];
         [self.view addSubview:carousel];
     } else {
+        [_iCarousel setCurrentItemIndex:0];
         [_iCarousel reloadData];
+    }
+}
+
+- (void)setupSlider
+{
+    if (!slider_) {
+        slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
+        [slider_ setMinimumValue:0];
+        [slider_ setMaximumValue:[_carouselArray count]];
+//        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventValueChanged];
+        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
+//        [slider_ addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
+        [self.view addSubview:slider_];
+    } else {
+        [slider_ setValue:0];
+        [slider_ setMaximumValue:[_carouselArray count]];
     }
 }
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
     return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
+}
+
+#pragma mark -
+#pragma mark UISlider Methods
+- (void)sliderTouchedUp:(UISlider *)slider
+{
+    [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
 }
 
 #pragma mark -
@@ -159,6 +184,11 @@
     }
 }
 
+- (void)carouselDidEndDecelerating:(iCarousel *)carousel
+{
+    [slider_ setValue:carousel.currentItemIndex animated:YES];
+}
+
 #pragma mark -
 #pragma mark FacebookFriendDelegate
 - (void)receiveFacebookFriends:(NSArray *)friends
@@ -166,6 +196,7 @@
     self.facebookFriends = [friends sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
     self.carouselArray = _facebookFriends;
     [self setupICarousel];
+    [self setupSlider];
 }
 
 #pragma mark -
@@ -176,19 +207,15 @@
         shouldBeginEditing_ = NO;
         
         _carouselArray = _facebookFriends;
-        
-        [_iCarousel setCurrentItemIndex:0];
-        [_iCarousel reloadData];
     } else {
         if ([searchBar.text isEqualToString:@""]) {
             _carouselArray = _facebookFriends;
         } else {
             _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
         }
-        
-        [_iCarousel setCurrentItemIndex:0];
-        [_iCarousel reloadData];
     }
+    [self setupICarousel];
+    [self setupSlider];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -200,22 +227,14 @@
         
         [searchBar setText:@""];
         
-        [_iCarousel setCurrentItemIndex:0];
-        [_iCarousel reloadData];
+        [self setupICarousel];
+        [self setupSlider];
     }
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
-    
-    if ([searchBar.text isEqualToString:@""]) {
-        _carouselArray = _facebookFriends;
-    } else {
-        _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
-    }
-    [_iCarousel reloadData];
-    [_iCarousel setCurrentItemIndex:0];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar

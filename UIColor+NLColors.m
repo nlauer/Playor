@@ -27,7 +27,7 @@
 
 + (UIColor *)playlistBarBackgroundColor
 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bar"]];
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bg"]];
 }
 
 @end

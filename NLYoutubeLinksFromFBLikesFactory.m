@@ -10,8 +10,9 @@
 
 #import "NLYoutubeVideo.h"
 #import "NSObject+SBJSON.h"
+#import "NLSearchQueriesFactory.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=10&v=2&alt=json&category=Music&format=1"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@+lyric+-parody&max-results=10&v=2&alt=json"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
@@ -37,7 +38,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     self.youtubeLinksFromFBLikesDelegate = delegate;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
-    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=20", friendID];
+    NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=15", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 
@@ -45,6 +46,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 {
     if (numberOfActiveConnections_ == 0) {
         [_youtubeLinksFromFBLikesDelegate receiveYoutubeLinksFromFBLikes:_youtubeLinksArray];
+        _youtubeLinksArray = nil;
     }
 }
 
@@ -58,9 +60,21 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 - (void)request:(FBRequest *)request didLoad:(id)result
 {
     NSDictionary *items = [(NSDictionary *)result objectForKey:@"data"];
+    NSMutableArray *artists = [[NSMutableArray alloc] init];
     for (NSDictionary *musicLikes in items) {
         NSString *name = [musicLikes objectForKey:@"name"];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [artists addObject:name];
+    }
+    [[NLSearchQueriesFactory sharedInstance] createSongsArrayForArtists:artists andDelegate:self];
+}
+
+#pragma mark -
+#pragma mark SearchQueriesFactoryDelegate
+- (void)receiveSearchQueries:(NSArray *)searchQueries
+{
+    for (NSString *query in searchQueries) {
+        NSLog(@"SEARCHING:%@",query);
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {
@@ -86,11 +100,10 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
                 [unsortedYoutubeLinks addObject:youtubeVideo];
             }
         }
-        if ([unsortedYoutubeLinks count] >= 4) {
-            [unsortedYoutubeLinks sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"viewCount" ascending:NO]]];
-            unsortedYoutubeLinks = [NSMutableArray arrayWithArray:[unsortedYoutubeLinks subarrayWithRange:NSMakeRange(0, 4)]];
+//        [unsortedYoutubeLinks sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"viewCount" ascending:NO]]];
+        if ([unsortedYoutubeLinks count] != 0) {
+            [_youtubeLinksArray addObject:[unsortedYoutubeLinks objectAtIndex:0]];
         }
-        _youtubeLinksArray = [NSMutableArray arrayWithArray:[_youtubeLinksArray arrayByAddingObjectsFromArray:unsortedYoutubeLinks]];
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }
