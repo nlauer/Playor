@@ -7,7 +7,6 @@
 //
 
 #import "NLYoutubeVideo.h"
-#import "HCYoutubeParser.h"
 
 @implementation NLYoutubeVideo
 @synthesize youtubeID = _youtubeID, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
