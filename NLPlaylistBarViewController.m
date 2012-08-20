@@ -32,6 +32,7 @@
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
+    BOOL shouldAutoplay_;
 }
 @synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
 
@@ -60,6 +61,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [super viewDidLoad];
     isShowingEditor_ = NO;
+    shouldAutoplay_ = YES;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor playlistBarBackgroundColor]];
     
@@ -81,9 +83,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
-    [playlistEditorButton setBackgroundColor:[UIColor clearColor]];
+    [playlistEditorButton setBackgroundColor:[UIColor darkGrayColor]];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
+    
+    UIButton *playerButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 88, 0, 44, 44)];
+    [playerButton setBackgroundColor:[UIColor blackColor]];
+    [playerButton addTarget:self action:@selector(playerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [playlistTitleView addSubview:playerButton];
     
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
     [infoLabel setBackgroundColor:[UIColor clearColor]];
@@ -143,13 +150,22 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 #pragma mark Playing Videos
 
+- (void)playerButtonPressed
+{
+    shouldAutoplay_ = NO;
+}
+
 - (void)loadNewVideoWithIndex:(NSNumber *)numberIndex
 {
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    
-    int index = [numberIndex integerValue];
-    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
+    if (shouldAutoplay_) {
+        NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+        [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+        
+        int index = [numberIndex integerValue];
+        [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
+    } else {
+        shouldAutoplay_ = YES;
+    }
 }
 
 - (void)playVideoAfterDelay
@@ -157,7 +173,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     int index = [_iCarousel currentItemIndex] + 1;
     if (index < [_playlist.videos count]) {
         [_iCarousel scrollToItemAtIndex:index animated:YES];
-        [self performSelector:@selector(loadNewVideoWithIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:1];
+        [self performSelector:@selector(loadNewVideoWithIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:3];
     }
 }
 
