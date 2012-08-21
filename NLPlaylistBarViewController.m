@@ -32,7 +32,6 @@
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
-    BOOL shouldAutoplay_;
     UIBackgroundTaskIdentifier bgTask;
 }
 @synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
@@ -62,7 +61,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [super viewDidLoad];
     isShowingEditor_ = NO;
-    shouldAutoplay_ = YES;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
     [self.view setBackgroundColor:[UIColor playlistBarBackgroundColor]];
     
@@ -88,10 +86,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
-    UIButton *playerButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 88, 0, 44, 44)];
-    [playerButton setBackgroundColor:[UIColor blackColor]];
-    [playerButton addTarget:self action:@selector(playerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [playlistTitleView addSubview:playerButton];
+    UIButton *stopLoadingVideoButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 88, 0, 44, 44)];
+    [stopLoadingVideoButton setBackgroundColor:[UIColor blackColor]];
+    [stopLoadingVideoButton addTarget:self action:@selector(stopLoadingCurrentVideo) forControlEvents:UIControlEventTouchUpInside];
+    [playlistTitleView addSubview:stopLoadingVideoButton];
     
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
     [infoLabel setBackgroundColor:[UIColor clearColor]];
@@ -223,9 +221,9 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 #pragma mark Playing Videos
 
-- (void)playerButtonPressed
+- (void)stopLoadingCurrentVideo
 {
-    shouldAutoplay_ = NO;
+    [_videoWebView stopLoading];
 }
 
 - (void)loadNewVideoWithIndex:(int)index
@@ -369,15 +367,11 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    if (shouldAutoplay_) {
-        UIButton *b = [self findButtonInView:_videoWebView];
-        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-        
-        NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-        [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    } else {
-        shouldAutoplay_ = YES;
-    }
+    UIButton *b = [self findButtonInView:_videoWebView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
 }
 
 - (UIButton *)findButtonInView:(UIView *)view {
