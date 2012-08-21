@@ -62,10 +62,12 @@
 
 - (void)addNewPlaylistWithName:(NSString *)name
 {
+    int row = [[[NLPlaylistManager sharedInstance] playlists] count]-1;
     NLPlaylist *playlist = [[NLPlaylist alloc] init];
     [playlist setName:name];
     [[NLPlaylistManager sharedInstance] addPlaylist:playlist];
-    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[[[NLPlaylistManager sharedInstance] playlists] count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [[NLPlaylistManager sharedInstance] setCurrentPlaylist:row];
 }
 
 - (int)selectedPlaylistIndex
@@ -134,6 +136,7 @@
     [titleLabel setText:[playlist name]];
     [titleLabel sizeToFit];
     [titleLabel setFrame:CGRectMake(10, tableView.rowHeight/2 - titleLabel.frame.size.height/2, cell.frame.size.width - 20, titleLabel.frame.size.height)];
+    
     return cell;
 }
 
