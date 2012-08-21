@@ -59,7 +59,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    
+    [[NLPlaylistBarViewController sharedInstance] endBackgroundPlay];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -85,9 +85,7 @@
                 NSLog(@"PREVIOUS");
                 break;
             case UIEventSubtypeRemoteControlNextTrack:
-            {
-                
-            }
+                NSLog(@"FAST FORWARD");
                 break;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"STOP");

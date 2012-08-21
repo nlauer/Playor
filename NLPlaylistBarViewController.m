@@ -122,49 +122,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [self.view addSubview:_videoWebView];
 }
 
-#pragma mark -
-#pragma mark BackgroundPlayMethods
-
-// Start playing next video with a background task
-- (void)playNextVideoInBackground
-{
-    UIApplication *app = [UIApplication sharedApplication];
-    if (bgTask != UIBackgroundTaskInvalid) {
-        [app endBackgroundTask:bgTask]; 
-        bgTask = UIBackgroundTaskInvalid;
-    }
-    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{ 
-        [app endBackgroundTask:bgTask]; 
-        bgTask = UIBackgroundTaskInvalid;
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self videoDidExitFullscreen:nil];
-    });
-}
-
-- (void)prepareForBackgroundPlay
-{
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
-        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-        [self becomeFirstResponder];
-    }
-    
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter removeObserver:self];
-    [notifyCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    [self webViewDidFinishLoad:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated 
-{
-    [super viewDidAppear:animated];
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
 - (void)togglePlaylistEditor
 {
     if (!isShowingEditor_) {
@@ -191,6 +148,77 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [playlistTitleLabel_ setText:playlist.name];
     }
     [_iCarousel scrollToItemAtIndex:0 animated:NO];
+}
+
+#pragma mark -
+#pragma mark BackgroundPlayMethods
+
+- (void)prepareForBackgroundPlay
+{
+    // Watch for remote events to keep getting notifications
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        [self becomeFirstResponder];
+    }
+    
+    // Remove other watchers, and only watch for the necessary background events
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter removeObserver:self];
+    [notifyCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    // The audio gets paused when entering background state, this restarts it
+    [self resumeAudio];
+}
+
+- (void)endBackgroundPlay
+{
+    // Kill the background task if it was still running
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask]; 
+        bgTask = UIBackgroundTaskInvalid;
+    }
+    
+    // Stop watching for remote events
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(endReceivingRemoteControlEvents)]){
+        [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+        [self resignFirstResponder];
+    }
+    
+    // Remove the background observers and re-add the foreground playlist observer
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter removeObserver:self];
+    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+}
+
+// Start playing next video with a background task
+- (void)playNextVideoInBackground
+{
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask]; 
+        bgTask = UIBackgroundTaskInvalid;
+    }
+    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{ 
+        [app endBackgroundTask:bgTask]; 
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self videoDidExitFullscreen:nil];
+    });
+}
+
+// Resumes the audio when it got stopped
+- (void)resumeAudio
+{
+    UIButton *b = [self findButtonInView:_videoWebView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+// Necessary to receive remote events
+- (BOOL)canBecomeFirstResponder {
+    return YES;
 }
 
 #pragma mark Playing Videos

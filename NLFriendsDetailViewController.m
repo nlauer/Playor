@@ -241,20 +241,20 @@
 }
 
 - (UIButton *)findButtonInView:(UIView *)view {
-    UIButton *button = nil;
+	UIButton *button = nil;
     
-    if ([view isMemberOfClass:[UIButton class]]) {
-        [((UIButton *)view) sendActionsForControlEvents:UIControlEventTouchUpInside];
-    }
+	if ([view isMemberOfClass:[UIButton class]]) {
+		return (UIButton *)view;
+	}
     
-    if (view.subviews && [view.subviews count] > 0) {
-        for (UIView *subview in view.subviews) {
-            button = [self findButtonInView:subview];
-            [button sendActionsForControlEvents:UIControlEventTouchUpInside];
-        }
-    }
+	if (view.subviews && [view.subviews count] > 0) {
+		for (UIView *subview in view.subviews) {
+			button = [self findButtonInView:subview];
+			if (button) return button;
+		}
+	}
     
-    return button;
+	return button;
 }
 
 @end
