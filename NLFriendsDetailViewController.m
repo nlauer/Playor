@@ -59,7 +59,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
-    [_tableView setRowHeight:100];
+    [_tableView setRowHeight:140];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tableView];
@@ -159,19 +159,21 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width - 160, tableView.rowHeight-10)];
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
         [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView setTag:2];
         [thumbnailImageView setAsynchronous:YES];
         [cell addSubview:thumbnailImageView];
         
-        titleLabel = [[UILabel alloc] init];
+        UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, tableView.rowHeight - 30 - 5, cell.frame.size.width, 30)];
+        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        [cell addSubview:titleView];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, tableView.rowHeight - 20 - 10, cell.frame.size.width - 20, 20)];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
         [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setFont:[UIFont systemFontOfSize:14]];
         [titleLabel setTag:1];
-        [titleLabel setNumberOfLines:3];
-        [titleLabel setLineBreakMode:UILineBreakModeWordWrap];
         [cell addSubview:titleLabel];
         
         CAGradientLayer *topShadow = [CAGradientLayer layer];
@@ -193,9 +195,7 @@
     }
     
     [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
-    
     [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
-    [titleLabel setFrame:CGRectMake(thumbnailImageView.frame.origin.x + thumbnailImageView.frame.size.width + 10, 10, cell.frame.size.width - thumbnailImageView.frame.origin.x - thumbnailImageView.frame.size.width - 20, _tableView.rowHeight - 20)];
     
     return cell;
 }

@@ -57,6 +57,7 @@
 
 - (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController
 {
+    [self.view setUserInteractionEnabled:NO];
     previousViewController_ = _topController;
     [self addChildViewController:viewController];
     _topController = viewController;
@@ -64,11 +65,14 @@
     
     [self transitionFromViewController:previousViewController_ toViewController:_topController duration:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
         [_topController.view setFrame:[NLUtils getContainerTopControllerFrame]];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        [self.view setUserInteractionEnabled:YES];
+    }];
 }
 
 - (void)dismissPresentedViewControllerBehindPlaylistBar
 {
+    [self.view setUserInteractionEnabled:NO];
     if (previousViewController_) {
         float previousHeight = previousViewController_.view.frame.size.height;
         [previousViewController_.view setFrame:CGRectMake(0, previousViewController_.view.frame.origin.y, previousViewController_.view.frame.size.width, 44)];
@@ -78,6 +82,7 @@
         } completion:^(BOOL finished) {
             _topController = previousViewController_;
             previousViewController_ = nil;
+            [self.view setUserInteractionEnabled:YES];
         }];
     }
 }

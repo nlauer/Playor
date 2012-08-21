@@ -57,7 +57,7 @@
 
 - (NSURL *)getVideoThumnailURLFromDictionary:(NSDictionary *)dataDictionary
 {
-    NSString *thumbnailString = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:1] objectForKey:@"url"];
+    NSString *thumbnailString = [[[[dataDictionary objectForKey:@"media$group"] objectForKey:@"media$thumbnail"] objectAtIndex:2] objectForKey:@"url"];
     return [NSURL URLWithString:thumbnailString];
 }
 

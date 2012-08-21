@@ -11,6 +11,7 @@
 #import "NLYoutubeVideo.h"
 #import "NSObject+SBJSON.h"
 #import "NLSearchQueriesFactory.h"
+#import "NSArray+Videos.h"
 
 #define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=1&v=2&alt=json&format=5,1"
 
@@ -99,7 +100,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
                 [unsortedYoutubeLinks addObject:youtubeVideo];
             }
         }
-        if ([unsortedYoutubeLinks count] != 0) {
+        if ([unsortedYoutubeLinks count] != 0 && ![_youtubeLinksArray containsVideo:[unsortedYoutubeLinks objectAtIndex:0]]) {
             [_youtubeLinksArray addObject:[unsortedYoutubeLinks objectAtIndex:0]];
         }
     } else {

@@ -12,6 +12,7 @@
 #import "NLPlaylistManager.h"
 #import "NLPlaylist.h"
 #import "NLUtils.h"
+#import "NLPlaylistEditorPictureView.h"
 
 @interface NLPlaylistEditorViewController ()
 @property (strong, nonatomic) UITableView *tableView;
@@ -44,7 +45,8 @@
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    [_tableView setSeparatorColor:[UIColor blackColor]];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView setRowHeight:60];
     [self.view addSubview:_tableView];
 }
 
@@ -91,13 +93,47 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellID = @"playlistCell";
+    NLPlaylistEditorPictureView *pictureView = nil;
+    UILabel *titleLabel = nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        
+        pictureView = [[NLPlaylistEditorPictureView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
+        [pictureView setTag:1337];
+        [cell addSubview:pictureView];
+        
+        UIView *titleView = [[UIView alloc] initWithFrame:pictureView.frame];
+        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
+        [cell addSubview:titleView];
+        
+        titleLabel = [[UILabel alloc] init];
+        [titleLabel setBackgroundColor:[UIColor clearColor]];
+        [titleLabel setTextColor:[UIColor whiteColor]];
+        [titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
+        [titleLabel setTag:13371337];
+        [cell addSubview:titleLabel];
+        
+        CAGradientLayer *topShadow = [CAGradientLayer layer];
+        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
+        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
+        [cell.layer insertSublayer:topShadow atIndex:0];
+        
+        CAGradientLayer *bottomShadow = [CAGradientLayer layer];
+        bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
+        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
+        [cell.layer insertSublayer:bottomShadow atIndex:0];
+    } else {
+        pictureView = (NLPlaylistEditorPictureView *)[cell viewWithTag:1337];
+        titleLabel = (UILabel *)[cell viewWithTag:13371337];
     }
-    cell.textLabel.text = [[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row] name];
-    [cell.textLabel setTextColor:[UIColor blackColor]];
+    NLPlaylist *playlist = [[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row];
+    [pictureView updatePlaylistVideos:playlist.videos];
+    
+    [titleLabel setText:[playlist name]];
+    [titleLabel sizeToFit];
+    [titleLabel setFrame:CGRectMake(10, tableView.rowHeight/2 - titleLabel.frame.size.height/2, cell.frame.size.width - 20, titleLabel.frame.size.height)];
     return cell;
 }
 

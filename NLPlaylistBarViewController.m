@@ -117,6 +117,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     
     _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
     [_videoWebView setDelegate:self];
+    [_videoWebView setMediaPlaybackRequiresUserAction:NO];
     [self.view addSubview:_videoWebView];
 }
 
@@ -155,32 +156,19 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     shouldAutoplay_ = NO;
 }
 
-- (void)loadNewVideoWithIndex:(NSNumber *)numberIndex
+- (void)loadNewVideoWithIndex:(int)index
 {
-    if (shouldAutoplay_) {
-        NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-        [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-        
-        int index = [numberIndex integerValue];
-        [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
-    } else {
-        shouldAutoplay_ = YES;
-    }
-}
-
-- (void)playVideoAfterDelay
-{
-    int index = [_iCarousel currentItemIndex] + 1;
-    if (index < [_playlist.videos count]) {
-        [_iCarousel scrollToItemAtIndex:index animated:YES];
-        [self performSelector:@selector(loadNewVideoWithIndex:) withObject:[NSNumber numberWithInt:index] afterDelay:3];
-    }
+    [_iCarousel scrollToItemAtIndex:index animated:YES];
+    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self playVideoAfterDelay];
+    int index = [_iCarousel currentItemIndex] + 1;
+    if (index < [_playlist.videos count]) {
+        [self loadNewVideoWithIndex:index];
+    }
 }
 
 #pragma mark -
@@ -256,7 +244,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    [self loadNewVideoWithIndex:[NSNumber numberWithInt:index]];
+    [self loadNewVideoWithIndex:index];
 }
 
 #pragma mark -
@@ -309,9 +297,15 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    
-    UIButton *b = [self findButtonInView:webView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    if (shouldAutoplay_) {
+        NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+        [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+        
+        UIButton *b = [self findButtonInView:webView];
+        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    } else {
+        shouldAutoplay_ = YES;
+    }
 }
 
 - (UIButton *)findButtonInView:(UIView *)view {
