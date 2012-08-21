@@ -33,6 +33,7 @@
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
     BOOL shouldAutoplay_;
+    UIBackgroundTaskIdentifier bgTask;
 }
 @synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
 
@@ -119,6 +120,49 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [_videoWebView setDelegate:self];
     [_videoWebView setMediaPlaybackRequiresUserAction:NO];
     [self.view addSubview:_videoWebView];
+}
+
+#pragma mark -
+#pragma mark BackgroundPlayMethods
+
+// Start playing next video with a background task
+- (void)playNextVideoInBackground
+{
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask]; 
+        bgTask = UIBackgroundTaskInvalid;
+    }
+    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{ 
+        [app endBackgroundTask:bgTask]; 
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self videoDidExitFullscreen:nil];
+    });
+}
+
+- (void)prepareForBackgroundPlay
+{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        [self becomeFirstResponder];
+    }
+    
+    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter removeObserver:self];
+    [notifyCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    [self webViewDidFinishLoad:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated 
+{
+    [super viewDidAppear:animated];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
 }
 
 - (void)togglePlaylistEditor
@@ -298,31 +342,31 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (shouldAutoplay_) {
+        UIButton *b = [self findButtonInView:_videoWebView];
+        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+        
         NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
         [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-        
-        UIButton *b = [self findButtonInView:webView];
-        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
     } else {
         shouldAutoplay_ = YES;
     }
 }
 
 - (UIButton *)findButtonInView:(UIView *)view {
-    UIButton *button = nil;
+	UIButton *button = nil;
     
-    if ([view isMemberOfClass:[UIButton class]]) {
-        [((UIButton *)view) sendActionsForControlEvents:UIControlEventTouchUpInside];
-    }
+	if ([view isMemberOfClass:[UIButton class]]) {
+		return (UIButton *)view;
+	}
     
-    if (view.subviews && [view.subviews count] > 0) {
-        for (UIView *subview in view.subviews) {
-            button = [self findButtonInView:subview];
-            [button sendActionsForControlEvents:UIControlEventTouchUpInside];
-        }
-    }
+	if (view.subviews && [view.subviews count] > 0) {
+		for (UIView *subview in view.subviews) {
+			button = [self findButtonInView:subview];
+			if (button) return button;
+		}
+	}
     
-    return button;
+	return button;
 }
 
 @end

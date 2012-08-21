@@ -23,5 +23,7 @@
 - (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend;
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video;
 - (void)updatePlaylist:(NLPlaylist *)playlist;
+- (void)videoDidExitFullscreen:(NSNotification *)note;
+- (void)prepareForBackgroundPlay;
 
 @end

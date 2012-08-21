@@ -158,6 +158,7 @@
 		85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLSearchQueriesFactory.m; sourceTree = "<group>"; };
 		85FB45E415E303CC00349534 /* NLPlaylistEditorPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistEditorPictureView.h; sourceTree = "<group>"; };
 		85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistEditorPictureView.m; sourceTree = "<group>"; };
+		85FB45EB15E33F0B00349534 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +181,7 @@
 		853FEB0815BB8560002A1EB5 = {
 			isa = PBXGroup;
 			children = (
+				85FB45EB15E33F0B00349534 /* AVFoundation.framework */,
 				85D9419215BB97F7009EF609 /* Libraries */,
 				853FEB4D15BB8FE1002A1EB5 /* Managers */,
 				853FEB3715BB88D5002A1EB5 /* Categories */,
