@@ -18,7 +18,9 @@
 @property (strong, nonatomic) UITableView *tableView;
 @end
 
-@implementation NLPlaylistEditorViewController
+@implementation NLPlaylistEditorViewController {
+    NSIndexPath *selectedIndexPath_;
+}
 @synthesize tableView = _tableView;
 
 - (id)init
@@ -41,6 +43,8 @@
     UIBarButtonItem *addPlaylistButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(getTitleForNewPlaylist)];
     [self.navigationItem setRightBarButtonItem:addPlaylistButton];
     
+    selectedIndexPath_ = [NSIndexPath indexPathForRow:[self selectedPlaylistIndex] inSection:0];
+    
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
@@ -62,17 +66,26 @@
 
 - (void)addNewPlaylistWithName:(NSString *)name
 {
-    int row = [[[NLPlaylistManager sharedInstance] playlists] count]-1;
     NLPlaylist *playlist = [[NLPlaylist alloc] init];
     [playlist setName:name];
     [[NLPlaylistManager sharedInstance] addPlaylist:playlist];
-    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    [[NLPlaylistManager sharedInstance] setCurrentPlaylist:row];
+    int row = [[[NLPlaylistManager sharedInstance] playlists] count]-1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self selectIndexPath:indexPath];
 }
 
 - (int)selectedPlaylistIndex
 {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"] integerValue];
+}
+
+- (void)selectIndexPath:(NSIndexPath *)indexPath
+{
+    [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
+    NSIndexPath *oldIndexPath = selectedIndexPath_;
+    selectedIndexPath_ = indexPath;
+    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark -
@@ -97,6 +110,7 @@
     NSString *cellID = @"playlistCell";
     NLPlaylistEditorPictureView *pictureView = nil;
     UILabel *titleLabel = nil;
+    UIView *titleView = nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
@@ -106,7 +120,8 @@
         [pictureView setTag:1337];
         [cell addSubview:pictureView];
         
-        UIView *titleView = [[UIView alloc] initWithFrame:pictureView.frame];
+        titleView = [[UIView alloc] initWithFrame:pictureView.frame];
+        [titleView setTag:999];
         [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
         [cell addSubview:titleView];
         
@@ -129,6 +144,7 @@
     } else {
         pictureView = (NLPlaylistEditorPictureView *)[cell viewWithTag:1337];
         titleLabel = (UILabel *)[cell viewWithTag:13371337];
+        titleView = [cell viewWithTag:999];
     }
     NLPlaylist *playlist = [[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row];
     [pictureView updatePlaylistVideos:playlist.videos];
@@ -136,6 +152,12 @@
     [titleLabel setText:[playlist name]];
     [titleLabel sizeToFit];
     [titleLabel setFrame:CGRectMake(10, tableView.rowHeight/2 - titleLabel.frame.size.height/2, cell.frame.size.width - 20, titleLabel.frame.size.height)];
+    
+    if (indexPath.row == selectedIndexPath_.row) {
+        [titleView setHidden:YES];
+    } else {
+        [titleView setHidden:NO];
+    }
     
     return cell;
 }
@@ -151,10 +173,12 @@
     switch (editingStyle) {
         case UITableViewCellEditingStyleDelete:
             [[NLPlaylistManager sharedInstance] removePlaylist:[[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row]];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             if ([self selectedPlaylistIndex] == indexPath.row) {
                 [[NLPlaylistManager sharedInstance] setCurrentPlaylist:0];
+                selectedIndexPath_ = [NSIndexPath indexPathForRow:0 inSection:0];
+                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             }
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
         case UITableViewCellEditingStyleInsert:
             break;
@@ -172,8 +196,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
+    if (indexPath.row != selectedIndexPath_.row) {
+        [self selectIndexPath:indexPath];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 @end
