@@ -23,7 +23,9 @@
 - (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend;
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video;
 - (void)updatePlaylist:(NLPlaylist *)playlist;
+
 - (void)endBackgroundPlay;
 - (void)prepareForBackgroundPlay;
+- (void)playNextVideoInBackground;
 
 @end

@@ -86,6 +86,7 @@
                 break;
             case UIEventSubtypeRemoteControlNextTrack:
                 NSLog(@"FAST FORWARD");
+                [[NLPlaylistBarViewController sharedInstance] playNextVideoInBackground];
                 break;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"STOP");
