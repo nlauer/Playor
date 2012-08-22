@@ -10,6 +10,7 @@
 
 @protocol LoadingViewDelegate <NSObject>
 - (void)stopLoadingVideo;
+- (void)loadTimedOut;
 @end
 
 @class NLYoutubeVideo;

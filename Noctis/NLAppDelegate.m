@@ -160,6 +160,13 @@
     [_loadingView removeFromSuperview];
 }
 
+- (void)loadTimedOut
+{
+    [self stopLoadingVideo];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Timed Out" message:@"The video was not able to load" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+    [alertView show];
+}
+
 - (void)setupLoadingView
 {
     if (!_loadingView) {

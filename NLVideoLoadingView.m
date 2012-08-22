@@ -17,6 +17,7 @@
     UIButton *dismissButton_;
     FXImageView *thumbnailImageView_;
     UILabel *titleLabel_;
+    NSTimer *loadingTimer_;
 }
 
 @synthesize loadingViewDelegate = _loadingViewDelegate;
@@ -79,11 +80,29 @@
         [self setAlpha:1.0];
     }];
     
+    if (loadingTimer_) {
+        [loadingTimer_ invalidate];
+        loadingTimer_ = nil;
+    }
+    loadingTimer_ = [[NSTimer alloc] initWithFireDate:[[NSDate date] dateByAddingTimeInterval:15] interval:0 target:self selector:@selector(videoLoadTimedOut) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:loadingTimer_ forMode:NSDefaultRunLoopMode];
+    
     [dismissButton_ setUserInteractionEnabled:YES];
     [dismissButton_ setAlpha:1.0];
     
     [thumbnailImageView_ setImageWithContentsOfURL:[video thumbnailURL]];
     [titleLabel_ setText:[video title]];
+}
+
+- (void)videoLoadTimedOut
+{
+    [_loadingViewDelegate loadTimedOut];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [self setAlpha:0.0];
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)dismissButtonPressed
@@ -103,6 +122,13 @@
     [UIView animateWithDuration:0.3 animations:^{
         [dismissButton_ setAlpha:0.0];
     }];
+}
+
+- (void)removeFromSuperview
+{
+    [loadingTimer_ invalidate];
+    loadingTimer_ = nil;
+    [super removeFromSuperview];
 }
 
 @end
