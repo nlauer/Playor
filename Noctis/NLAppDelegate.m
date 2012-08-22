@@ -20,6 +20,7 @@
 @implementation NLAppDelegate {
     UIBackgroundTaskIdentifier bgTask_;
     BOOL isPlayingVideo_;
+    BOOL isBackgrounded_;
 }
 
 @synthesize window = _window;
@@ -97,7 +98,7 @@
                 break;
             case UIEventSubtypeRemoteControlNextTrack:
                 NSLog(@"FAST FORWARD");
-                [self playNextVideoInBackground];
+                [self startPlayingNextVideo];
                 break;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"STOP");
@@ -125,16 +126,23 @@
 {
     _videoPlayerDelegate = videoPlayerDelegate;
     
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
-    [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    
-    [self setupLoadingView];
-    [_loadingView showInView:self.containerController.view withVideo:video];
+    if (!isBackgrounded_) {
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+        [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+        
+        [self setupLoadingView];
+        [_loadingView showInView:self.containerController.view withVideo:video];
+    }
     
     [self setupVideoWebView];
     
-    [self performSelector:@selector(loadVideoWebview:) withObject:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]] afterDelay:1];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]];
+    if (isBackgrounded_) {
+        [self loadVideoWebview:request];
+    } else {
+        [self performSelector:@selector(loadVideoWebview:) withObject:request afterDelay:1];
+    }
 }
 
 - (void)loadVideoWebview:(NSURLRequest *)urlRequest
@@ -191,6 +199,8 @@
 
 - (void)prepareForBackgroundPlay
 {
+    isBackgrounded_ = YES;
+    
     // Watch for remote events to keep getting notifications
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
@@ -203,7 +213,7 @@
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     
     [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreenInBackground) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
-    [notificationCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreenInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     
     // The audio gets paused when entering background state, this restarts it
     if (isPlayingVideo_) {
@@ -213,6 +223,7 @@
 
 - (void)endBackgroundPlay
 {
+    isBackgrounded_ = NO;
     // Kill the background task if it was still running
     UIApplication *app = [UIApplication sharedApplication];
     if (bgTask_ != UIBackgroundTaskInvalid) {
@@ -240,17 +251,11 @@
 - (void)videoDidEnterFullscreenInBackground
 {
     isPlayingVideo_ = YES;
-    UIApplication *app = [UIApplication sharedApplication];
-    if (bgTask_ != UIBackgroundTaskInvalid) {
-        [app endBackgroundTask:bgTask_]; 
-        bgTask_ = UIBackgroundTaskInvalid;
-    }
 }
 
 // Start playing next video with a background task
-- (void)playNextVideoInBackground
+- (void)videoDidExitFullscreenInBackground
 {
-    isPlayingVideo_ = NO;
     UIApplication *app = [UIApplication sharedApplication];
     if (bgTask_ != UIBackgroundTaskInvalid) {
         [app endBackgroundTask:bgTask_]; 
@@ -264,6 +269,12 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [_videoPlayerDelegate videoPlaybackDidEnd];
     });
+}
+
+- (void)startPlayingNextVideo
+{
+    // Closes the current video player, and the notifications handle the rest
+    [_videoWebView loadRequest:nil];
 }
 
 // Resumes the audio when it got stopped
