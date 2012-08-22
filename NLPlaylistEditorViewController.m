@@ -85,7 +85,7 @@
     [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
     NSIndexPath *oldIndexPath = selectedIndexPath_;
     selectedIndexPath_ = indexPath;
-    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -
@@ -114,7 +114,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        [cell setSelectionStyle:UITableViewCellEditingStyleNone];
         
         pictureView = [[NLPlaylistEditorPictureView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
         [pictureView setTag:1337];
@@ -122,7 +122,7 @@
         
         titleView = [[UIView alloc] initWithFrame:pictureView.frame];
         [titleView setTag:999];
-        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
+        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
         [cell addSubview:titleView];
         
         titleLabel = [[UILabel alloc] init];
@@ -139,7 +139,7 @@
         
         CAGradientLayer *bottomShadow = [CAGradientLayer layer];
         bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
-        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
+        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.7] CGColor], nil];
         [cell.layer insertSublayer:bottomShadow atIndex:0];
     } else {
         pictureView = (NLPlaylistEditorPictureView *)[cell viewWithTag:1337];
@@ -155,8 +155,10 @@
     
     if (indexPath.row == selectedIndexPath_.row) {
         [titleView setHidden:YES];
+        [titleLabel setHidden:YES];
     } else {
         [titleView setHidden:NO];
+        [titleLabel setHidden:NO];
     }
     
     return cell;

@@ -34,10 +34,10 @@
         [contentView setClipsToBounds:YES];
         [self addSubview:contentView];
         
-        dismissButton_ = [[UIButton alloc] initWithFrame:CGRectMake(50, 100, 44, 44)];
-        [dismissButton_ setBackgroundColor:[UIColor blackColor]];
+        dismissButton_ = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        [dismissButton_ setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_close_btn"]]];
         [dismissButton_ addTarget:self action:@selector(dismissButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:dismissButton_];
+        [contentView addSubview:dismissButton_];
         
         UILabel *loadingLabel = [[UILabel alloc] init];
         [loadingLabel setBackgroundColor:[UIColor clearColor]];
@@ -45,7 +45,7 @@
         [loadingLabel setText:@"Loading..."];
         [loadingLabel setFont:[UIFont boldSystemFontOfSize:16]];
         [loadingLabel sizeToFit];
-        [loadingLabel setCenter:CGPointMake(contentView.frame.size.width/2 - 15, 20 + loadingLabel.frame.size.height/2)];
+        [loadingLabel setCenter:CGPointMake(contentView.frame.size.width/2 - 15, 12 + loadingLabel.frame.size.height/2)];
         [contentView addSubview:loadingLabel];
         
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -53,7 +53,7 @@
         [activityIndicator setCenter:CGPointMake(loadingLabel.frame.origin.x + loadingLabel.frame.size.width + 10 + activityIndicator.frame.size.width/2, loadingLabel.frame.origin.y + loadingLabel.frame.size.height/2)];
         [contentView addSubview:activityIndicator];
         
-        thumbnailImageView_ = [[FXImageView alloc] initWithFrame:CGRectMake(10, loadingLabel.frame.origin.y + loadingLabel.frame.size.height + 10, contentView.frame.size.width - 20, 100)];
+        thumbnailImageView_ = [[FXImageView alloc] initWithFrame:CGRectMake(10, dismissButton_.frame.origin.y + dismissButton_.frame.size.height, contentView.frame.size.width - 20, 100)];
         [thumbnailImageView_ setBackgroundColor:[UIColor grayColor]];
         [thumbnailImageView_ setContentMode:UIViewContentModeScaleAspectFill];
         [thumbnailImageView_ setAsynchronous:YES];

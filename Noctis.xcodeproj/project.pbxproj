@@ -36,6 +36,8 @@
 		856AF91D15BE52A100529F5C /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91115BE52A100529F5C /* SBJsonWriter.m */; };
 		856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91F15BE650400529F5C /* NLURLConnectionManager.m */; };
 		856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */; };
+		858394E415E4A7AA00E4F57E /* loading_close_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 858394E315E4A7AA00E4F57E /* loading_close_btn@2x.png */; };
+		858394E615E4AA0F00E4F57E /* loading_close_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 858394E515E4AA0F00E4F57E /* loading_close_btn.png */; };
 		85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CA415CA36FD00C17639 /* NLPlaylist.m */; };
 		85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CAE15CF5D5400C17639 /* NLPlaylistEditorViewController.m */; };
 		85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CB115CF66E200C17639 /* NLPlaylistManager.m */; };
@@ -117,6 +119,8 @@
 		856AF91F15BE650400529F5C /* NLURLConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLURLConnectionManager.m; sourceTree = "<group>"; };
 		856AF96315C0C59300529F5C /* NLPlaylistBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistBarViewController.h; sourceTree = "<group>"; };
 		856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistBarViewController.m; sourceTree = "<group>"; };
+		858394E315E4A7AA00E4F57E /* loading_close_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_close_btn@2x.png"; sourceTree = "<group>"; };
+		858394E515E4AA0F00E4F57E /* loading_close_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_close_btn.png; sourceTree = "<group>"; };
 		85B55CA315CA36FD00C17639 /* NLPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylist.h; sourceTree = "<group>"; };
 		85B55CA415CA36FD00C17639 /* NLPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylist.m; sourceTree = "<group>"; };
 		85B55CAD15CF5D5400C17639 /* NLPlaylistEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistEditorViewController.h; sourceTree = "<group>"; };
@@ -403,6 +407,8 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				858394E515E4AA0F00E4F57E /* loading_close_btn.png */,
+				858394E315E4A7AA00E4F57E /* loading_close_btn@2x.png */,
 				85FB45DB15E1A40400349534 /* playlist_bg.png */,
 				85FB45D715E1A13C00349534 /* slider_maximum.png */,
 				85FB45D815E1A13C00349534 /* slider_minimum.png */,
@@ -468,6 +474,8 @@
 				85FB45D915E1A13C00349534 /* slider_maximum.png in Resources */,
 				85FB45DA15E1A13C00349534 /* slider_minimum.png in Resources */,
 				85FB45DD15E1A40400349534 /* playlist_bg.png in Resources */,
+				858394E415E4A7AA00E4F57E /* loading_close_btn@2x.png in Resources */,
+				858394E615E4AA0F00E4F57E /* loading_close_btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

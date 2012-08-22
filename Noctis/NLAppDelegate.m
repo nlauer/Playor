@@ -134,7 +134,12 @@
     
     [self setupVideoWebView];
     
-    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]]];
+    [self performSelector:@selector(loadVideoWebview:) withObject:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]] afterDelay:1];
+}
+
+- (void)loadVideoWebview:(NSURLRequest *)urlRequest
+{
+    [_videoWebView loadRequest:urlRequest];
 }
 
 - (void)stopLoadingVideo
