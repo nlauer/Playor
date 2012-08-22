@@ -130,8 +130,7 @@
     [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     
     [self setupLoadingView];
-    [self.containerController.view addSubview:_loadingView];
-    [_loadingView updateLoadingViewForVideo:video];
+    [_loadingView showInView:self.containerController.view withVideo:video];
     
     [self setupVideoWebView];
     
@@ -151,7 +150,7 @@
 - (void)setupLoadingView
 {
     if (!_loadingView) {
-        _loadingView = [[NLVideoLoadingView alloc] initWithFrame:self.containerController.view.frame andDelegate:self];
+        _loadingView = [[NLVideoLoadingView alloc] initWithFrame:self.window.frame andDelegate:self];
     }
 }
 
@@ -236,11 +235,11 @@
 - (void)videoDidEnterFullscreenInBackground
 {
     isPlayingVideo_ = YES;
-//    UIApplication *app = [UIApplication sharedApplication];
-//    if (bgTask_ != UIBackgroundTaskInvalid) {
-//        [app endBackgroundTask:bgTask_]; 
-//        bgTask_ = UIBackgroundTaskInvalid;
-//    }
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask_ != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }
 }
 
 // Start playing next video with a background task
@@ -278,6 +277,7 @@
 #pragma mark UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [_loadingView hideDismissButton];
     UIButton *b = [self findButtonInView:_videoWebView];
     [b sendActionsForControlEvents:UIControlEventTouchUpInside];
 }

@@ -83,11 +83,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
-    UIButton *stopLoadingVideoButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 88, 0, 44, 44)];
-    [stopLoadingVideoButton setBackgroundColor:[UIColor blackColor]];
-    [stopLoadingVideoButton addTarget:self action:@selector(stopLoadingCurrentVideo) forControlEvents:UIControlEventTouchUpInside];
-    [playlistTitleView addSubview:stopLoadingVideoButton];
-    
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
     [infoLabel setBackgroundColor:[UIColor clearColor]];
     [infoLabel setText:@"Swipe right on songs to add to playlist, swipe up on playlist items to remove"];

@@ -16,7 +16,10 @@
 
 @interface NLVideoLoadingView : UIView
 
+@property (weak, nonatomic) id <LoadingViewDelegate> loadingViewDelegate;
+
 - (id)initWithFrame:(CGRect)frame andDelegate:(id)loadingViewDelegate;
-- (void)updateLoadingViewForVideo:(NLYoutubeVideo *)video;
+- (void)showInView:(UIView *)view withVideo:(NLYoutubeVideo *)video;
+- (void)hideDismissButton;
 
 @end
