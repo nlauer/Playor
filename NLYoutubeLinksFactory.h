@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSMutableArray *activeConnections;
 
 + (NLYoutubeLinksFactory *)sharedInstance;
++ (void)resetSharedInstance;
 
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate;
 

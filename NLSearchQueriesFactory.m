@@ -31,6 +31,12 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
++ (void)resetSharedInstance
+{
+    [sharedInstance clearActiveConnections];
+    sharedInstance = [[NLSearchQueriesFactory alloc] init];
+}
+
 - (void)clearActiveConnections
 {
     if ([_activeConnections count] > 0) {

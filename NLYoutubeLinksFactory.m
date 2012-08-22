@@ -28,6 +28,12 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
++ (void)resetSharedInstance
+{
+    [sharedInstance clearActiveConnections];
+    sharedInstance = [[NLYoutubeLinksFactory alloc] init];
+}
+
 - (void)clearActiveConnections
 {
     if ([_activeConnections count] > 0) {

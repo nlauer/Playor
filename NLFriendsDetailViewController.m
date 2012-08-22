@@ -71,6 +71,8 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [NLYoutubeLinksFactory resetSharedInstance];
+    [NLYoutubeLinksFromFBLikesFactory resetSharedInstance];
     activityIndicator_ = nil;
     [_tableView setDelegate:nil];
     [_tableView setDataSource:nil];

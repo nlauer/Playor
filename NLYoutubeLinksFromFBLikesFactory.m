@@ -34,6 +34,13 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
++ (void)resetSharedInstance
+{
+    [sharedInstance clearActiveConnections];
+    [NLSearchQueriesFactory resetSharedInstance];
+    sharedInstance = [[NLYoutubeLinksFromFBLikesFactory alloc] init];
+}
+
 - (void)clearActiveConnections
 {
     if ([_activeConnections count] > 0) {
