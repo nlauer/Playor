@@ -240,13 +240,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 #pragma mark -
 #pragma mark Receiving and Deleting Methods
-
-- (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend
-{
-    [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:facebookFriend.ID andDelegate:self];
-    //Need to get the shared videos here too
-}
-
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
     [[self.view viewWithTag:69] setHidden:YES];

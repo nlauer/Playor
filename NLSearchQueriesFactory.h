@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) id <SearchQueriesFactoryDelegate> searchQueriesFactoryDelegate;
 @property (strong, nonatomic) NSMutableArray *searchQueriesArray;
+@property (strong, nonatomic) NSMutableArray *activeConnections;
 
 + (NLSearchQueriesFactory *)sharedInstance;
 - (void)createSongsArrayForArtists:(NSArray *)artists andDelegate:(id)delegate;

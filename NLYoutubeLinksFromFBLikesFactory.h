@@ -19,6 +19,7 @@
 
 @property (weak, nonatomic) id <YoutubeLinksFromFBLikesDelegate> youtubeLinksFromFBLikesDelegate;
 @property (strong, nonatomic) NSMutableArray *youtubeLinksArray;
+@property (strong, nonatomic) NSMutableArray *activeConnections;
 
 + (NLYoutubeLinksFromFBLikesFactory *)sharedInstance;
 

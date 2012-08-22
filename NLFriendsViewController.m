@@ -138,11 +138,6 @@
         [nameLabel setTextColor:[UIColor whiteColor]];
         [nameLabel setFont:[UIFont boldSystemFontOfSize:16]];
         [view addSubview:nameLabel];
-        
-        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeFriendView:)];
-        [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
-        [view addGestureRecognizer:swipeRecognizer];
-        
     } else {
         nameLabel = (UILabel *)[view viewWithTag:1];
         profileImageView = (FXImageView *)[view viewWithTag:2];
@@ -266,33 +261,6 @@
     BOOL boolToReturn = shouldBeginEditing_;
     shouldBeginEditing_ = YES;
     return boolToReturn;
-}
-
-#pragma mark -
-#pragma mark Panning and Playlist Methods
-- (void)swipeFriendView:(UISwipeGestureRecognizer *)swipeRecognizer
-{
-    [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
-        [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, 170/2 + 220)];
-        [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(0.3, 0.3)];
-        [[swipeRecognizer.view viewWithTag:1] setHidden:YES];
-    } completion:^(BOOL finished) {
-        [self addFriendToPlaylistFromCarouselForView:swipeRecognizer.view];
-        [UIView animateWithDuration:0.2 animations:^{
-            [swipeRecognizer.view setCenter:CGPointMake(swipeRecognizer.view.center.x, 170/2)];
-            [swipeRecognizer.view setTransform:CGAffineTransformMakeScale(1.0, 1.0)];
-            [[swipeRecognizer.view viewWithTag:1] setHidden:NO];
-            [self.view setUserInteractionEnabled:YES];
-        }];
-    }];
-}
-
-- (void)addFriendToPlaylistFromCarouselForView:(UIView *)view
-{
-    int index = [_iCarousel indexOfItemView:view];
-    NLFacebookFriend *facebookFriend = [_carouselArray objectAtIndex:index];
-    [[NLPlaylistBarViewController sharedInstance] receiveFacebookFriend:facebookFriend];
 }
 
 @end

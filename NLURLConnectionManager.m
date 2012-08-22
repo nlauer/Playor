@@ -27,7 +27,7 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSLog(@"error requesting youtube data from facebook likes:%@", error);
-    [_connectionManagerDelegate receiveFinishedData:nil];
+    [_connectionManagerDelegate receiveFinishedData:nil fromConnection:connection];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -37,7 +37,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    [_connectionManagerDelegate receiveFinishedData:_data];
+    [_connectionManagerDelegate receiveFinishedData:_data fromConnection:connection];
     _data = nil;
     _connectionManagerDelegate = nil;
 }

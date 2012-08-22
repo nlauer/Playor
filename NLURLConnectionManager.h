@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol URLConnectionManagerDelegate <NSObject>
-- (void)receiveFinishedData:(NSData *)data;
+- (void)receiveFinishedData:(NSData *)data fromConnection:(NSURLConnection *)connection;
 @end
 
 @interface NLURLConnectionManager : NSObject <NSURLConnectionDataDelegate>

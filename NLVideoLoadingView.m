@@ -84,7 +84,7 @@
         [loadingTimer_ invalidate];
         loadingTimer_ = nil;
     }
-    loadingTimer_ = [[NSTimer alloc] initWithFireDate:[[NSDate date] dateByAddingTimeInterval:15] interval:0 target:self selector:@selector(videoLoadTimedOut) userInfo:nil repeats:NO];
+    loadingTimer_ = [[NSTimer alloc] initWithFireDate:[[NSDate date] dateByAddingTimeInterval:20] interval:0 target:self selector:@selector(videoLoadTimedOut) userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:loadingTimer_ forMode:NSDefaultRunLoopMode];
     
     [dismissButton_ setUserInteractionEnabled:YES];

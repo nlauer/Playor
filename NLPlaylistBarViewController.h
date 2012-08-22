@@ -17,11 +17,10 @@
 - (NSURL *)getPictureURL;
 @end
 
-@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, YoutubeLinksFromFBLikesDelegate, VideoPlayerDelegate>
+@interface NLPlaylistBarViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, VideoPlayerDelegate>
 
 + (NLPlaylistBarViewController *)sharedInstance;
 
-- (void)receiveFacebookFriend:(NLFacebookFriend *)facebookFriend;
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video;
 - (void)updatePlaylist:(NLPlaylist *)playlist;
 

@@ -19,7 +19,7 @@
     int numberOfActiveConnections_;
 }
 @synthesize youtubeLinksFromFBLikesDelegate = _youtubeLinksFromFBLikesDelegate;
-@synthesize youtubeLinksArray = _youtubeLinksArray;
+@synthesize youtubeLinksArray = _youtubeLinksArray, activeConnections = _activeConnections;
 
 static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 
@@ -34,13 +34,22 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
+- (void)clearActiveConnections
+{
+    if ([_activeConnections count] > 0) {
+        for (NSURLConnection *connection in _activeConnections) {
+            [connection cancel];
+        }
+    }
+}
+
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
-    if (numberOfActiveConnections_ != 0) {
-        sharedInstance = [[NLYoutubeLinksFromFBLikesFactory alloc] init];
-    }
+    [self clearActiveConnections];
+    
     self.youtubeLinksFromFBLikesDelegate = delegate;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
+    _activeConnections = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
     NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=15", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
@@ -83,6 +92,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
         if (!connection) {
             NSLog(@"couldnt create connection");
         } else {
+            [_activeConnections addObject:connection];
             numberOfActiveConnections_++;
         }
     }
@@ -91,7 +101,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 
 #pragma mark -
 #pragma mark URLConnectionManagerDelegate
-- (void)receiveFinishedData:(NSData *)data
+- (void)receiveFinishedData:(NSData *)data fromConnection:(NSURLConnection *)connection
 {
     NSDictionary *dataDictionary = [data JSONValue];
     if (dataDictionary) {
@@ -110,6 +120,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     }
     
+    [_activeConnections removeObject:connection];
     numberOfActiveConnections_--;
     [self sendYoutubeLinks];
 }

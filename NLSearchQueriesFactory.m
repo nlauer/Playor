@@ -16,7 +16,7 @@
 @implementation NLSearchQueriesFactory {
     int numberOfActiveConnections_;
 }
-@synthesize searchQueriesArray = _searchQueriesArray, searchQueriesFactoryDelegate = _searchQueriesFactoryDelegate;
+@synthesize searchQueriesArray = _searchQueriesArray, searchQueriesFactoryDelegate = _searchQueriesFactoryDelegate, activeConnections = _activeConnections;
 
 static NLSearchQueriesFactory *sharedInstance = NULL;
 
@@ -31,8 +31,19 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
+- (void)clearActiveConnections
+{
+    if ([_activeConnections count] > 0) {
+        for (NSURLConnection *connection in _activeConnections) {
+            [connection cancel];
+        }
+    }
+}
+
 - (void)createSongsArrayForArtists:(NSArray *)artists andDelegate:(id)delegate
 {
+    [self clearActiveConnections];
+    
     self.searchQueriesFactoryDelegate = delegate;
     self.searchQueriesArray = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
@@ -46,6 +57,7 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
             NSLog(@"couldnt create connection");
             [_searchQueriesFactoryDelegate receiveSearchQueries:nil];
         } else {
+            [_activeConnections addObject:connection];
             numberOfActiveConnections_++;
         }
     }
@@ -61,9 +73,11 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
 
 #pragma mark -
 #pragma mark URLConnectionManagerDelegate
-- (void)receiveFinishedData:(NSData *)data
+- (void)receiveFinishedData:(NSData *)data fromConnection:(NSURLConnection *)connection
 {
     numberOfActiveConnections_--;
+    [_activeConnections removeObject:connection];
+    
     NSDictionary *dataDictionary = [data JSONValue];
     for (NSDictionary *results in [dataDictionary objectForKey:@"results"]) {
         NSString *trackName = [results objectForKey:@"trackName"];
