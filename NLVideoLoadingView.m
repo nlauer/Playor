@@ -105,15 +105,19 @@
     }];
 }
 
-- (void)dismissButtonPressed
+- (void)dismissLoadingView
 {
-    [_loadingViewDelegate stopLoadingVideo];
-    
     [UIView animateWithDuration:0.3 animations:^{
         [self setAlpha:0.0];
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
+}
+
+- (void)dismissButtonPressed
+{
+    [_loadingViewDelegate stopLoadingVideo];
+    [self dismissLoadingView];
 }
 
 - (void)hideDismissButton

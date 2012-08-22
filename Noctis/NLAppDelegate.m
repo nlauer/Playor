@@ -21,6 +21,7 @@
     UIBackgroundTaskIdentifier bgTask_;
     BOOL isPlayingVideo_;
     BOOL isBackgrounded_;
+    BOOL shouldLoadWebview_;
 }
 
 @synthesize window = _window;
@@ -125,15 +126,16 @@
 - (void)playYoutubeVideo:(NLYoutubeVideo *)video withDelegate:(id)videoPlayerDelegate
 {
     _videoPlayerDelegate = videoPlayerDelegate;
+    shouldLoadWebview_= YES;
     
     if (!isBackgrounded_) {
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
         [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-        
-        [self setupLoadingView];
-        [_loadingView showInView:self.containerController.view withVideo:video];
     }
+        
+    [self setupLoadingView];
+    [_loadingView showInView:self.containerController.view withVideo:video];
     
     [self setupVideoWebView];
     
@@ -147,7 +149,9 @@
 
 - (void)loadVideoWebview:(NSURLRequest *)urlRequest
 {
-    [_videoWebView loadRequest:urlRequest];
+    if (shouldLoadWebview_) {
+        [_videoWebView loadRequest:urlRequest];
+    }
 }
 
 - (void)stopLoadingVideo
@@ -155,9 +159,8 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    
+    shouldLoadWebview_ = NO;
     [_videoWebView stopLoading];
-    [_loadingView removeFromSuperview];
 }
 
 - (void)loadTimedOut
@@ -187,7 +190,6 @@
 {
     NSLog(@"Entered Fullscreen");
     isPlayingVideo_ = YES;
-    [_loadingView removeFromSuperview];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note
@@ -258,6 +260,7 @@
 - (void)videoDidEnterFullscreenInBackground
 {
     isPlayingVideo_ = YES;
+    [_loadingView dismissLoadingView];
 }
 
 // Start playing next video with a background task

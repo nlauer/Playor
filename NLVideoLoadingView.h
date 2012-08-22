@@ -21,6 +21,7 @@
 
 - (id)initWithFrame:(CGRect)frame andDelegate:(id)loadingViewDelegate;
 - (void)showInView:(UIView *)view withVideo:(NLYoutubeVideo *)video;
+- (void)dismissLoadingView;
 - (void)hideDismissButton;
 
 @end
