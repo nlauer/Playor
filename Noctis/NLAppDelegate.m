@@ -14,11 +14,18 @@
 #import "NLPlaylistManager.h"
 #import "NLContainerViewController.h"
 #import "UIColor+NLColors.h"
+#import "NLYoutubeVideo.h"
+#import "NLVideoLoadingView.h"
 
-@implementation NLAppDelegate
+@implementation NLAppDelegate {
+    UIBackgroundTaskIdentifier bgTask_;
+    BOOL isPlayingVideo_;
+}
 
 @synthesize window = _window;
 @synthesize containerController = _containerController;
+@synthesize videoWebView = _videoWebView, loadingView = _loadingView;
+@synthesize videoPlayerDelegate = _videoPlayerDelegate;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -41,6 +48,8 @@
     [[UISlider appearance] setMinimumTrackImage:minImage 
                                        forState:UIControlStateNormal];
     
+    isPlayingVideo_ = NO;
+    
     _containerController = [[NLContainerViewController alloc] initWithTopViewController:nav andBottomViewController:[NLPlaylistBarViewController sharedInstance]];
     self.window.rootViewController = _containerController;
     [self.window makeKeyAndVisible];
@@ -54,12 +63,14 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[NLPlaylistBarViewController sharedInstance] prepareForBackgroundPlay];
+    if (isPlayingVideo_) {
+        [self prepareForBackgroundPlay];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[NLPlaylistBarViewController sharedInstance] endBackgroundPlay];
+    [self endBackgroundPlay];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -86,7 +97,7 @@
                 break;
             case UIEventSubtypeRemoteControlNextTrack:
                 NSLog(@"FAST FORWARD");
-                [[NLPlaylistBarViewController sharedInstance] playNextVideoInBackground];
+                [self playNextVideoInBackground];
                 break;
             case UIEventSubtypeRemoteControlStop:
                 NSLog(@"STOP");
@@ -100,6 +111,197 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return [[[NLFacebookManager sharedInstance] facebook] handleOpenURL:url]; 
+}
+
++ (NLAppDelegate *)appDelegate
+{
+    return (NLAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+#pragma mark -
+#pragma mark Playing Video Methods
+
+- (void)playYoutubeVideo:(NLYoutubeVideo *)video withDelegate:(id)videoPlayerDelegate
+{
+    _videoPlayerDelegate = videoPlayerDelegate;
+    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    [self setupLoadingView];
+    [self.containerController.view addSubview:_loadingView];
+    [_loadingView updateLoadingViewForVideo:video];
+    
+    [self setupVideoWebView];
+    
+    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]]];
+}
+
+- (void)stopLoadingVideo
+{
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    [_videoWebView stopLoading];
+    [_loadingView removeFromSuperview];
+}
+
+- (void)setupLoadingView
+{
+    if (!_loadingView) {
+        _loadingView = [[NLVideoLoadingView alloc] initWithFrame:self.containerController.view.frame andDelegate:self];
+    }
+}
+
+- (void)setupVideoWebView
+{
+    if (!_videoWebView) {
+        _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
+        [_videoWebView setDelegate:self];
+        [self.containerController.view addSubview:_videoWebView];
+    }
+}
+
+- (void)videoDidEnterFullscreen:(NSNotification *)note
+{
+    NSLog(@"Entered Fullscreen");
+    isPlayingVideo_ = YES;
+    [_loadingView removeFromSuperview];
+}
+
+- (void)videoDidExitFullscreen:(NSNotification *)note
+{
+    NSLog(@"Exited Fullscreen");
+    isPlayingVideo_ = NO;
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    [_videoPlayerDelegate videoPlaybackDidEnd];
+}
+
+#pragma mark -
+#pragma mark BackgroundPlayMethods
+
+- (void)prepareForBackgroundPlay
+{
+    // Watch for remote events to keep getting notifications
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        [self becomeFirstResponder];
+    }
+    
+    // Remove other watchers, and only watch for the necessary background events
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreenInBackground) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    // The audio gets paused when entering background state, this restarts it
+    if (isPlayingVideo_) {
+        [self resumeAudio];
+    }
+}
+
+- (void)endBackgroundPlay
+{
+    // Kill the background task if it was still running
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask_ != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }
+    
+    // Stop watching for remote events
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(endReceivingRemoteControlEvents)]){
+        [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+        [self resignFirstResponder];
+    }
+    
+    // Remove the background observers and re-add the foreground playlist observer
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    if (isPlayingVideo_) {
+        [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+        [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    }
+}
+
+- (void)videoDidEnterFullscreenInBackground
+{
+    isPlayingVideo_ = YES;
+//    UIApplication *app = [UIApplication sharedApplication];
+//    if (bgTask_ != UIBackgroundTaskInvalid) {
+//        [app endBackgroundTask:bgTask_]; 
+//        bgTask_ = UIBackgroundTaskInvalid;
+//    }
+}
+
+// Start playing next video with a background task
+- (void)playNextVideoInBackground
+{
+    isPlayingVideo_ = NO;
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask_ != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }
+    bgTask_ = [app beginBackgroundTaskWithExpirationHandler:^{ 
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [_videoPlayerDelegate videoPlaybackDidEnd];
+    });
+}
+
+// Resumes the audio when it got stopped
+- (void)resumeAudio
+{
+    UIButton *b = [self findButtonInView:_videoWebView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+// Necessary to receive remote events
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+#pragma mark -
+#pragma mark UIWebViewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    UIButton *b = [self findButtonInView:_videoWebView];
+    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    NSLog(@"VIDEO WEBVIEW DID FAIL LOAD WITH ERROR:%@", error);
+}
+
+- (UIButton *)findButtonInView:(UIView *)view {
+	UIButton *button = nil;
+    
+	if ([view isMemberOfClass:[UIButton class]]) {
+		return (UIButton *)view;
+	}
+    
+	if (view.subviews && [view.subviews count] > 0) {
+		for (UIView *subview in view.subviews) {
+			button = [self findButtonInView:subview];
+			if (button) return button;
+		}
+	}
+    
+	return button;
 }
 
 @end

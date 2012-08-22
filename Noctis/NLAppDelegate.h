@@ -7,12 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NLVideoLoadingView.h"
 
-@class NLViewController, NLContainerViewController;
+@protocol VideoPlayerDelegate <NSObject>
+- (void)videoPlaybackDidEnd;
+@end
 
-@interface NLAppDelegate : UIResponder <UIApplicationDelegate>
+@class NLViewController, NLContainerViewController, NLYoutubeVideo;
+
+@interface NLAppDelegate : UIResponder <UIApplicationDelegate, UIWebViewDelegate, LoadingViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NLContainerViewController *containerController;
+
+@property (strong, nonatomic) NLVideoLoadingView *loadingView;
+@property (strong, nonatomic) UIWebView *videoWebView;
+@property (weak, nonatomic) id <VideoPlayerDelegate> videoPlayerDelegate;
+
++ (NLAppDelegate *)appDelegate;
+
+- (void)playYoutubeVideo:(NLYoutubeVideo *)video withDelegate:(id)videoPlayerDelegate;
 
 @end

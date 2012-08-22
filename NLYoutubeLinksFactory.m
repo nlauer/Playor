@@ -30,6 +30,9 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
+    if (numberOfActiveConnections_ != 0) {
+        sharedInstance = [[NLYoutubeLinksFactory alloc] init];
+    }
     self.youtubeLinksDelegate = delegate;
     numberOfActiveConnections_ = 0;
     _youtubeLinksArray = [[NSMutableArray alloc] init];

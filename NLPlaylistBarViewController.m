@@ -16,7 +16,6 @@
 #import "NLPlaylist.h"
 #import "NLPlaylistManager.h"
 #import "NSArray+Videos.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import "NLAppDelegate.h"
 #import "NLContainerViewController.h"
 #import "NLAppDelegate.h"
@@ -26,15 +25,13 @@
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
 @property (strong, nonatomic) NLPlaylist *playlist;
-@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
-    UIBackgroundTaskIdentifier bgTask;
 }
-@synthesize iCarousel = _iCarousel, playlist = _playlist, videoWebView = _videoWebView;
+@synthesize iCarousel = _iCarousel, playlist = _playlist;
 
 static NLPlaylistBarViewController *sharedInstance = NULL;
 
@@ -113,11 +110,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [carousel setContentOffset:CGSizeMake(0, 0)];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
-    
-    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-    [_videoWebView setDelegate:self];
-    [_videoWebView setMediaPlaybackRequiresUserAction:NO];
-    [self.view addSubview:_videoWebView];
 }
 
 - (void)togglePlaylistEditor
@@ -149,96 +141,20 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 }
 
 #pragma mark -
-#pragma mark BackgroundPlayMethods
+#pragma mark VideoPlayerDelegate
 
-- (void)prepareForBackgroundPlay
+- (void)videoPlaybackDidEnd
 {
-    // Watch for remote events to keep getting notifications
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
-        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-        [self becomeFirstResponder];
+    int index = [_iCarousel currentItemIndex] + 1;
+    if (index < [_playlist.videos count]) {
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
+        [self loadNewVideoWithIndex:index];
     }
-    
-    // Remove other watchers, and only watch for the necessary background events
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter removeObserver:self];
-    [notifyCenter addObserver:self selector:@selector(playNextVideoInBackground) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    
-    // The audio gets paused when entering background state, this restarts it
-    [self resumeAudio];
-}
-
-- (void)endBackgroundPlay
-{
-    // Kill the background task if it was still running
-    UIApplication *app = [UIApplication sharedApplication];
-    if (bgTask != UIBackgroundTaskInvalid) {
-        [app endBackgroundTask:bgTask]; 
-        bgTask = UIBackgroundTaskInvalid;
-    }
-    
-    // Stop watching for remote events
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(endReceivingRemoteControlEvents)]){
-        [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-        [self resignFirstResponder];
-    }
-    
-    // Remove the background observers and re-add the foreground playlist observer
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter removeObserver:self];
-    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-}
-
-// Start playing next video with a background task
-- (void)playNextVideoInBackground
-{
-    UIApplication *app = [UIApplication sharedApplication];
-    if (bgTask != UIBackgroundTaskInvalid) {
-        [app endBackgroundTask:bgTask]; 
-        bgTask = UIBackgroundTaskInvalid;
-    }
-    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{ 
-        [app endBackgroundTask:bgTask]; 
-        bgTask = UIBackgroundTaskInvalid;
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self videoDidExitFullscreen:nil];
-    });
-}
-
-// Resumes the audio when it got stopped
-- (void)resumeAudio
-{
-    UIButton *b = [self findButtonInView:_videoWebView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-}
-
-// Necessary to receive remote events
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
-#pragma mark Playing Videos
-
-- (void)stopLoadingCurrentVideo
-{
-    [_videoWebView stopLoading];
 }
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    [_iCarousel scrollToItemAtIndex:index animated:YES];
-    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_playlist.videos objectAtIndex:index] youtubeID]]]]];
-}
-
-- (void)videoDidExitFullscreen:(NSNotification *)note
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    int index = [_iCarousel currentItemIndex] + 1;
-    if (index < [_playlist.videos count]) {
-        [self loadNewVideoWithIndex:index];
-    }
+    [[NLAppDelegate appDelegate] playYoutubeVideo:[_playlist.videos objectAtIndex:index] withDelegate:self];
 }
 
 #pragma mark -
@@ -361,34 +277,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [_playlist.videos removeObjectAtIndex:index];
         [_iCarousel removeItemAtIndex:index animated:YES];
     }];
-}
-
-#pragma mark -
-#pragma mark UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    UIButton *b = [self findButtonInView:_videoWebView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-    
-    NSNotificationCenter *notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-}
-
-- (UIButton *)findButtonInView:(UIView *)view {
-	UIButton *button = nil;
-    
-	if ([view isMemberOfClass:[UIButton class]]) {
-		return (UIButton *)view;
-	}
-    
-	if (view.subviews && [view.subviews count] > 0) {
-		for (UIView *subview in view.subviews) {
-			button = [self findButtonInView:subview];
-			if (button) return button;
-		}
-	}
-    
-	return button;
 }
 
 @end

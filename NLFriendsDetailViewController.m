@@ -11,7 +11,6 @@
 #import "NLYoutubeVideo.h"
 #import "FXImageView.h"
 #import "NLPlaylistBarViewController.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import "NLAppDelegate.h"
 #import "NLUtils.h"
 
@@ -21,7 +20,6 @@
 @property (strong, nonatomic) NLFacebookFriend *facebookFriend;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *youtubeLinksArray;
-@property (strong, nonatomic) UIWebView *videoWebView;
 @end
 
 @implementation NLFriendsDetailViewController {
@@ -29,7 +27,7 @@
     int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
-@synthesize youtubeLinksArray = _youtubeLinksArray, tableView = _tableView, videoWebView = _videoWebView;
+@synthesize youtubeLinksArray = _youtubeLinksArray, tableView = _tableView;
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend
 {
@@ -68,10 +66,6 @@
     [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
     [self.view addSubview:activityIndicator_];
     [activityIndicator_ startAnimating];
-    
-    _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
-    [_videoWebView setDelegate:self];
-    [self.view addSubview:_videoWebView];
 }
 
 - (void)viewDidUnload
@@ -85,7 +79,7 @@
 
 - (void)loadNewVideoWithIndex:(int)index
 {
-    [_videoWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [[_youtubeLinksArray objectAtIndex:index] youtubeID]]]]];
+    [[NLAppDelegate appDelegate] playYoutubeVideo:[_youtubeLinksArray objectAtIndex:index] withDelegate:nil];
 }
 
 #pragma mark -
@@ -209,7 +203,7 @@
 }
 
 #pragma mark -
-#pragma mark Panning and Playlist Methods
+#pragma mark Swiping and Playlist Methods
 - (void)swipeVideoView:(UISwipeGestureRecognizer *)swipeRecognizer
 {
     [self.view setUserInteractionEnabled:NO];
@@ -229,32 +223,6 @@
     int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
-}
-
-#pragma mark -
-#pragma mark UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    
-    UIButton *b = [self findButtonInView:webView];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
-}
-
-- (UIButton *)findButtonInView:(UIView *)view {
-	UIButton *button = nil;
-    
-	if ([view isMemberOfClass:[UIButton class]]) {
-		return (UIButton *)view;
-	}
-    
-	if (view.subviews && [view.subviews count] > 0) {
-		for (UIView *subview in view.subviews) {
-			button = [self findButtonInView:subview];
-			if (button) return button;
-		}
-	}
-    
-	return button;
 }
 
 @end

@@ -47,7 +47,6 @@
 		85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C215BBAACE009EF609 /* NLFacebookFriend.m */; };
 		85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
-		85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85FB45AD15DC905500349534 /* MediaPlayer.framework */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
 		85FB45C915E067AB00349534 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45C715E067AB00349534 /* bg.png */; };
@@ -57,6 +56,7 @@
 		85FB45DD15E1A40400349534 /* playlist_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB45DB15E1A40400349534 /* playlist_bg.png */; };
 		85FB45E315E1DB3C00349534 /* NLSearchQueriesFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */; };
 		85FB45E615E303CC00349534 /* NLPlaylistEditorPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */; };
+		85FB45EF15E4520200349534 /* NLVideoLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45EE15E4520200349534 /* NLVideoLoadingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -143,7 +143,6 @@
 		85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriendFactory.m; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
-		85FB45AD15DC905500349534 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
 		85FB45B415DCB58600349534 /* NLContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLContainerViewController.m; sourceTree = "<group>"; };
 		85FB45B615DDF3E200349534 /* NLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLUtils.h; sourceTree = "<group>"; };
@@ -158,7 +157,8 @@
 		85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLSearchQueriesFactory.m; sourceTree = "<group>"; };
 		85FB45E415E303CC00349534 /* NLPlaylistEditorPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistEditorPictureView.h; sourceTree = "<group>"; };
 		85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistEditorPictureView.m; sourceTree = "<group>"; };
-		85FB45EB15E33F0B00349534 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		85FB45ED15E4520200349534 /* NLVideoLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLVideoLoadingView.h; sourceTree = "<group>"; };
+		85FB45EE15E4520200349534 /* NLVideoLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLVideoLoadingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,7 +166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85FB45AE15DC905500349534 /* MediaPlayer.framework in Frameworks */,
 				85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */,
 				85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */,
 				853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */,
@@ -181,7 +180,6 @@
 		853FEB0815BB8560002A1EB5 = {
 			isa = PBXGroup;
 			children = (
-				85FB45EB15E33F0B00349534 /* AVFoundation.framework */,
 				85D9419215BB97F7009EF609 /* Libraries */,
 				853FEB4D15BB8FE1002A1EB5 /* Managers */,
 				853FEB3715BB88D5002A1EB5 /* Categories */,
@@ -208,7 +206,6 @@
 		853FEB1615BB8561002A1EB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				85FB45AD15DC905500349534 /* MediaPlayer.framework */,
 				85D941BA15BBA5A1009EF609 /* QuartzCore.framework */,
 				853FEB1715BB8561002A1EB5 /* UIKit.framework */,
 				853FEB1915BB8561002A1EB5 /* Foundation.framework */,
@@ -264,6 +261,8 @@
 			children = (
 				85FB45E415E303CC00349534 /* NLPlaylistEditorPictureView.h */,
 				85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */,
+				85FB45ED15E4520200349534 /* NLVideoLoadingView.h */,
+				85FB45EE15E4520200349534 /* NLVideoLoadingView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -517,6 +516,7 @@
 				85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */,
 				85FB45E315E1DB3C00349534 /* NLSearchQueriesFactory.m in Sources */,
 				85FB45E615E303CC00349534 /* NLPlaylistEditorPictureView.m in Sources */,
+				85FB45EF15E4520200349534 /* NLVideoLoadingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
