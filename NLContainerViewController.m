@@ -10,6 +10,8 @@
 
 #import "NLUtils.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NLYoutubeSearchViewController.h"
+#import "NLFriendsViewController.h"
 
 @interface NLContainerViewController ()
 
@@ -21,14 +23,21 @@
     UIView *bottomViewContainer_;
 }
 @synthesize topController = _topController, bottomController = _bottomController;
+@synthesize friendsViewController = _friendsViewController, searchViewController = _searchViewController;
 
 - (id)initWithTopViewController:(UIViewController *)topController andBottomViewController:(UIViewController *)bottomController
 {
     self = [super init];
     if (self) {
         self.topController = topController;
+        self.friendsViewController = (UINavigationController *)_topController;
+        NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+        self.searchViewController = nav;
+        
         self.bottomController = bottomController;
-        [self addChildViewController:_topController];
+        [self addChildViewController:_friendsViewController];
+        [self addChildViewController:_searchViewController];
         [self addChildViewController:_bottomController];
     }
     return self;
@@ -85,6 +94,16 @@
             [self.view setUserInteractionEnabled:YES];
         }];
     }
+}
+
+- (void)switchToYoutubeSearch
+{
+    [self presentViewControllerBehindPlaylistBar:_searchViewController];
+}
+
+- (void)switchToFriends
+{
+    [self presentViewControllerBehindPlaylistBar:_friendsViewController];
 }
 
 @end

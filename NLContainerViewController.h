@@ -12,9 +12,14 @@
 
 @property (strong, nonatomic) UIViewController *topController;
 @property (strong, nonatomic) UIViewController *bottomController;
+@property (strong, nonatomic) UINavigationController *friendsViewController;
+@property (strong, nonatomic) UINavigationController *searchViewController;
 
 - (id)initWithTopViewController:(UIViewController *)topController andBottomViewController:(UIViewController *)bottomController;
 - (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController;
 - (void)dismissPresentedViewControllerBehindPlaylistBar;
+
+- (void)switchToYoutubeSearch;
+- (void)switchToFriends;
 
 @end

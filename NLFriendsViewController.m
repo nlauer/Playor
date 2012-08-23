@@ -17,6 +17,7 @@
 #import "NLPlaylistBarViewController.h"
 #import "NLUtils.h"
 #import "UIColor+NLColors.h"
+#import "NLContainerViewController.h"
 
 @interface NLFriendsViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -27,6 +28,7 @@
 @implementation NLFriendsViewController {
     BOOL shouldBeginEditing_;
     UISlider *slider_;
+    UIBarButtonItem *switchToSearchButtonItem_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
@@ -37,11 +39,14 @@
     [self.view setClipsToBounds:YES];
     [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 100, 44.0)];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
     [searchBar setBarStyle:UIBarStyleBlack];
     [searchBar setPlaceholder:@"Search for friends"];
     [searchBar setDelegate:self];
     [self.navigationItem setTitleView:searchBar];
+    
+    switchToSearchButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(switchToSearch)];
+    [self.navigationItem setLeftBarButtonItem:switchToSearchButtonItem_];
     
     if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
         [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
@@ -96,6 +101,14 @@
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
     return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
+}
+
+#pragma mark -
+#pragma mark SwitchToSearch
+
+- (void)switchToSearch
+{
+    [[[NLAppDelegate appDelegate] containerController] switchToYoutubeSearch];
 }
 
 #pragma mark -
@@ -243,8 +256,9 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     [searchBar setShowsCancelButton:YES animated:NO];
+    [self.navigationItem setLeftBarButtonItem:nil];
     [UIView animateWithDuration:0.3 animations:^{
-        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, searchBar.frame.size.width+100, searchBar.frame.size.height)];
+        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width, searchBar.frame.size.height)];
     }];
 }
 
@@ -252,7 +266,9 @@
 {
     [searchBar setShowsCancelButton:NO animated:NO];
     [UIView animateWithDuration:0.3 animations:^{
-        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, searchBar.frame.size.width-100, searchBar.frame.size.height)];
+        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width - 110, searchBar.frame.size.height)];
+    } completion:^(BOOL finished) {
+        [self.navigationItem setLeftBarButtonItem:switchToSearchButtonItem_ animated:NO];
     }];
 }
 

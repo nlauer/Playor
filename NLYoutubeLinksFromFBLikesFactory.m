@@ -13,10 +13,11 @@
 #import "NLSearchQueriesFactory.h"
 #import "NSArray+Videos.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=1&v=2&alt=json&format=6,1,5"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&v=2&alt=json&format=6,1,5"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
+    int batchSizePerQuery_;
 }
 @synthesize youtubeLinksFromFBLikesDelegate = _youtubeLinksFromFBLikesDelegate;
 @synthesize youtubeLinksArray = _youtubeLinksArray, activeConnections = _activeConnections;
@@ -51,8 +52,21 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     _activeConnections = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
+    batchSizePerQuery_ = 1;
     NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=15", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
+}
+
+- (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size andDelegate:(id)delegate
+{
+    [self clearActiveConnections];
+    
+    self.youtubeLinksFromFBLikesDelegate = delegate;
+    _youtubeLinksArray = [[NSMutableArray alloc] init];
+    _activeConnections = [[NSMutableArray alloc] init];
+    numberOfActiveConnections_ = 0;
+    batchSizePerQuery_ = size;
+    [self getVideosFromQueries:[NSArray arrayWithObject:searchQuery]];
 }
 
 - (void)sendYoutubeLinks
@@ -85,12 +99,10 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     }
 }
 
-#pragma mark -
-#pragma mark SearchQueriesFactoryDelegate
-- (void)receiveSearchQueries:(NSArray *)searchQueries
+- (void)getVideosFromQueries:(NSArray *)searchQueries
 {
     for (NSString *query in searchQueries) {
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query, batchSizePerQuery_] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {
@@ -101,6 +113,13 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
         }
     }
     [self sendYoutubeLinks];
+}
+
+#pragma mark -
+#pragma mark SearchQueriesFactoryDelegate
+- (void)receiveSearchQueries:(NSArray *)searchQueries
+{
+    [self getVideosFromQueries:searchQueries];
 }
 
 #pragma mark -
@@ -118,7 +137,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
             }
         }
         if ([unsortedYoutubeLinks count] != 0 && ![_youtubeLinksArray containsVideo:[unsortedYoutubeLinks objectAtIndex:0]]) {
-            [_youtubeLinksArray addObject:[unsortedYoutubeLinks objectAtIndex:0]];
+            _youtubeLinksArray = [NSMutableArray arrayWithArray:[_youtubeLinksArray arrayByAddingObjectsFromArray:unsortedYoutubeLinks]];
         }
     } else {
         NSLog(@"failed to create data dictionary:%@ for YoutubeLinksFromFBLikesFactory", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);

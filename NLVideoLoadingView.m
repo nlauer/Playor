@@ -107,6 +107,9 @@
 
 - (void)dismissLoadingView
 {
+    [loadingTimer_ invalidate];
+    loadingTimer_ = nil;
+    
     [UIView animateWithDuration:0.3 animations:^{
         [self setAlpha:0.0];
     } completion:^(BOOL finished) {
@@ -130,8 +133,6 @@
 
 - (void)removeFromSuperview
 {
-    [loadingTimer_ invalidate];
-    loadingTimer_ = nil;
     [super removeFromSuperview];
 }
 
