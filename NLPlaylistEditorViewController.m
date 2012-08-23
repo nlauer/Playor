@@ -85,11 +85,15 @@
     [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
     NSIndexPath *oldIndexPath = selectedIndexPath_;
     selectedIndexPath_ = indexPath;
-    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationFade];
+    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark -
 #pragma mark UIAlertViewDelegate
+
+- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView {
+    return [[[alertView textFieldAtIndex:0] text] length] > 0;
+}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 { 
@@ -111,6 +115,7 @@
     NLPlaylistEditorPictureView *pictureView = nil;
     UILabel *titleLabel = nil;
     UIView *titleView = nil;
+    UIImageView *checkmarkImageView = nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
@@ -141,10 +146,16 @@
         bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
         bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.7] CGColor], nil];
         [cell.layer insertSublayer:bottomShadow atIndex:0];
+        
+        checkmarkImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
+        [checkmarkImageView setCenter:CGPointMake(cell.frame.size.width - 30, tableView.rowHeight/2)];
+        [checkmarkImageView setTag:99999];
+        [cell addSubview:checkmarkImageView];
     } else {
         pictureView = (NLPlaylistEditorPictureView *)[cell viewWithTag:1337];
         titleLabel = (UILabel *)[cell viewWithTag:13371337];
         titleView = [cell viewWithTag:999];
+        checkmarkImageView = (UIImageView *)[cell viewWithTag:99999];
     }
     NLPlaylist *playlist = [[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row];
     [pictureView updatePlaylistVideos:playlist.videos];
@@ -154,11 +165,9 @@
     [titleLabel setFrame:CGRectMake(10, tableView.rowHeight/2 - titleLabel.frame.size.height/2, cell.frame.size.width - 20, titleLabel.frame.size.height)];
     
     if (indexPath.row == selectedIndexPath_.row) {
-        [titleView setHidden:YES];
-        [titleLabel setHidden:YES];
+        [checkmarkImageView setHidden:NO];
     } else {
-        [titleView setHidden:NO];
-        [titleLabel setHidden:NO];
+        [checkmarkImageView setHidden:YES];
     }
     
     return cell;
@@ -180,6 +189,9 @@
                 [[NLPlaylistManager sharedInstance] setCurrentPlaylist:0];
                 selectedIndexPath_ = [NSIndexPath indexPathForRow:0 inSection:0];
                 [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            } else if (indexPath.row < selectedIndexPath_.row) {
+                [[NLPlaylistManager sharedInstance] setCurrentPlaylist:selectedIndexPath_.row - 1];
+                selectedIndexPath_ = [NSIndexPath indexPathForRow:selectedIndexPath_.row - 1 inSection:0];
             }
             break;
         case UITableViewCellEditingStyleInsert:

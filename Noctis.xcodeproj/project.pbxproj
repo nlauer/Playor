@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8505AB7C15E5E48800DC1B69 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8505AB7B15E5E48800DC1B69 /* checkmark@2x.png */; };
+		8505AB7F15E5E62F00DC1B69 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8505AB7E15E5E62F00DC1B69 /* checkmark.png */; };
 		853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1715BB8561002A1EB5 /* UIKit.framework */; };
 		853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1915BB8561002A1EB5 /* Foundation.framework */; };
 		853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */; };
@@ -62,6 +64,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8505AB7B15E5E48800DC1B69 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
+		8505AB7E15E5E62F00DC1B69 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
 		853FEB1315BB8561002A1EB5 /* Noctis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noctis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853FEB1715BB8561002A1EB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		853FEB1915BB8561002A1EB5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -407,6 +411,8 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8505AB7E15E5E62F00DC1B69 /* checkmark.png */,
+				8505AB7B15E5E48800DC1B69 /* checkmark@2x.png */,
 				858394E515E4AA0F00E4F57E /* loading_close_btn.png */,
 				858394E315E4A7AA00E4F57E /* loading_close_btn@2x.png */,
 				85FB45DB15E1A40400349534 /* playlist_bg.png */,
@@ -476,6 +482,8 @@
 				85FB45DD15E1A40400349534 /* playlist_bg.png in Resources */,
 				858394E415E4A7AA00E4F57E /* loading_close_btn@2x.png in Resources */,
 				858394E615E4AA0F00E4F57E /* loading_close_btn.png in Resources */,
+				8505AB7C15E5E48800DC1B69 /* checkmark@2x.png in Resources */,
+				8505AB7F15E5E62F00DC1B69 /* checkmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
