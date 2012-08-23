@@ -79,8 +79,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
-    [playlistEditorButton setBackgroundColor:[UIColor darkGrayColor]];
-    [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor) forControlEvents:UIControlEventTouchUpInside];
+    [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg"] forState:UIControlStateNormal];
+    UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"playlist_toggle_arrow"]];
+    [arrowImageView setCenter:CGPointMake(playlistEditorButton.frame.size.width/2, playlistEditorButton.frame.size.height/2)];
+    [arrowImageView setTag:1919];
+    [playlistEditorButton addSubview:arrowImageView];
+    [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor:) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
     UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
@@ -107,13 +111,27 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [self.view addSubview:carousel];
 }
 
-- (void)togglePlaylistEditor
+- (void)togglePlaylistEditor:(UIButton *)button
 {
+    UIImageView *arrowImageView = (UIImageView *)[button viewWithTag:1919];
+    arrowImageView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     if (!isShowingEditor_) {
+        [UIView animateWithDuration:0.3 animations:^{
+            CGAffineTransform rotationTransform = CGAffineTransformIdentity;
+            rotationTransform = CGAffineTransformRotate(rotationTransform, M_PI);
+            arrowImageView.transform = rotationTransform;
+        }];
+        
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] presentViewControllerBehindPlaylistBar:nav];
     } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            CGAffineTransform rotationTransform = CGAffineTransformIdentity;
+            rotationTransform = CGAffineTransformRotate(rotationTransform, 0);
+            arrowImageView.transform = rotationTransform;
+        }];
+        
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] dismissPresentedViewControllerBehindPlaylistBar];
     }
     isShowingEditor_ = !isShowingEditor_;
