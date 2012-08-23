@@ -14,6 +14,7 @@
 		8505AB8615E5F0B200DC1B69 /* playlist_toggle_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8505AB8415E5F0B200DC1B69 /* playlist_toggle_arrow.png */; };
 		8505AB8715E5F0B200DC1B69 /* playlist_toggle_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8505AB8515E5F0B200DC1B69 /* playlist_toggle_bg.png */; };
 		8505AB8A15E600E000DC1B69 /* NLYoutubeSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */; };
+		8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */; };
 		853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1715BB8561002A1EB5 /* UIKit.framework */; };
 		853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1915BB8561002A1EB5 /* Foundation.framework */; };
 		853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */; };
@@ -77,6 +78,8 @@
 		8505AB8515E5F0B200DC1B69 /* playlist_toggle_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playlist_toggle_bg.png; sourceTree = "<group>"; };
 		8505AB8815E600E000DC1B69 /* NLYoutubeSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeSearchViewController.h; sourceTree = "<group>"; };
 		8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeSearchViewController.m; sourceTree = "<group>"; };
+		8505AB8B15E61A2200DC1B69 /* NLYoutubeResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeResultsViewController.h; sourceTree = "<group>"; };
+		8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeResultsViewController.m; sourceTree = "<group>"; };
 		853FEB1315BB8561002A1EB5 /* Noctis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noctis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853FEB1715BB8561002A1EB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		853FEB1915BB8561002A1EB5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -323,6 +326,8 @@
 				853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */,
 				85FB45B615DDF3E200349534 /* NLUtils.h */,
 				85FB45B715DDF3E200349534 /* NLUtils.m */,
+				8505AB8B15E61A2200DC1B69 /* NLYoutubeResultsViewController.h */,
+				8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */,
 			);
 			name = "Base Classes";
 			sourceTree = "<group>";
@@ -555,6 +560,7 @@
 				85FB45E615E303CC00349534 /* NLPlaylistEditorPictureView.m in Sources */,
 				85FB45EF15E4520200349534 /* NLVideoLoadingView.m in Sources */,
 				8505AB8A15E600E000DC1B69 /* NLYoutubeSearchViewController.m in Sources */,
+				8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

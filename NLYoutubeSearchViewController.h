@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "NLViewController.h"
+#import "NLYoutubeResultsViewController.h"
 #import "NLYoutubeLinksFromFBLikesFactory.h"
 
-@interface NLYoutubeSearchViewController : NLViewController <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, YoutubeLinksFromFBLikesDelegate>
+@interface NLYoutubeSearchViewController : NLYoutubeResultsViewController <UISearchBarDelegate, YoutubeLinksFromFBLikesDelegate>
 
 @end

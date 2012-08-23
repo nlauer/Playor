@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "NLViewController.h"
-#import "NLFacebookFriend.h"
+#import "NLYoutubeResultsViewController.h"
 #import "NLYoutubeLinksFactory.h"
 #import "NLYoutubeLinksFromFBLikesFactory.h"
-#import "iCarousel.h"
 
-@interface NLFriendsDetailViewController : NLViewController <YoutubeLinksDelegate, YoutubeLinksFromFBLikesDelegate, UITableViewDelegate, UITableViewDataSource>
+@class NLFacebookFriend;
+
+@interface NLFriendsDetailViewController : NLYoutubeResultsViewController <YoutubeLinksDelegate, YoutubeLinksFromFBLikesDelegate>
 
 - (id)initWithFacebookFriend:(NLFacebookFriend *)facebookFriend;
 
