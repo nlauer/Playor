@@ -190,6 +190,7 @@
 {
     NSLog(@"Entered Fullscreen");
     isPlayingVideo_ = YES;
+    [_loadingView dismissLoadingView];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note

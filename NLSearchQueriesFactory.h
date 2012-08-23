@@ -21,7 +21,6 @@
 @property (strong, nonatomic) NSMutableArray *activeConnections;
 
 + (NLSearchQueriesFactory *)sharedInstance;
-+ (void)resetSharedInstance;
 
 - (void)createSongsArrayForArtists:(NSArray *)artists andDelegate:(id)delegate;
 

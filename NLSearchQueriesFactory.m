@@ -31,12 +31,6 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
-+ (void)resetSharedInstance
-{
-    [sharedInstance clearActiveConnections];
-    sharedInstance = [[NLSearchQueriesFactory alloc] init];
-}
-
 - (void)clearActiveConnections
 {
     if ([_activeConnections count] > 0) {
@@ -61,12 +55,12 @@ static NLSearchQueriesFactory *sharedInstance = NULL;
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {
             NSLog(@"couldnt create connection");
-            [_searchQueriesFactoryDelegate receiveSearchQueries:nil];
         } else {
             [_activeConnections addObject:connection];
             numberOfActiveConnections_++;
         }
     }
+    [self sendSearchQueries];
 }
 
 - (void)sendSearchQueries

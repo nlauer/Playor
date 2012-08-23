@@ -13,7 +13,7 @@
 #import "NLSearchQueriesFactory.h"
 #import "NSArray+Videos.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=1&v=2&alt=json&format=5,1"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=1&v=2&alt=json&format=6,1,5"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
@@ -32,13 +32,6 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     }
     
     return sharedInstance;
-}
-
-+ (void)resetSharedInstance
-{
-    [sharedInstance clearActiveConnections];
-    [NLSearchQueriesFactory resetSharedInstance];
-    sharedInstance = [[NLYoutubeLinksFromFBLikesFactory alloc] init];
 }
 
 - (void)clearActiveConnections
@@ -85,7 +78,11 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
         NSString *name = [musicLikes objectForKey:@"name"];
         [artists addObject:name];
     }
-    [[NLSearchQueriesFactory sharedInstance] createSongsArrayForArtists:artists andDelegate:self];
+    if ([artists count] > 0) {
+        [[NLSearchQueriesFactory sharedInstance] createSongsArrayForArtists:artists andDelegate:self];
+    } else {
+        [self sendYoutubeLinks];
+    }
 }
 
 #pragma mark -

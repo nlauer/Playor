@@ -28,12 +28,6 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
     return sharedInstance;
 }
 
-+ (void)resetSharedInstance
-{
-    [sharedInstance clearActiveConnections];
-    sharedInstance = [[NLYoutubeLinksFactory alloc] init];
-}
-
 - (void)clearActiveConnections
 {
     if ([_activeConnections count] > 0) {
@@ -46,6 +40,11 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate
 {
     [self clearActiveConnections];
+    
+    
+    if (numberOfActiveConnections_ != 0) {
+        NSLog(@"STILL HAS ACTIVE CONNECTIONS");
+    }
     
     self.youtubeLinksDelegate = delegate;
     numberOfActiveConnections_ = 0;
@@ -94,6 +93,7 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
 {
     if (numberOfActiveConnections_ == 0) {
         [_youtubeLinksDelegate receiveYoutubeLinks:_youtubeLinksArray];
+        _youtubeLinksArray = nil;
     }
 }
 

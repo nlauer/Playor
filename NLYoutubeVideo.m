@@ -15,10 +15,14 @@
 {
     self = [super init];
     if (self) {
-        self.title = [self getVideoTitleFromDictionary:dataDictionary];
-        self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
-        self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
-        self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
+        if (![self isPlayableOnMobile:dataDictionary]) {
+            return nil;
+        } else {
+            self.title = [self getVideoTitleFromDictionary:dataDictionary];
+            self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
+            self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
+            self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
+        }
     }
     
     return self;
@@ -30,6 +34,12 @@
 + (BOOL)isMusicLinkForDataDictionary:(NSDictionary *)dataDictonary
 {
     return [((NSString *)[[[[dataDictonary objectForKey:@"media$group"] objectForKey:@"media$category"] objectAtIndex:0] objectForKey:@"label"]) isEqualToString:@"Music"];
+}
+
+- (BOOL)isPlayableOnMobile:(NSDictionary *)dataDictionary
+{
+    NSString *syndicate = [[[dataDictionary objectForKey:@"yt$accessControl"] objectAtIndex:7] objectForKey:@"permission"];
+    return [syndicate isEqualToString:@"denied"] ? NO : YES;
 }
 
 - (BOOL)isRestrictedForPlaybackForDataDictionary:(NSDictionary *)dataDictionary
