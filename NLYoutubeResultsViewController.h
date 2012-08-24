@@ -8,7 +8,7 @@
 
 #import "NLViewController.h"
 
-@interface NLYoutubeResultsViewController : NLViewController <UITableViewDelegate, UITableViewDataSource>
+@interface NLYoutubeResultsViewController : NLViewController <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *youtubeLinksArray;

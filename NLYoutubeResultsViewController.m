@@ -17,7 +17,9 @@
 @interface NLYoutubeResultsViewController ()
 @end
 
-@implementation NLYoutubeResultsViewController
+@implementation NLYoutubeResultsViewController {
+    UILabel *addToPlaylistLabel_;
+}
 @synthesize tableView = _tableView, youtubeLinksArray = _youtubeLinksArray;
 
 - (id)init
@@ -111,9 +113,9 @@
         bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
         [cell.layer insertSublayer:bottomShadow atIndex:0];
         
-        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeVideoView:)];
-        [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
-        [cell addGestureRecognizer:swipeRecognizer];
+        UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panVideoView:)];
+        [panRecognizer setDelegate:self];
+        [cell addGestureRecognizer:panRecognizer];
     } else {
         titleLabel = (UILabel *)[cell viewWithTag:1];
         thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
@@ -135,18 +137,57 @@
 
 #pragma mark -
 #pragma mark Swiping and Playlist Methods
-- (void)swipeVideoView:(UISwipeGestureRecognizer *)swipeRecognizer
+- (void)panVideoView:(UIPanGestureRecognizer *)panGesture
 {
-    [self.view setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationCurveEaseOut animations:^{
-        [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2 + 100, swipeRecognizer.view.center.y)];
-    } completion:^(BOOL finished) {
-        [self addVideoToPlaylistFromCell:(UITableViewCell *)swipeRecognizer.view];
-        [UIView animateWithDuration:0.2 animations:^{
-            [swipeRecognizer.view setCenter:CGPointMake(self.view.frame.size.width/2, swipeRecognizer.view.center.y)];
-            [self.view setUserInteractionEnabled:YES];
+	CGPoint delta = [panGesture translationInView: panGesture.view.superview];
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+        if (!addToPlaylistLabel_) {
+            addToPlaylistLabel_ = [[UILabel alloc] init];
+            [addToPlaylistLabel_ setNumberOfLines:2];
+            [addToPlaylistLabel_ setTextAlignment:UITextAlignmentCenter];
+            [addToPlaylistLabel_ setFont:[UIFont boldSystemFontOfSize:18]];
+            [addToPlaylistLabel_ setBackgroundColor:[UIColor clearColor]];
+            [addToPlaylistLabel_ setLineBreakMode:UILineBreakModeWordWrap];
+            [addToPlaylistLabel_ setText:@"Add to playlist"];
+        }
+        [addToPlaylistLabel_ setFrame:CGRectMake(10, panGesture.view.center.y - 25, self.view.frame.size.width/2-50, 50)];
+        [_tableView addSubview:addToPlaylistLabel_];
+        [_tableView sendSubviewToBack:addToPlaylistLabel_];
+    }
+    else if (panGesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint center = panGesture.view.center;
+        center.x += delta.x;
+        
+        // Move the view
+        if (center.x <= self.view.frame.size.width-30 && center.x >= self.view.frame.size.width/2) {
+            panGesture.view.center = center;
+            [panGesture setTranslation: CGPointZero inView: panGesture.view.superview];
+        } else if (center.x > self.view.frame.size.width-30) {
+            panGesture.view.center = CGPointMake(self.view.frame.size.width-30, panGesture.view.center.y);
+            [panGesture setTranslation: CGPointZero inView: panGesture.view.superview];
+        } else if (center.x < self.view.frame.size.width/2) {
+            panGesture.view.center = CGPointMake(self.view.frame.size.width/2, panGesture.view.center.y);
+            [panGesture setTranslation: CGPointZero inView: panGesture.view.superview];
+        }
+        
+        // Change the text colour
+        if (center.x > self.view.frame.size.width-60) {
+            [addToPlaylistLabel_ setTextColor:[UIColor greenColor]];
+        } else if (center.x <= self.view.frame.size.width-60) {
+            [addToPlaylistLabel_ setTextColor:[UIColor blackColor]];
+        }
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+        BOOL shouldAddVideo = panGesture.view.center.x >= self.view.frame.size.width-60 ? YES : NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            panGesture.view.center = CGPointMake(self.view.frame.size.width/2, panGesture.view.center.y);
+            [panGesture setTranslation: CGPointZero inView: panGesture.view.superview];
+        } completion:^(BOOL finished) {
+            if (shouldAddVideo) {
+                [self addVideoToPlaylistFromCell:(UITableViewCell *)panGesture.view];
+            }
+            [addToPlaylistLabel_ removeFromSuperview];
         }];
-    }];
+    }
 }
 
 - (void)addVideoToPlaylistFromCell:(UITableViewCell *)cell
@@ -154,6 +195,14 @@
     int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
+}
+
+#pragma mark -
+#pragma mark UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panGestureRecognizer {
+    CGPoint translation = [panGestureRecognizer translationInView:self.view];
+    return fabs(translation.x) > fabs(translation.y);
 }
 
 

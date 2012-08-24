@@ -122,6 +122,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
             arrowImageView.transform = rotationTransform;
         }];
         
+        [button setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg_pressed"] forState:UIControlStateNormal];
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] presentViewControllerBehindPlaylistBar:nav];
@@ -132,6 +133,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
             arrowImageView.transform = rotationTransform;
         }];
         
+        [button setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg"] forState:UIControlStateNormal];
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] dismissPresentedViewControllerBehindPlaylistBar];
     }
     isShowingEditor_ = !isShowingEditor_;
