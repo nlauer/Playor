@@ -62,6 +62,7 @@
     [super viewDidUnload];
     bottomViewContainer_ = nil;
     topViewContainer_ = nil;
+    previousViewController_ = nil;
 }
 
 - (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController

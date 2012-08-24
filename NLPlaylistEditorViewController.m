@@ -54,6 +54,14 @@
     [self.view addSubview:_tableView];
 }
 
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    [_tableView setDelegate:nil];
+    [_tableView setDataSource:nil];
+    _tableView = nil;
+}
+
 - (void)getTitleForNewPlaylist
 {
     UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"New Playlist" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];

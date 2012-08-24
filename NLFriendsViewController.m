@@ -53,6 +53,22 @@
             [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
         }];
     }
+    
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
+    [carousel setType:iCarouselTypeLinear];
+    [carousel setDataSource:self];
+    [carousel setDelegate:self];
+    [carousel setHidden:YES];
+    [self setICarousel:carousel];
+    [self.view addSubview:carousel];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    [_iCarousel setDelegate:nil];
+    [_iCarousel setDataSource:nil];
+    _iCarousel = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -69,17 +85,9 @@
 
 - (void)setupICarousel
 {
-    if (!_iCarousel) {
-        iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
-        [carousel setType:iCarouselTypeLinear];
-        [carousel setDataSource:self];
-        [carousel setDelegate:self];
-        [self setICarousel:carousel];
-        [self.view addSubview:carousel];
-    } else {
-        [_iCarousel setCurrentItemIndex:0];
-        [_iCarousel reloadData];
-    }
+    [_iCarousel setHidden:NO];
+    [_iCarousel setCurrentItemIndex:0];
+    [_iCarousel reloadData];
 }
 
 - (void)setupSlider

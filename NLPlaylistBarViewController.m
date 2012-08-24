@@ -111,6 +111,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [self.view addSubview:carousel];
 }
 
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    [_iCarousel setDelegate:nil];
+    [_iCarousel setDataSource:nil];
+    _iCarousel = nil;
+}
+
 - (void)togglePlaylistEditor:(UIButton *)button
 {
     UIImageView *arrowImageView = (UIImageView *)[button viewWithTag:1919];

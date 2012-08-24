@@ -166,7 +166,7 @@
 - (void)loadTimedOut
 {
     [self stopLoadingVideo];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Timed Out" message:@"The video was not able to load" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Load Failed" message:@"Check your network connection" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
     [alertView show];
 }
 
