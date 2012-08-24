@@ -188,14 +188,12 @@
 
 - (void)videoDidEnterFullscreen:(NSNotification *)note
 {
-    NSLog(@"Entered Fullscreen");
     isPlayingVideo_ = YES;
     [_loadingView dismissLoadingView];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note
 {
-    NSLog(@"Exited Fullscreen");
     isPlayingVideo_ = NO;
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
@@ -267,6 +265,7 @@
 // Start playing next video with a background task
 - (void)videoDidExitFullscreenInBackground
 {
+    isPlayingVideo_ = NO;
     UIApplication *app = [UIApplication sharedApplication];
     if (bgTask_ != UIBackgroundTaskInvalid) {
         [app endBackgroundTask:bgTask_]; 
