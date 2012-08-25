@@ -8,7 +8,7 @@
 
 #import "NLAppDelegate.h"
 
-#import "NLFriendsViewController.h"
+#import "NLYoutubeSearchViewController.h"
 #import "NLFacebookManager.h"
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
@@ -33,8 +33,8 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
+    NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
     
     [nav.navigationBar setBarStyle:UIBarStyleBlack];
     UIColor *barColor = [UIColor navBarTint];
@@ -125,8 +125,10 @@
 
 - (void)playYoutubeVideo:(NLYoutubeVideo *)video withDelegate:(id)videoPlayerDelegate
 {
+    isPlayingVideo_ = YES;
     _videoPlayerDelegate = videoPlayerDelegate;
     shouldLoadWebview_= YES;
+    NSLog(@"PLAYING VIDEO");
     
     if (!isBackgrounded_) {
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -161,6 +163,7 @@
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     shouldLoadWebview_ = NO;
     [_videoWebView stopLoading];
+    [_videoWebView loadRequest:nil];
 }
 
 - (void)loadTimedOut
@@ -188,7 +191,6 @@
 
 - (void)videoDidEnterFullscreen:(NSNotification *)note
 {
-    isPlayingVideo_ = YES;
     [_loadingView dismissLoadingView];
 }
 
@@ -250,15 +252,12 @@
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     
-    if (isPlayingVideo_) {
-        [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-        [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
-    }
+    [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
 }
 
 - (void)videoDidEnterFullscreenInBackground
 {
-    isPlayingVideo_ = YES;
     [_loadingView dismissLoadingView];
 }
 

@@ -9,7 +9,6 @@
 #import "NLFriendsViewController.h"
 
 #import "NLFacebookManager.h"
-#import "NLFBLoginViewController.h"
 #import "NLFacebookFriend.h"
 #import "FXImageView.h"
 #import "NLFriendsDetailViewController.h"
@@ -48,11 +47,9 @@
     switchToSearchButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(switchToSearch)];
     [self.navigationItem setLeftBarButtonItem:switchToSearchButtonItem_];
     
-    if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
-        [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
-            [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
-        }];
-    }
+    [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
+        [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
+    }];
     
     iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
     [carousel setType:iCarouselTypeLinear];
@@ -71,18 +68,6 @@
     _iCarousel = nil;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (![[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
-        NLFBLoginViewController *loginViewController = [[NLFBLoginViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginViewController];
-        [nav.navigationBar setBarStyle:UIBarStyleBlack];
-        [[NLPlaylistBarViewController sharedInstance] presentViewController:nav animated:YES completion:nil];
-    }
-}
-
 - (void)setupICarousel
 {
     [_iCarousel setHidden:NO];
@@ -96,9 +81,7 @@
         slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
         [slider_ setMinimumValue:0];
         [slider_ setMaximumValue:[_carouselArray count]];
-//        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventValueChanged];
-        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside];
-//        [slider_ addTarget:self action:@selector(sliderTouchedDown:) forControlEvents:UIControlEventTouchDown];
+        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         [self.view addSubview:slider_];
     } else {
         [slider_ setValue:0];

@@ -30,10 +30,10 @@
     self = [super init];
     if (self) {
         self.topController = topController;
-        self.friendsViewController = (UINavigationController *)_topController;
-        NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-        self.searchViewController = nav;
+        self.searchViewController = (UINavigationController *)_topController;
+        NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
+        self.friendsViewController = nav;
         
         self.bottomController = bottomController;
         [self addChildViewController:_friendsViewController];
