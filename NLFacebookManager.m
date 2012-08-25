@@ -85,7 +85,7 @@ static NLFacebookManager *sharedInstance = NULL;
 {
     NSLog(@"Login Cancelled");
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Please Sign In" 
-                                                        message:@"This app requires Facebook to find your friends' music"
+                                                        message:@"This action requires Facebook Login"
                                                        delegate:nil 
                                               cancelButtonTitle:@"Okay" 
                                               otherButtonTitles:nil];

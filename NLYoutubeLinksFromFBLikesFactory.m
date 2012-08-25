@@ -13,11 +13,12 @@
 #import "NLSearchQueriesFactory.h"
 #import "NSArray+Videos.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&v=2&alt=json&format=6,1,5"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&start-index=%d&v=2&alt=json&format=6,1,5"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
     int batchSizePerQuery_;
+    int startIndex_;
 }
 @synthesize youtubeLinksFromFBLikesDelegate = _youtubeLinksFromFBLikesDelegate;
 @synthesize youtubeLinksArray = _youtubeLinksArray, activeConnections = _activeConnections;
@@ -53,11 +54,12 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     _activeConnections = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
     batchSizePerQuery_ = 1;
+    startIndex_ = 0;
     NSString *graphPath = [NSString stringWithFormat:@"%@/music?limit=15", friendID];
     [[[NLFacebookManager sharedInstance] facebook] requestWithGraphPath:graphPath andDelegate:self];
 }
 
-- (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size andDelegate:(id)delegate
+- (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size startIndex:(int)startIndex andDelegate:(id)delegate
 {
     [self clearActiveConnections];
     
@@ -65,6 +67,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     _youtubeLinksArray = [[NSMutableArray alloc] init];
     _activeConnections = [[NSMutableArray alloc] init];
     numberOfActiveConnections_ = 0;
+    startIndex_ = startIndex;
     batchSizePerQuery_ = size;
     [self getVideosFromQueries:[NSArray arrayWithObject:searchQuery]];
 }
@@ -102,7 +105,7 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
 - (void)getVideosFromQueries:(NSArray *)searchQueries
 {
     for (NSString *query in searchQueries) {
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query, batchSizePerQuery_] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[NSString stringWithFormat:YOUTUBE_SEARCH_STRING, query, batchSizePerQuery_, startIndex_+1] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
         NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
         if (!connection) {

@@ -24,6 +24,6 @@
 + (NLYoutubeLinksFromFBLikesFactory *)sharedInstance;
 
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate;
-- (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size andDelegate:(id)delegate;
+- (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size startIndex:(int)index andDelegate:(id)delegate;
 
 @end

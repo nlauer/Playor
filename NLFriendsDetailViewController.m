@@ -19,7 +19,6 @@
 @end
 
 @implementation NLFriendsDetailViewController {
-    UIActivityIndicatorView *activityIndicator_;
     int numberOfActiveFactories;
 }
 @synthesize facebookFriend = _facebookFriend;
@@ -39,6 +38,7 @@
     [super viewDidLoad];
 	self.title = [_facebookFriend name];
     
+    [self startLoading];
     numberOfActiveFactories = 0;
     
     [[NLYoutubeLinksFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
@@ -46,17 +46,11 @@
     
     [[NLYoutubeLinksFromFBLikesFactory sharedInstance] createYoutubeLinksForFriendID:_facebookFriend.ID andDelegate:self];
     numberOfActiveFactories++;
-    
-    activityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 50)];
-    [self.view addSubview:activityIndicator_];
-    [activityIndicator_ startAnimating];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    activityIndicator_ = nil;
 }
 
 #pragma mark -
@@ -82,19 +76,19 @@
         UILabel *noContentLabel = [[UILabel alloc] init];
         [noContentLabel setTextColor:[UIColor whiteColor]];
         [noContentLabel setText:@"No content available"];
+        [noContentLabel setFont:[UIFont boldSystemFontOfSize:24]];
         [noContentLabel sizeToFit];
+        [noContentLabel setTag:919191];
         [noContentLabel setBackgroundColor:[UIColor clearColor]];
         
-        [noContentLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+        [noContentLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 30)];
         [self.view addSubview:noContentLabel];
-        
-        [activityIndicator_ stopAnimating];
-        [activityIndicator_ setHidden:YES];
+        [self finishLoading];
         return;
     }
-    if ([links count] && !activityIndicator_.hidden> 0) {
-        [activityIndicator_ stopAnimating];
-        [activityIndicator_ setHidden:YES];
+    if ([self.youtubeLinksArray count] != 0) {
+        // One array has already been returned, meaning the current array was the last array.  Stop loading
+        [self finishLoading];
     }
     [self insertNewLinksIntoTableView:links];
 }

@@ -252,12 +252,12 @@
 		853FEB3415BB88BD002A1EB5 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8505AB8815E600E000DC1B69 /* NLYoutubeSearchViewController.h */,
+				8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */,
 				85D941A915BB9EF8009EF609 /* NLFriendsViewController.h */,
 				85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */,
 				856AF8E615BC7CD100529F5C /* NLFriendsDetailViewController.h */,
 				856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */,
-				8505AB8815E600E000DC1B69 /* NLYoutubeSearchViewController.h */,
-				8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */,
 				856AF96315C0C59300529F5C /* NLPlaylistBarViewController.h */,
 				856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */,
 				85B55CAD15CF5D5400C17639 /* NLPlaylistEditorViewController.h */,

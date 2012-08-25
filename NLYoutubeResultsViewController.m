@@ -19,6 +19,7 @@
 
 @implementation NLYoutubeResultsViewController {
     UILabel *addToPlaylistLabel_;
+    BOOL isLoadingVideos_;
 }
 @synthesize tableView = _tableView, youtubeLinksArray = _youtubeLinksArray;
 
@@ -63,6 +64,25 @@
 }
 
 #pragma mark -
+#pragma mark Loading Cell Methods
+
+- (void)startLoading
+{
+    if (!isLoadingVideos_) {
+        isLoadingVideos_ = YES;
+        [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_youtubeLinksArray count] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (void)finishLoading
+{
+    if (isLoadingVideos_) {
+        isLoadingVideos_ = NO;
+        [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[_youtubeLinksArray count] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+#pragma mark -
 #pragma mark UITableViewDataSource
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -72,57 +92,93 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_youtubeLinksArray count];
+    return isLoadingVideos_ ? [_youtubeLinksArray count] + 1 : [_youtubeLinksArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellID = @"friendDetailReuseId";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    
-    UILabel *titleLabel = nil;
-    FXImageView *thumbnailImageView = nil;
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+    UITableViewCell *cell = nil;
+    if (indexPath.row == [_youtubeLinksArray count]) {
+        NSString *loadingCellID = @"loadingCellReuseId";
+        cell = [tableView dequeueReusableCellWithIdentifier:loadingCellID];
         
-        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
-        [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
-        [thumbnailImageView setTag:2];
-        [thumbnailImageView setAsynchronous:YES];
-        [cell addSubview:thumbnailImageView];
-        
-        UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, tableView.rowHeight - 30 - 5, cell.frame.size.width, 30)];
-        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
-        [cell addSubview:titleView];
-        
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, tableView.rowHeight - 20 - 10, cell.frame.size.width - 20, 20)];
-        [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor whiteColor]];
-        [titleLabel setFont:[UIFont systemFontOfSize:14]];
-        [titleLabel setTag:1];
-        [cell addSubview:titleLabel];
-        
-        CAGradientLayer *topShadow = [CAGradientLayer layer];
-        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
-        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
-        [cell.layer insertSublayer:topShadow atIndex:0];
-        
-        CAGradientLayer *bottomShadow = [CAGradientLayer layer];
-        bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
-        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
-        [cell.layer insertSublayer:bottomShadow atIndex:0];
-        
-        UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panVideoView:)];
-        [panRecognizer setDelegate:self];
-        [cell addGestureRecognizer:panRecognizer];
+        UILabel *loadingLabel = nil;
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:loadingCellID];
+            
+            loadingLabel = [[UILabel alloc] init];
+            [loadingLabel setTextColor:[UIColor whiteColor]];
+            [loadingLabel setBackgroundColor:[UIColor clearColor]];
+            [loadingLabel setFont:[UIFont boldSystemFontOfSize:24]];
+            [loadingLabel setText:@"Loading Videos..."];
+            [loadingLabel sizeToFit];
+            [loadingLabel setCenter:CGPointMake(cell.frame.size.width/2 - 30, tableView.rowHeight/2)];
+            [cell addSubview:loadingLabel];
+            
+            UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            [loadingIndicator setCenter:CGPointMake(loadingLabel.frame.origin.x + loadingLabel.frame.size.width + loadingIndicator.frame.size.width/2 + 20, loadingLabel.center.y)];
+            [loadingIndicator startAnimating];
+            [loadingIndicator setHidden:NO];
+            [cell addSubview:loadingIndicator];
+            
+            CAGradientLayer *topShadow = [CAGradientLayer layer];
+            topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
+            topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
+            [cell.layer insertSublayer:topShadow atIndex:0];
+            
+            CAGradientLayer *bottomShadow = [CAGradientLayer layer];
+            bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
+            bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
+            [cell.layer insertSublayer:bottomShadow atIndex:0];
+        }
     } else {
-        titleLabel = (UILabel *)[cell viewWithTag:1];
-        thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
+        NSString *cellID = @"friendDetailReuseId";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        
+        UILabel *titleLabel = nil;
+        FXImageView *thumbnailImageView = nil;
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+            
+            thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
+            [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
+            [thumbnailImageView setTag:2];
+            [thumbnailImageView setAsynchronous:YES];
+            [cell addSubview:thumbnailImageView];
+            
+            UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, tableView.rowHeight - 30 - 5, cell.frame.size.width, 30)];
+            [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+            [cell addSubview:titleView];
+            
+            titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, tableView.rowHeight - 20 - 10, cell.frame.size.width - 20, 20)];
+            [titleLabel setBackgroundColor:[UIColor clearColor]];
+            [titleLabel setTextColor:[UIColor whiteColor]];
+            [titleLabel setFont:[UIFont systemFontOfSize:14]];
+            [titleLabel setTag:1];
+            [cell addSubview:titleLabel];
+            
+            CAGradientLayer *topShadow = [CAGradientLayer layer];
+            topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
+            topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
+            [cell.layer insertSublayer:topShadow atIndex:0];
+            
+            CAGradientLayer *bottomShadow = [CAGradientLayer layer];
+            bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
+            bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
+            [cell.layer insertSublayer:bottomShadow atIndex:0];
+            
+            UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panVideoView:)];
+            [panRecognizer setDelegate:self];
+            [cell addGestureRecognizer:panRecognizer];
+        } else {
+            titleLabel = (UILabel *)[cell viewWithTag:1];
+            thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
+        }
+        
+        [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
+        [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
     }
-    
-    [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
-    [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
     
     return cell;
 }
@@ -131,8 +187,27 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self loadNewVideoWithIndex:indexPath.row];
+    if (indexPath.row == [_youtubeLinksArray count]) {
+        
+    } else {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self loadNewVideoWithIndex:indexPath.row];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    int currentPage = ((scrollView.contentOffset.y + _tableView.frame.size.height) / _tableView.rowHeight);
+    int cellsUntilEnd = ([_youtubeLinksArray count] - 1) - currentPage;
+    
+    if (cellsUntilEnd <= 9 && !isLoadingVideos_ && [_youtubeLinksArray count] > 0) {
+        [self didRequestMoreData];
+    }
+}
+
+- (void)didRequestMoreData
+{
+    // Implemented by the subclass to reuqest more data to implement infinite scrolling
 }
 
 #pragma mark -

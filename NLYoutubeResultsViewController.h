@@ -13,4 +13,8 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *youtubeLinksArray;
 
+- (void)didRequestMoreData;
+- (void)startLoading;
+- (void)finishLoading;
+
 @end
