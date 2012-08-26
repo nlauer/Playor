@@ -25,5 +25,6 @@
 
 - (void)createYoutubeLinksForFriendID:(NSNumber *)friendID andDelegate:(id)delegate;
 - (void)createYoutubeLinksForSearchQuery:(NSString *)searchQuery batchSize:(int)size startIndex:(int)index andDelegate:(id)delegate;
+- (void)createYoutubeLinksForMostPopularVideos:(id)delegate;
 
 @end

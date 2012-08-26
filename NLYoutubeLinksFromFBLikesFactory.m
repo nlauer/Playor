@@ -13,7 +13,8 @@
 #import "NLSearchQueriesFactory.h"
 #import "NSArray+Videos.h"
 
-#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&start-index=%d&v=2&alt=json&format=6,1,5"
+#define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&start-index=%d&v=2&alt=json&format=6,1,5&category=Music"
+#define YOUTUBE_MOST_POPULAR_MUSIC_QUERY @"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated_Music?v=2&alt=json"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;
@@ -70,6 +71,26 @@ static NLYoutubeLinksFromFBLikesFactory *sharedInstance = NULL;
     startIndex_ = startIndex;
     batchSizePerQuery_ = size;
     [self getVideosFromQueries:[NSArray arrayWithObject:searchQuery]];
+}
+
+- (void)createYoutubeLinksForMostPopularVideos:(id)delegate
+{
+    [self clearActiveConnections];
+    
+    self.youtubeLinksFromFBLikesDelegate = delegate;
+    _youtubeLinksArray = [[NSMutableArray alloc] init];
+    _activeConnections = [[NSMutableArray alloc] init];
+    numberOfActiveConnections_ = 0;
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[YOUTUBE_MOST_POPULAR_MUSIC_QUERY stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
+    if (!connection) {
+        NSLog(@"couldnt create connection");
+    } else {
+        [_activeConnections addObject:connection];
+        numberOfActiveConnections_++;
+    }
 }
 
 - (void)sendYoutubeLinks
