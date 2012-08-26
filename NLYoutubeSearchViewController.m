@@ -23,6 +23,7 @@
     NSString *currentSearchText_;
     int currentBatchStartIndex_;
     BOOL shouldRequestMoreVideos_;
+    UISearchBar *searchBar_;
 }
 
 - (id)init
@@ -40,18 +41,6 @@
     currentBatchStartIndex_ = 0;
     shouldRequestMoreVideos_ = YES;
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
-    
-//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
-//    [searchBar setBarStyle:UIBarStyleBlack];
-//    [searchBar setPlaceholder:@"Search Youtube"];
-//    [searchBar setDelegate:self];
-//    [self.navigationItem setTitleView:searchBar];
-//    
-//    [self.navigationController.navigationBar setTintColor:[UIColor redColor]];
-//    [searchBar setTintColor:[UIColor redColor]];
-//	
-//    switchToChooserButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:[[NLAppDelegate appDelegate] containerController] action:@selector(switchToChooser)];
-//    [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_];
 }
 
 - (void)viewDidUnload
@@ -150,7 +139,6 @@
     // remove the no content label
     [[self.view viewWithTag:919191] removeFromSuperview];
     
-    
     currentSearchText_ = [searchBar text];
     currentBatchStartIndex_ = 0;
     shouldRequestMoreVideos_ = YES;
@@ -167,5 +155,17 @@
     }];
 }
 
+#pragma mark -
+#pragma mark ChooserViewController Methods
+- (UIView *)getTitleView
+{
+    if (!searchBar_) {
+        searchBar_ = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
+        [searchBar_ setBarStyle:UIBarStyleBlack];
+        [searchBar_ setPlaceholder:@"Search Music"];
+        [searchBar_ setDelegate:self];
+    }
+    return searchBar_;
+}
 
 @end

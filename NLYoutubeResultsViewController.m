@@ -105,6 +105,7 @@
         UILabel *loadingLabel = nil;
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:loadingCellID];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
             loadingLabel = [[UILabel alloc] init];
             [loadingLabel setTextColor:[UIColor whiteColor]];

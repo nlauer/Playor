@@ -9,7 +9,8 @@
 #import "NLViewController.h"
 #import "iCarousel.h"
 #import "NLFacebookFriendFactory.h"
+#import "NLControllerChooserViewController.h"
 
-@interface NLFriendsViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, FacebookFriendDelegate, UISearchBarDelegate>
+@interface NLFriendsViewController : NLViewController <iCarouselDelegate, iCarouselDataSource, FacebookFriendDelegate, UISearchBarDelegate, ChooserViewController>
 
 @end

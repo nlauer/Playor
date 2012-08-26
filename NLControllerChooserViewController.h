@@ -9,6 +9,11 @@
 #import "NLViewController.h"
 #import "iCarousel.h"
 
+@protocol ChooserViewController <NSObject>
+@optional
+- (UIView *)getTitleView;
+@end
+
 @interface NLControllerChooserViewController : NLViewController <iCarouselDelegate, iCarouselDataSource>
 
 @end

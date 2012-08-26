@@ -156,6 +156,7 @@
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
     shouldLoadWebview_ = NO;
+    isPlayingVideo_ = NO;
     [_videoWebView stopLoading];
     [_videoWebView loadRequest:nil];
 }
@@ -194,6 +195,9 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
+    
+    [_videoWebView stopLoading];
+    [_videoWebView loadRequest:nil];
     
     [_videoPlayerDelegate videoPlaybackDidEnd];
 }
@@ -270,6 +274,8 @@
     }];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [_videoWebView stopLoading];
+        [_videoWebView loadRequest:nil];
         [_videoPlayerDelegate videoPlaybackDidEnd];
     });
 }

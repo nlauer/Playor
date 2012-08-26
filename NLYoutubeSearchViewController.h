@@ -8,7 +8,8 @@
 
 #import "NLYoutubeResultsViewController.h"
 #import "NLYoutubeLinksFromFBLikesFactory.h"
+#import "NLControllerChooserViewController.h"
 
-@interface NLYoutubeSearchViewController : NLYoutubeResultsViewController <UISearchBarDelegate, YoutubeLinksFromFBLikesDelegate>
+@interface NLYoutubeSearchViewController : NLYoutubeResultsViewController <UISearchBarDelegate, YoutubeLinksFromFBLikesDelegate, ChooserViewController>
 
 @end

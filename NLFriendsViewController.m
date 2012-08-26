@@ -28,6 +28,7 @@
     BOOL shouldBeginEditing_;
     UISlider *slider_;
     UIBarButtonItem *switchToChooserButtonItem_;
+    UISearchBar *searchBar_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
@@ -37,16 +38,7 @@
     shouldBeginEditing_ = YES;
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     [self.view setClipsToBounds:YES];
-    
-//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
-//    [searchBar setBarStyle:UIBarStyleBlack];
-//    [searchBar setPlaceholder:@"Search for friends"];
-//    [searchBar setDelegate:self];
-//    [self.navigationItem setTitleView:searchBar];
-//    
-//    switchToChooserButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:[[NLAppDelegate appDelegate] containerController] action:@selector(switchToChooser)];
-//    [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_];
-    
+        
     [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
         [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
     }];
@@ -260,6 +252,20 @@
     BOOL boolToReturn = shouldBeginEditing_;
     shouldBeginEditing_ = YES;
     return boolToReturn;
+}
+
+#pragma mark -
+#pragma mark ChooserViewController Methods
+- (UIView *)getTitleView
+{
+    if (!searchBar_) {
+        searchBar_ = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
+        [searchBar_ setBarStyle:UIBarStyleBlack];
+        [searchBar_ setPlaceholder:@"Search for friends"];
+        [searchBar_ setDelegate:self];
+    }
+
+    return searchBar_;
 }
 
 @end

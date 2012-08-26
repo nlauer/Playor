@@ -15,16 +15,15 @@
 #import "iCarousel.h"
 
 @interface NLControllerChooserViewController ()
-@property (strong, nonatomic) NLFriendsViewController *friendsViewController;
-@property (strong, nonatomic) NLYoutubeSearchViewController *searchViewController;
 @property (strong, nonatomic) NSMutableArray *viewControllers;
 @property (strong, nonatomic) iCarousel *iCarousel;
 @end
 
 @implementation NLControllerChooserViewController {
     UIView *currentShowingView_;
+    int currentSelectedIndex_;
 }
-@synthesize friendsViewController = _friendsViewController, searchViewController = _searchViewController, viewControllers = _viewControllers, iCarousel = _iCarousel;
+@synthesize viewControllers = _viewControllers, iCarousel = _iCarousel;
 
 - (id)init
 {
@@ -32,16 +31,14 @@
     if (self) {
         // Init the search view controller
         NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
-        self.searchViewController = searchViewController;
         
         // Init the friends view controller
         NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
-        self.friendsViewController = friendsViewController;
         
         _viewControllers = [[NSMutableArray alloc] initWithObjects:searchViewController, friendsViewController, nil];
         
-        [self addChildViewController:_searchViewController];
-        [self addChildViewController:_friendsViewController];
+        [self addChildViewController:searchViewController];
+        [self addChildViewController:friendsViewController];
     }
     return self;
 }
@@ -74,8 +71,11 @@
     [UIView animateWithDuration:0.3 animations:^{
         CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
         [currentShowingView_ setTransform:tr2];
+        [currentShowingView_ setFrame:[self.view convertRect:[[_iCarousel itemViewAtIndex:currentSelectedIndex_] frame] fromView:[_iCarousel itemViewAtIndex:currentSelectedIndex_]]];
     } completion:^(BOOL finished) {
         [currentShowingView_ removeFromSuperview];
+        currentShowingView_ = nil;
+        currentSelectedIndex_ = -1;
         [_iCarousel reloadData];
         [self.navigationItem setTitleView:nil];
         [self.navigationItem setLeftBarButtonItem:nil];
@@ -94,10 +94,11 @@
 {
     if (view == nil) {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*0.7, carousel.frame.size.height*0.7)];
+        [view setClipsToBounds:YES];
         UIViewController *vc = [_viewControllers objectAtIndex:index];
         CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
         [vc.view setTransform:tr2];
-        [vc.view setCenter:CGPointMake(view.frame.size.width/2, view.frame.size.height/2)];
+        [vc.view setFrame:CGRectMake(0, 0, vc.view.frame.size.width, vc.view.frame.size.height)];
         [vc.view setUserInteractionEnabled:NO];
         [view addSubview:vc.view];
     } else {
@@ -129,24 +130,22 @@
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
+    currentSelectedIndex_ = index;
     currentShowingView_ = ((UIViewController *)[_viewControllers objectAtIndex:index]).view;
-    [currentShowingView_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+    CGRect viewFrame = [NLUtils getContainerTopInnerFrame];
+    [currentShowingView_ setFrame:[self.view convertRect:[[carousel itemViewAtIndex:index] frame] fromView:[carousel itemViewAtIndex:index]]];
     [self.view addSubview:currentShowingView_];
+    
     [UIView animateWithDuration:0.3 animations:^{
         CGAffineTransform tr2 = CGAffineTransformMakeScale(1, 1);
-        [currentShowingView_ setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2)];
+        [currentShowingView_ setCenter:CGPointMake(viewFrame.size.width/2, viewFrame.size.height/2)];
         [currentShowingView_ setTransform:tr2];
     } completion:^(BOOL finished) {
         [currentShowingView_ setUserInteractionEnabled:YES];
         
         UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(removeCurrentShowingView)];
         [self.navigationItem setLeftBarButtonItem:buttonItem];
-        
-        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
-        [searchBar setBarStyle:UIBarStyleBlack];
-        [searchBar setPlaceholder:@"Search for friends"];
-        [searchBar setDelegate:[_viewControllers objectAtIndex:index]];
-        [self.navigationItem setTitleView:searchBar];
+        [self.navigationItem setTitleView:[[_viewControllers objectAtIndex:index] getTitleView]];
     }];
 }
 
