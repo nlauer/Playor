@@ -11,6 +11,7 @@
 #import "NLAppDelegate.h"
 #import "NLContainerViewController.h"
 #import "NLYoutubeLinksFromFBLikesFactory.h"
+#import "NLUtils.h"
 
 #define BATCH_SIZE 25
 
@@ -18,7 +19,7 @@
 @end
 
 @implementation NLYoutubeSearchViewController {
-    UIBarButtonItem *switchToFriendsButtonItem_;
+    UIBarButtonItem *switchToChooserButtonItem_;
     NSString *currentSearchText_;
     int currentBatchStartIndex_;
     BOOL shouldRequestMoreVideos_;
@@ -38,18 +39,19 @@
     [super viewDidLoad];
     currentBatchStartIndex_ = 0;
     shouldRequestMoreVideos_ = YES;
+    [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
-    [searchBar setBarStyle:UIBarStyleBlack];
-    [searchBar setPlaceholder:@"Search Youtube"];
-    [searchBar setDelegate:self];
-    [self.navigationItem setTitleView:searchBar];
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor redColor]];
-    [searchBar setTintColor:[UIColor redColor]];
-	
-    switchToFriendsButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(switchToFriends)];
-    [self.navigationItem setLeftBarButtonItem:switchToFriendsButtonItem_];
+//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
+//    [searchBar setBarStyle:UIBarStyleBlack];
+//    [searchBar setPlaceholder:@"Search Youtube"];
+//    [searchBar setDelegate:self];
+//    [self.navigationItem setTitleView:searchBar];
+//    
+//    [self.navigationController.navigationBar setTintColor:[UIColor redColor]];
+//    [searchBar setTintColor:[UIColor redColor]];
+//	
+//    switchToChooserButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:[[NLAppDelegate appDelegate] containerController] action:@selector(switchToChooser)];
+//    [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_];
 }
 
 - (void)viewDidUnload
@@ -124,14 +126,6 @@
 }
 
 #pragma mark -
-#pragma mark Switch To Friends
-
-- (void)switchToFriends
-{
-    [[[NLAppDelegate appDelegate] containerController] switchToFriends];
-}
-
-#pragma mark -
 #pragma mark UISearchBarDelegate
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -169,7 +163,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width - 110, searchBar.frame.size.height)];
     } completion:^(BOOL finished) {
-        [self.navigationItem setLeftBarButtonItem:switchToFriendsButtonItem_ animated:NO];
+        [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_ animated:NO];
     }];
 }
 

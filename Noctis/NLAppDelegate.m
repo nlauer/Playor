@@ -8,7 +8,6 @@
 
 #import "NLAppDelegate.h"
 
-#import "NLYoutubeSearchViewController.h"
 #import "NLFacebookManager.h"
 #import "NLPlaylistBarViewController.h"
 #import "NLPlaylistManager.h"
@@ -32,11 +31,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    
-    [nav.navigationBar setBarStyle:UIBarStyleBlack];
     UIColor *barColor = [UIColor navBarTint];
     [[UINavigationBar appearance] setTintColor:barColor];
     [[UISearchBar appearance] setTintColor:barColor];
@@ -52,7 +46,7 @@
     
     isPlayingVideo_ = NO;
     
-    _containerController = [[NLContainerViewController alloc] initWithTopViewController:nav andBottomViewController:[NLPlaylistBarViewController sharedInstance]];
+    _containerController = [[NLContainerViewController alloc] init];
     self.window.rootViewController = _containerController;
     [self.window makeKeyAndVisible];
     return YES;

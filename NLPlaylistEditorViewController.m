@@ -69,6 +69,7 @@
     UITextField * alertTextField = [alert textFieldAtIndex:0];
     alertTextField.keyboardType = UIKeyboardTypeDefault;
     alertTextField.placeholder = @"Enter a name";
+    alertTextField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     [alert show];
 }
 

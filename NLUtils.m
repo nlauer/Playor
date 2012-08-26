@@ -16,4 +16,10 @@
     return CGRectMake(0, 0, screenRect.size.width, screenRect.size.height- 128 - 20);
 }
 
++ (CGRect)getContainerTopInnerFrame
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    return CGRectMake(0, 0, screenRect.size.width, screenRect.size.height- 128 - 20 - 44);
+}
+
 @end

@@ -11,5 +11,6 @@
 @interface NLUtils : NSObject
 
 + (CGRect)getContainerTopControllerFrame;
++ (CGRect)getContainerTopInnerFrame;
 
 @end

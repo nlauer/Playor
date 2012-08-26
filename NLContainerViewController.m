@@ -12,6 +12,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NLYoutubeSearchViewController.h"
 #import "NLFriendsViewController.h"
+#import "NLControllerChooserViewController.h"
+#import "NLPlaylistBarViewController.h"
 
 @interface NLContainerViewController ()
 
@@ -23,21 +25,18 @@
     UIView *bottomViewContainer_;
 }
 @synthesize topController = _topController, bottomController = _bottomController;
-@synthesize friendsViewController = _friendsViewController, searchViewController = _searchViewController;
 
-- (id)initWithTopViewController:(UIViewController *)topController andBottomViewController:(UIViewController *)bottomController
+- (id)init
 {
     self = [super init];
     if (self) {
-        self.topController = topController;
-        self.searchViewController = (UINavigationController *)_topController;
-        NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendsViewController];
-        self.friendsViewController = nav;
+        // Init the chooser view controller
+        NLControllerChooserViewController *chooserViewController = [[NLControllerChooserViewController alloc] init];
+        UINavigationController *chooserNav = [[UINavigationController alloc] initWithRootViewController:chooserViewController];
+        self.topController = chooserNav;
         
-        self.bottomController = bottomController;
-        [self addChildViewController:_friendsViewController];
-        [self addChildViewController:_searchViewController];
+        self.bottomController = [NLPlaylistBarViewController sharedInstance];
+        [self addChildViewController:_topController];
         [self addChildViewController:_bottomController];
     }
     return self;
@@ -53,6 +52,7 @@
     bottomViewContainer_ = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 128, self.view.frame.size.width, 128)];
     [bottomViewContainer_ setClipsToBounds:NO];
     [self.view addSubview:bottomViewContainer_];
+    
 	[topViewContainer_ addSubview:_topController.view];
     [bottomViewContainer_ addSubview:_bottomController.view];
 }
@@ -64,6 +64,9 @@
     topViewContainer_ = nil;
     previousViewController_ = nil;
 }
+
+#pragma mark -
+#pragma mark Presentation Methods
 
 - (void)presentViewControllerBehindPlaylistBar:(UIViewController *)viewController
 {
@@ -95,16 +98,6 @@
             [self.view setUserInteractionEnabled:YES];
         }];
     }
-}
-
-- (void)switchToYoutubeSearch
-{
-    [self presentViewControllerBehindPlaylistBar:_searchViewController];
-}
-
-- (void)switchToFriends
-{
-    [self presentViewControllerBehindPlaylistBar:_friendsViewController];
 }
 
 @end

@@ -27,7 +27,7 @@
 @implementation NLFriendsViewController {
     BOOL shouldBeginEditing_;
     UISlider *slider_;
-    UIBarButtonItem *switchToSearchButtonItem_;
+    UIBarButtonItem *switchToChooserButtonItem_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
@@ -35,17 +35,17 @@
 {
     [super viewDidLoad];
     shouldBeginEditing_ = YES;
+    [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     [self.view setClipsToBounds:YES];
-    [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
-    [searchBar setBarStyle:UIBarStyleBlack];
-    [searchBar setPlaceholder:@"Search for friends"];
-    [searchBar setDelegate:self];
-    [self.navigationItem setTitleView:searchBar];
-    
-    switchToSearchButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(switchToSearch)];
-    [self.navigationItem setLeftBarButtonItem:switchToSearchButtonItem_];
+//    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width- 110, 44.0)];
+//    [searchBar setBarStyle:UIBarStyleBlack];
+//    [searchBar setPlaceholder:@"Search for friends"];
+//    [searchBar setDelegate:self];
+//    [self.navigationItem setTitleView:searchBar];
+//    
+//    switchToChooserButtonItem_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:[[NLAppDelegate appDelegate] containerController] action:@selector(switchToChooser)];
+//    [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_];
     
     [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
         [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
@@ -58,6 +58,13 @@
     [carousel setHidden:YES];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
+    
+    slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
+    [slider_ setMinimumValue:0];
+    [slider_ setMaximumValue:[_carouselArray count]];
+    [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    [slider_ setHidden:YES];
+    [self.view addSubview:slider_];
 }
 
 - (void)viewDidUnload
@@ -77,29 +84,14 @@
 
 - (void)setupSlider
 {
-    if (!slider_) {
-        slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
-        [slider_ setMinimumValue:0];
-        [slider_ setMaximumValue:[_carouselArray count]];
-        [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-        [self.view addSubview:slider_];
-    } else {
-        [slider_ setValue:0];
-        [slider_ setMaximumValue:[_carouselArray count]];
-    }
+    [slider_ setHidden:NO];
+    [slider_ setValue:0];
+    [slider_ setMaximumValue:[_carouselArray count]];
 }
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
     return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
-}
-
-#pragma mark -
-#pragma mark SwitchToSearch
-
-- (void)switchToSearch
-{
-    [[[NLAppDelegate appDelegate] containerController] switchToYoutubeSearch];
 }
 
 #pragma mark -
@@ -259,7 +251,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width - 110, searchBar.frame.size.height)];
     } completion:^(BOOL finished) {
-        [self.navigationItem setLeftBarButtonItem:switchToSearchButtonItem_ animated:NO];
+        [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_ animated:NO];
     }];
 }
 
