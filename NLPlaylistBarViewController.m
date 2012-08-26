@@ -30,6 +30,7 @@
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
+    int playingItemIndex_;
 }
 @synthesize iCarousel = _iCarousel, playlist = _playlist;
 
@@ -168,10 +169,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)videoPlaybackDidEnd
 {
-    int index = [_iCarousel currentItemIndex] + 1;
-    if (index < [_playlist.videos count]) {
-        [_iCarousel scrollToItemAtIndex:index animated:YES];
-        [self loadNewVideoWithIndex:index];
+    playingItemIndex_ ++;
+    if (playingItemIndex_ < [_playlist.videos count]) {
+        [_iCarousel scrollToItemAtIndex:playingItemIndex_ animated:YES];
+        [self loadNewVideoWithIndex:playingItemIndex_];
     }
 }
 
@@ -253,6 +254,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
+    playingItemIndex_ = index;
     [self loadNewVideoWithIndex:index];
 }
 

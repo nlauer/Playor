@@ -35,10 +35,11 @@
         // Init the friends view controller
         NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
         
+        // Group the view controllers so they can be used by the data source, and add all as child view controllers
         _viewControllers = [[NSMutableArray alloc] initWithObjects:searchViewController, friendsViewController, nil];
-        
-        [self addChildViewController:searchViewController];
-        [self addChildViewController:friendsViewController];
+        for (UIViewController *vc in _viewControllers) {
+            [self addChildViewController:vc];
+        }
     }
     return self;
 }
@@ -77,8 +78,11 @@
         currentShowingView_ = nil;
         currentSelectedIndex_ = -1;
         [_iCarousel reloadData];
+        
+        // Reset the navigation to originals
         [self.navigationItem setTitleView:nil];
         [self.navigationItem setLeftBarButtonItem:nil];
+        self.title = @"Noctis";
     }];
 }
 
@@ -133,6 +137,8 @@
     currentSelectedIndex_ = index;
     currentShowingView_ = ((UIViewController *)[_viewControllers objectAtIndex:index]).view;
     CGRect viewFrame = [NLUtils getContainerTopInnerFrame];
+    
+    // Set the frame to be the same as what was in the carousel
     [currentShowingView_ setFrame:[self.view convertRect:[[carousel itemViewAtIndex:index] frame] fromView:[carousel itemViewAtIndex:index]]];
     [self.view addSubview:currentShowingView_];
     
@@ -143,9 +149,16 @@
     } completion:^(BOOL finished) {
         [currentShowingView_ setUserInteractionEnabled:YES];
         
+        // Set up the navigation bar appropriately for the view
         UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(removeCurrentShowingView)];
         [self.navigationItem setLeftBarButtonItem:buttonItem];
-        [self.navigationItem setTitleView:[[_viewControllers objectAtIndex:index] getTitleView]];
+        if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getTitleView)]) {
+            // Set the title as a custom view
+            [self.navigationItem setTitleView:[[_viewControllers objectAtIndex:index] getTitleView]];
+        } else if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getTitle)]) {
+            // Set the nav bar's title
+            self.title = [[_viewControllers objectAtIndex:index] getTitle];
+        }
     }];
 }
 
