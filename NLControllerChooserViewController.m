@@ -12,6 +12,7 @@
 #import "NLAppDelegate.h"
 #import "NLYoutubeSearchViewController.h"
 #import "NLFriendsViewController.h"
+#import "NLPopularResultsViewController.h"
 #import "iCarousel.h"
 
 @interface NLControllerChooserViewController ()
@@ -29,14 +30,13 @@
 {
     self = [super init];
     if (self) {
-        // Init the search view controller
+        // Init the view controllers
         NLYoutubeSearchViewController *searchViewController = [[NLYoutubeSearchViewController alloc] init];
-        
-        // Init the friends view controller
         NLFriendsViewController *friendsViewController = [[NLFriendsViewController alloc] init];
+        NLPopularResultsViewController *popularViewController = [[NLPopularResultsViewController alloc] init];
         
         // Group the view controllers so they can be used by the data source, and add all as child view controllers
-        _viewControllers = [[NSMutableArray alloc] initWithObjects:searchViewController, friendsViewController, nil];
+        _viewControllers = [[NSMutableArray alloc] initWithObjects:popularViewController, searchViewController, friendsViewController, nil];
         for (UIViewController *vc in _viewControllers) {
             [self addChildViewController:vc];
         }
@@ -69,11 +69,15 @@
 
 - (void)removeCurrentShowingView
 {
+    [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.3 animations:^{
         CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
         [currentShowingView_ setTransform:tr2];
         [currentShowingView_ setFrame:[self.view convertRect:[[_iCarousel itemViewAtIndex:currentSelectedIndex_] frame] fromView:[_iCarousel itemViewAtIndex:currentSelectedIndex_]]];
     } completion:^(BOOL finished) {
+        if ([[_viewControllers objectAtIndex:currentSelectedIndex_] respondsToSelector:@selector(removedFromMainView)]) {
+            [[_viewControllers objectAtIndex:currentSelectedIndex_] removedFromMainView];
+        }
         [currentShowingView_ removeFromSuperview];
         currentShowingView_ = nil;
         currentSelectedIndex_ = -1;
@@ -83,6 +87,8 @@
         [self.navigationItem setTitleView:nil];
         [self.navigationItem setLeftBarButtonItem:nil];
         self.title = @"Noctis";
+        
+        [self.navigationController.navigationBar setUserInteractionEnabled:YES];
     }];
 }
 
@@ -99,15 +105,18 @@
     if (view == nil) {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*0.7, carousel.frame.size.height*0.7)];
         [view setClipsToBounds:YES];
-        UIViewController *vc = [_viewControllers objectAtIndex:index];
-        CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
-        [vc.view setTransform:tr2];
-        [vc.view setFrame:CGRectMake(0, 0, vc.view.frame.size.width, vc.view.frame.size.height)];
-        [vc.view setUserInteractionEnabled:NO];
-        [view addSubview:vc.view];
     } else {
-    
+        [[view viewWithTag:777] removeFromSuperview];
     }
+    
+    UIViewController *vc = [_viewControllers objectAtIndex:index];
+    CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
+    [vc.view setTransform:tr2];
+    [vc.view setTag:777];
+    [vc.view setFrame:CGRectMake(0, 0, vc.view.frame.size.width, vc.view.frame.size.height)];
+    [vc.view setUserInteractionEnabled:NO];
+    [view addSubview:vc.view];
+    
     return view;
 }
 
@@ -147,6 +156,9 @@
         [currentShowingView_ setCenter:CGPointMake(viewFrame.size.width/2, viewFrame.size.height/2)];
         [currentShowingView_ setTransform:tr2];
     } completion:^(BOOL finished) {
+        if ([[_viewControllers objectAtIndex:currentSelectedIndex_] respondsToSelector:@selector(movedToMainView)]) {
+            [[_viewControllers objectAtIndex:currentSelectedIndex_] movedToMainView];
+        }
         [currentShowingView_ setUserInteractionEnabled:YES];
         
         // Set up the navigation bar appropriately for the view

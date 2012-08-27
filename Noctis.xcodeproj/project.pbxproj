@@ -59,6 +59,7 @@
 		85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C215BBAACE009EF609 /* NLFacebookFriend.m */; };
 		85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */; };
 		85F8F3C715EB057100C14754 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F3C615EB057100C14754 /* iRate.m */; };
+		85F8F3CB15EB0B4300C14754 /* NLPopularResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F3CA15EB0B4300C14754 /* NLPopularResultsViewController.m */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -170,6 +171,8 @@
 		85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriendFactory.m; sourceTree = "<group>"; };
 		85F8F3C515EB057100C14754 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		85F8F3C615EB057100C14754 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
+		85F8F3C915EB0B4300C14754 /* NLPopularResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPopularResultsViewController.h; sourceTree = "<group>"; };
+		85F8F3CA15EB0B4300C14754 /* NLPopularResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPopularResultsViewController.m; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -262,6 +265,7 @@
 				8595692715E9C179005A89F3 /* NLControllerChooserViewController.m */,
 				85FB45B315DCB58600349534 /* NLContainerViewController.h */,
 				85FB45B415DCB58600349534 /* NLContainerViewController.m */,
+				85F8F3C815EB0B0B00C14754 /* Youtube Popular Songs View Controllers */,
 				8595692A15E9C17F005A89F3 /* Youtube Search View Controllers */,
 				8595692B15E9C18D005A89F3 /* Friends Music View Controllers */,
 				8595692C15E9C1A1005A89F3 /* Playlist Bar View Controllers */,
@@ -467,6 +471,15 @@
 			name = iRate;
 			sourceTree = "<group>";
 		};
+		85F8F3C815EB0B0B00C14754 /* Youtube Popular Songs View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				85F8F3C915EB0B4300C14754 /* NLPopularResultsViewController.h */,
+				85F8F3CA15EB0B4300C14754 /* NLPopularResultsViewController.m */,
+			);
+			name = "Youtube Popular Songs View Controllers";
+			sourceTree = "<group>";
+		};
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,6 +620,7 @@
 				8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */,
 				8595692815E9C179005A89F3 /* NLControllerChooserViewController.m in Sources */,
 				85F8F3C715EB057100C14754 /* iRate.m in Sources */,
+				85F8F3CB15EB0B4300C14754 /* NLPopularResultsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

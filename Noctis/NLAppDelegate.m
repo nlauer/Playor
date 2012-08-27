@@ -209,6 +209,19 @@
 {
     isBackgrounded_ = YES;
     
+    UIApplication *app = [UIApplication sharedApplication];
+    if (bgTask_ != UIBackgroundTaskInvalid) {
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }
+    bgTask_ = [app beginBackgroundTaskWithExpirationHandler:^{ 
+        [app endBackgroundTask:bgTask_]; 
+        bgTask_ = UIBackgroundTaskInvalid;
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    });
+    
     // Watch for remote events to keep getting notifications
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginReceivingRemoteControlEvents)]){
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];

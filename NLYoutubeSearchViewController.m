@@ -159,4 +159,14 @@
     return searchBar_;
 }
 
+- (void)removedFromMainView
+{
+    [self finishLoading];
+}
+
+- (void)movedToMainView
+{
+    shouldRequestMoreVideos_ = YES;
+}
+
 @end

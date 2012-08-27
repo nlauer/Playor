@@ -25,6 +25,7 @@
 @end
 
 @implementation NLFriendsViewController {
+    BOOL isPastFirstRun_;
     BOOL shouldBeginEditing_;
     UISlider *slider_;
     UIBarButtonItem *switchToChooserButtonItem_;
@@ -38,10 +39,6 @@
     shouldBeginEditing_ = YES;
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     [self.view setClipsToBounds:YES];
-        
-    [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
-        [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
-    }];
     
     iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
     [carousel setType:iCarouselTypeLinear];
@@ -257,6 +254,16 @@
     }
 
     return searchBar_;
+}
+
+- (void)movedToMainView
+{
+    if (!isPastFirstRun_) {
+        [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
+            [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
+        }];
+        isPastFirstRun_ = YES;
+    }
 }
 
 @end

@@ -13,6 +13,8 @@
 @optional
 - (UIView *)getTitleView;
 - (NSString *)getNavigationTitle;
+- (void)movedToMainView;
+- (void)removedFromMainView;
 @end
 
 @interface NLControllerChooserViewController : NLViewController <iCarouselDelegate, iCarouselDataSource>
