@@ -12,7 +12,7 @@
 @protocol ChooserViewController <NSObject>
 @optional
 - (UIView *)getTitleView;
-- (NSString *)getTitle;
+- (NSString *)getNavigationTitle;
 @end
 
 @interface NLControllerChooserViewController : NLViewController <iCarouselDelegate, iCarouselDataSource>

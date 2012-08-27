@@ -231,20 +231,11 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     [searchBar setShowsCancelButton:YES animated:NO];
-    [self.navigationItem setLeftBarButtonItem:nil];
-    [UIView animateWithDuration:0.3 animations:^{
-        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width, searchBar.frame.size.height)];
-    }];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
     [searchBar setShowsCancelButton:NO animated:NO];
-    [UIView animateWithDuration:0.3 animations:^{
-        [searchBar setFrame:CGRectMake(searchBar.frame.origin.x, searchBar.frame.origin.y, self.view.frame.size.width - 110, searchBar.frame.size.height)];
-    } completion:^(BOOL finished) {
-        [self.navigationItem setLeftBarButtonItem:switchToChooserButtonItem_ animated:NO];
-    }];
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar

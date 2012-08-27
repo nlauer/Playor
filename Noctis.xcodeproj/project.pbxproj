@@ -58,6 +58,7 @@
 		85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D941BA15BBA5A1009EF609 /* QuartzCore.framework */; };
 		85D941C315BBAACE009EF609 /* NLFacebookFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C215BBAACE009EF609 /* NLFacebookFriend.m */; };
 		85D941C615BBAC6C009EF609 /* NLFacebookFriendFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */; };
+		85F8F3C715EB057100C14754 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F3C615EB057100C14754 /* iRate.m */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -167,6 +168,8 @@
 		85D941C215BBAACE009EF609 /* NLFacebookFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriend.m; sourceTree = "<group>"; };
 		85D941C415BBAC6C009EF609 /* NLFacebookFriendFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFacebookFriendFactory.h; sourceTree = "<group>"; };
 		85D941C515BBAC6C009EF609 /* NLFacebookFriendFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookFriendFactory.m; sourceTree = "<group>"; };
+		85F8F3C515EB057100C14754 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
+		85F8F3C615EB057100C14754 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -406,6 +409,7 @@
 		85D9419215BB97F7009EF609 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				85F8F3C415EB055900C14754 /* iRate */,
 				856AF8F815BE528E00529F5C /* SBJson */,
 				856AF8DE15BC612500529F5C /* FXImageView */,
 				85D941B615BBA526009EF609 /* iCarousel */,
@@ -452,6 +456,15 @@
 				85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */,
 			);
 			name = Factories;
+			sourceTree = "<group>";
+		};
+		85F8F3C415EB055900C14754 /* iRate */ = {
+			isa = PBXGroup;
+			children = (
+				85F8F3C515EB057100C14754 /* iRate.h */,
+				85F8F3C615EB057100C14754 /* iRate.m */,
+			);
+			name = iRate;
 			sourceTree = "<group>";
 		};
 		85FB45BD15E05E4C00349534 /* Resources */ = {
@@ -593,6 +606,7 @@
 				8505AB8A15E600E000DC1B69 /* NLYoutubeSearchViewController.m in Sources */,
 				8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */,
 				8595692815E9C179005A89F3 /* NLControllerChooserViewController.m in Sources */,
+				85F8F3C715EB057100C14754 /* iRate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

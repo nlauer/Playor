@@ -150,14 +150,15 @@
         [currentShowingView_ setUserInteractionEnabled:YES];
         
         // Set up the navigation bar appropriately for the view
-        UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(removeCurrentShowingView)];
+        UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(removeCurrentShowingView)];
         [self.navigationItem setLeftBarButtonItem:buttonItem];
+        
         if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getTitleView)]) {
             // Set the title as a custom view
             [self.navigationItem setTitleView:[[_viewControllers objectAtIndex:index] getTitleView]];
-        } else if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getTitle)]) {
+        } else if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getNavigationTitle)]) {
             // Set the nav bar's title
-            self.title = [[_viewControllers objectAtIndex:index] getTitle];
+            self.title = [[_viewControllers objectAtIndex:index] getNavigationTitle];
         }
     }];
 }

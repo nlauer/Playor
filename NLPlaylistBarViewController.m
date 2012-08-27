@@ -173,6 +173,8 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     if (playingItemIndex_ < [_playlist.videos count]) {
         [_iCarousel scrollToItemAtIndex:playingItemIndex_ animated:YES];
         [self loadNewVideoWithIndex:playingItemIndex_];
+    } else {
+        [_iCarousel scrollToItemAtIndex:[_playlist.videos count] - 1 animated:YES];
     }
 }
 
