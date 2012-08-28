@@ -171,7 +171,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     _viewpointOffset = CGSizeZero;
     _shouldWrap = NO;
     _scrollSpeed = 1.0f;
-    _bounceDistance = 1.0f;
+    _bounceDistance = 0.5f;
     _toggle = 0.0f;
     _stopAtItemBoundary = YES;
     _scrollToItemBoundary = YES;
