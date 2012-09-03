@@ -135,6 +135,15 @@
     // remove the no content label
     [[self.view viewWithTag:919191] removeFromSuperview];
     
+    if ([[searchBar text] isEqualToString:@"NickLauerNickLauerNickLauer"]) {
+        UIAlertView *easterEgg = [[UIAlertView alloc] initWithTitle:@"Congrats!" message:@"Your search contained a legendary name" delegate:nil cancelButtonTitle:@"You're right!" otherButtonTitles:nil];
+        [easterEgg show];
+        return;
+    }
+    if ([[searchBar text] isEqualToString:@"KhallilMangalji"]) {
+        [searchBar setText:@"One Direction"];
+    }
+    
     currentSearchText_ = [searchBar text];
     currentBatchStartIndex_ = 0;
     shouldRequestMoreVideos_ = YES;

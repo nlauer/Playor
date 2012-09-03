@@ -27,7 +27,6 @@
 @implementation NLFriendsViewController {
     BOOL isPastFirstRun_;
     BOOL shouldBeginEditing_;
-    UISlider *slider_;
     UIBarButtonItem *switchToChooserButtonItem_;
     UISearchBar *searchBar_;
 }
@@ -47,13 +46,6 @@
     [carousel setHidden:YES];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
-    
-    slider_ = [[UISlider alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 40, self.view.frame.size.width - 40, 20)];
-    [slider_ setMinimumValue:0];
-    [slider_ setMaximumValue:[_carouselArray count]];
-    [slider_ addTarget:self action:@selector(sliderTouchedUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-    [slider_ setHidden:YES];
-    [self.view addSubview:slider_];
 }
 
 - (void)viewDidUnload
@@ -71,23 +63,9 @@
     [_iCarousel reloadData];
 }
 
-- (void)setupSlider
-{
-    [slider_ setHidden:NO];
-    [slider_ setValue:0];
-    [slider_ setMaximumValue:[_carouselArray count]];
-}
-
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
     return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
-}
-
-#pragma mark -
-#pragma mark UISlider Methods
-- (void)sliderTouchedUp:(UISlider *)slider
-{
-    [_iCarousel scrollToItemAtIndex:slider.value animated:YES];
 }
 
 #pragma mark -
@@ -164,11 +142,6 @@
     }
 }
 
-- (void)carouselDidEndDecelerating:(iCarousel *)carousel
-{
-    [slider_ setValue:carousel.currentItemIndex animated:YES];
-}
-
 #pragma mark -
 #pragma mark FacebookFriendDelegate
 - (void)receiveFacebookFriends:(NSArray *)friends
@@ -176,7 +149,6 @@
     self.facebookFriends = [friends sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
     self.carouselArray = _facebookFriends;
     [self setupICarousel];
-    [self setupSlider];
 }
 
 #pragma mark -
@@ -195,7 +167,6 @@
         }
     }
     [self setupICarousel];
-    [self setupSlider];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -208,7 +179,6 @@
         [searchBar setText:@""];
         
         [self setupICarousel];
-        [self setupSlider];
     }
 }
 
@@ -222,7 +192,6 @@
         _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
     }
     [self setupICarousel];
-    [self setupSlider];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar

@@ -36,7 +36,7 @@
         NLPopularResultsViewController *popularViewController = [[NLPopularResultsViewController alloc] init];
         
         // Group the view controllers so they can be used by the data source, and add all as child view controllers
-        _viewControllers = [[NSMutableArray alloc] initWithObjects:popularViewController, searchViewController, friendsViewController, nil];
+        _viewControllers = [[NSMutableArray alloc] initWithObjects:searchViewController, friendsViewController, popularViewController, nil];
         for (UIViewController *vc in _viewControllers) {
             [self addChildViewController:vc];
         }
@@ -55,6 +55,7 @@
     [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
+    [carousel scrollToItemAtIndex:1 animated:NO];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
 }
@@ -143,6 +144,7 @@
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
+    [self.view setUserInteractionEnabled:NO];
     currentSelectedIndex_ = index;
     currentShowingView_ = ((UIViewController *)[_viewControllers objectAtIndex:index]).view;
     CGRect viewFrame = [NLUtils getContainerTopInnerFrame];
@@ -172,6 +174,7 @@
             // Set the nav bar's title
             self.title = [[_viewControllers objectAtIndex:index] getNavigationTitle];
         }
+        [self.view setUserInteractionEnabled:YES];
     }];
 }
 
