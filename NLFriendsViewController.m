@@ -29,6 +29,7 @@
     BOOL shouldBeginEditing_;
     UIBarButtonItem *switchToChooserButtonItem_;
     UISearchBar *searchBar_;
+    UILabel *nameLabel_;
 }
 @synthesize iCarousel = _iCarousel, facebookFriends = _facebookFriends, carouselArray = _carouselArray;
 
@@ -47,6 +48,14 @@
     [carousel setHidden:YES];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
+    
+    nameLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, carousel.frame.origin.y + carousel.frame.size.height, self.view.frame.size.width - 20, 30)];
+    [nameLabel_ setTextAlignment:UITextAlignmentCenter];
+    [nameLabel_ setBackgroundColor:[UIColor clearColor]];
+    [nameLabel_ setTextColor:[UIColor whiteColor]];
+    [nameLabel_ setFont:[UIFont boldSystemFontOfSize:16]];
+    [self.view addSubview:nameLabel_];
+    [self.view bringSubviewToFront:nameLabel_];
 }
 
 - (void)viewDidUnload
@@ -66,7 +75,13 @@
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
 {
-    return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
+    @synchronized(_carouselArray) {
+        if (index < [_carouselArray count]) {
+            return [((NLFacebookFriend *)[_carouselArray objectAtIndex:index]) name];
+        } else {
+            return nil;
+        }
+    }
 }
 
 #pragma mark -
@@ -79,7 +94,6 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    UILabel *nameLabel = nil;
     FXImageView *profileImageView = nil;
     
     if (view == nil) {
@@ -98,21 +112,9 @@
         [profileImageView setReflectionGap:0];
         [profileImageView setReflectionScale:0.7];
         [view addSubview:profileImageView];
-        
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 160, view.frame.size.width, 30)];
-        [nameLabel setTextAlignment:UITextAlignmentCenter];
-        [nameLabel setBackgroundColor:[UIColor clearColor]];
-        [nameLabel setTag:1];
-        [nameLabel setTextColor:[UIColor whiteColor]];
-        [nameLabel setFont:[UIFont boldSystemFontOfSize:16]];
-        [view addSubview:nameLabel];
     } else {
-        nameLabel = (UILabel *)[view viewWithTag:1];
         profileImageView = (FXImageView *)[view viewWithTag:2];
     }
-    
-    [nameLabel setText:[self friendNameForIndex:index]];
-    [nameLabel setCenter:CGPointMake(floorf(view.frame.size.width/2), view.frame.size.height + 15)];
     
     [profileImageView setImage:nil];
     [profileImageView setImageWithContentsOfURL:[[_carouselArray objectAtIndex:index] profilePictureURL]];
@@ -140,6 +142,11 @@
             return value;
         }
     }
+}
+
+- (void)carouselDidScroll:(iCarousel *)carousel
+{
+    [nameLabel_ setText:[self friendNameForIndex:[carousel currentItemIndex]]];
 }
 
 #pragma mark -
