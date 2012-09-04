@@ -38,9 +38,10 @@
     shouldBeginEditing_ = YES;
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     [self.view setClipsToBounds:YES];
+    [self.view setBackgroundColor:[UIColor blackColor]];
     
-    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 170)];
-    [carousel setType:iCarouselTypeLinear];
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 170)];
+    [carousel setType:iCarouselTypeRotary];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
     [carousel setHidden:YES];
@@ -82,16 +83,20 @@
     FXImageView *profileImageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 170.0f, 170.0f)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.height, carousel.frame.size.height)];
         [view setBackgroundColor:[UIColor blackColor]];
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.height, view.frame.size.height*0.7f)];
+        [backgroundView setBackgroundColor:[UIColor blackColor]];
+        [view addSubview:backgroundView];
         
         profileImageView = [[FXImageView alloc] initWithFrame:view.frame];
         [profileImageView setContentMode:UIViewContentModeScaleAspectFill];
         [profileImageView setTag:2];
         [profileImageView setAsynchronous:YES];
-        [profileImageView setReflectionAlpha:0.4];
+        [profileImageView setReflectionAlpha:0.5];
         [profileImageView setReflectionGap:0];
-        [profileImageView setReflectionScale:0.5];
+        [profileImageView setReflectionScale:0.7];
         [view addSubview:profileImageView];
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 160, view.frame.size.width, 30)];
@@ -128,12 +133,7 @@
     {
         case iCarouselOptionWrap:
         {
-            return NO;
-        }
-        case iCarouselOptionSpacing:
-        {
-            //add a bit of spacing between the item views
-            return value * 1.1f;
+            return YES;
         }
         default:
         {
@@ -223,6 +223,11 @@
     }
 
     return searchBar_;
+}
+
+- (NSString *)getNavigationTitle
+{
+    return @"Friends";
 }
 
 - (void)movedToMainView

@@ -13,6 +13,7 @@
 #import "FXImageView.h"
 #import "NLYoutubeVideo.h"
 #import "NLUtils.h"
+#import "UIColor+NLColors.h"
 
 @interface NLYoutubeResultsViewController ()
 @end
@@ -40,7 +41,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
-    [_tableView setRowHeight:140];
+    [_tableView setRowHeight:122];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tableView];
@@ -87,7 +88,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]]];
+    [cell setBackgroundColor:[UIColor baseViewBackgroundColor]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

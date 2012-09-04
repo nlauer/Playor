@@ -168,6 +168,11 @@
     return searchBar_;
 }
 
+- (NSString *)getNavigationTitle
+{
+    return @"Search";
+}
+
 - (void)removedFromMainView
 {
     [self finishLoading];

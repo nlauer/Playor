@@ -595,7 +595,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-            CGFloat count = [self circularCarouselItemCount];
+            CGFloat count = [self circularCarouselItemCount]/1.7;
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(_itemWidth * spacing / 2.0f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];

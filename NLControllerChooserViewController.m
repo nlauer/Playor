@@ -48,8 +48,8 @@
 {
     [super viewDidLoad];
     self.title = @"Noctis";
+    [self.view setClipsToBounds:YES];
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
-    [self.view setBackgroundColor:[UIColor darkGrayColor]];
 
     iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [carousel setType:iCarouselTypeLinear];
@@ -170,7 +170,8 @@
         if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getTitleView)]) {
             // Set the title as a custom view
             [self.navigationItem setTitleView:[[_viewControllers objectAtIndex:index] getTitleView]];
-        } else if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getNavigationTitle)]) {
+        } 
+        if ([[_viewControllers objectAtIndex:index] respondsToSelector:@selector(getNavigationTitle)]) {
             // Set the nav bar's title
             self.title = [[_viewControllers objectAtIndex:index] getNavigationTitle];
         }

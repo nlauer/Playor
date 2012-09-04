@@ -60,56 +60,41 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [super viewDidLoad];
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
-    [self.view setBackgroundColor:[UIColor playlistBarBackgroundColor]];
     
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
-    CAGradientLayer *topShadow = [CAGradientLayer layer];
-    topShadow.frame = CGRectMake(0, 0, playlistTitleView.frame.size.width, 44);
-    topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.9 alpha:0.4f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
-    [playlistTitleView.layer insertSublayer:topShadow atIndex:0];
-    [playlistTitleView setBackgroundColor:[UIColor blackColor]];
+    [playlistTitleView setBackgroundColor:[UIColor playlistBarColor]];
     [self.view addSubview:playlistTitleView];
     
     playlistTitleLabel_ = [[UILabel alloc] init];
     [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
     [playlistTitleLabel_ setText:_playlist.name];
-    [playlistTitleLabel_ setFont:[UIFont boldSystemFontOfSize:16]];
-    [playlistTitleLabel_ setTextColor:[UIColor whiteColor]];
+    [playlistTitleLabel_ setFont:[UIFont boldSystemFontOfSize:17]];
+    [playlistTitleLabel_ setTextColor:[UIColor solidColorWithRed:47 green:47 blue:47]];
     [playlistTitleLabel_ sizeToFit];
     [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
     [playlistTitleView addSubview:playlistTitleLabel_];
     
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
-    [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg"] forState:UIControlStateNormal];
-    UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"playlist_toggle_arrow"]];
-    [arrowImageView setCenter:CGPointMake(playlistEditorButton.frame.size.width/2, playlistEditorButton.frame.size.height/2)];
-    [arrowImageView setTag:1919];
-    [playlistEditorButton addSubview:arrowImageView];
+    [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background"] forState:UIControlStateNormal];
+    [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_highlighted"] forState:UIControlStateHighlighted];
+    [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_selected"] forState:UIControlStateSelected];
+    [playlistEditorButton setImage:[UIImage imageNamed:@"arrow"] forState:UIControlStateNormal];
+    [playlistEditorButton setImage:[UIImage imageNamed:@"arrow_highlighted"] forState:UIControlStateHighlighted];
+    [playlistEditorButton setImage:[UIImage imageNamed:@"arrow_pressed"] forState:UIControlStateSelected];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor:) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
     
-    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 40, 40)];
-    [infoLabel setBackgroundColor:[UIColor clearColor]];
-    [infoLabel setText:@"Swipe right on songs to add to playlist, swipe up on playlist items to remove"];
-    [infoLabel setTextAlignment:UITextAlignmentCenter];
-    [infoLabel setNumberOfLines:2];
-    [infoLabel setLineBreakMode:UILineBreakModeWordWrap];
-    [infoLabel setFont:[UIFont systemFontOfSize:14]];
-    [infoLabel setTextColor:[UIColor whiteColor]];
-    [infoLabel setTag:69];
-    [infoLabel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 10 - 32)];
-    [self.view addSubview:infoLabel];
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, playlistTitleView.frame.size.height, playlistTitleView.frame.size.width, self.view.frame.size.height - playlistTitleView.frame.size.height)];
+    [contentView setBackgroundColor:[UIColor playlistBarBackgroundColor]];
+    [self.view addSubview:contentView];
     
-    if ([_playlist.videos count] > 0) {
-        [infoLabel setHidden:YES];
-    }
-    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
     [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
     [carousel setContentOffset:CGSizeMake(0, 0)];
     [self setICarousel:carousel];
-    [self.view addSubview:carousel];
+    [contentView addSubview:carousel];
 }
 
 - (void)viewDidUnload
@@ -122,27 +107,28 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 
 - (void)togglePlaylistEditor:(UIButton *)button
 {
-    UIImageView *arrowImageView = (UIImageView *)[button viewWithTag:1919];
+    [button setSelected:!button.selected];
+    UIImageView *arrowImageView = button.imageView;
     arrowImageView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     if (!isShowingEditor_) {
+        [arrowImageView setImage:[UIImage imageNamed:@"arrow_pressed"]];
         [UIView animateWithDuration:0.3 animations:^{
             CGAffineTransform rotationTransform = CGAffineTransformIdentity;
             rotationTransform = CGAffineTransformRotate(rotationTransform, M_PI);
             arrowImageView.transform = rotationTransform;
         }];
         
-        [button setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg_pressed"] forState:UIControlStateNormal];
         NLPlaylistEditorViewController *playlistEditor = [[NLPlaylistEditorViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:playlistEditor];
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] presentViewControllerBehindPlaylistBar:nav];
     } else {
+        [arrowImageView setImage:[UIImage imageNamed:@"arrow"]];
         [UIView animateWithDuration:0.3 animations:^{
             CGAffineTransform rotationTransform = CGAffineTransformIdentity;
             rotationTransform = CGAffineTransformRotate(rotationTransform, 0);
             arrowImageView.transform = rotationTransform;
         }];
         
-        [button setBackgroundImage:[UIImage imageNamed:@"playlist_toggle_bg"] forState:UIControlStateNormal];
         [[((NLAppDelegate *)[[UIApplication sharedApplication] delegate]) containerController] dismissPresentedViewControllerBehindPlaylistBar];
     }
     isShowingEditor_ = !isShowingEditor_;
@@ -157,7 +143,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     if (playlist != _playlist) {
         _playlist = playlist;
-        [[self.view viewWithTag:69] setHidden:([_playlist.videos count] > 0) ? YES : NO];
         [_iCarousel reloadData];
         [playlistTitleLabel_ setText:playlist.name];
     }
@@ -198,8 +183,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 64)];
         [view setBackgroundColor:[UIColor blackColor]];
         [view setUserInteractionEnabled:YES];
-        [view.layer setBorderWidth:3.0];
-        [view.layer setBorderColor:[[UIColor grayColor] CGColor]];
         
         imageView = [[FXImageView alloc] initWithFrame:view.bounds];
         [imageView setAsynchronous:YES];
@@ -274,15 +257,8 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark Receiving and Deleting Methods
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
-    [[self.view viewWithTag:69] setHidden:YES];
-    if (![_playlist.videos containsVideo:video]) {
-        [_playlist.videos addObject:video];
-        [self updateICarousel];
-        [_iCarousel scrollToItemAtIndex:[_playlist.videos count] - 1 animated:YES];
-    } else {
-        int index = [_playlist.videos indexOfVideo:video];
-        [_iCarousel scrollToItemAtIndex:index animated:YES];
-    }
+    int index = [_playlist.videos indexOfVideo:video];
+    [_iCarousel scrollToItemAtIndex:index animated:YES];
 }
 
 - (void)deletePlaylistItem:(UISwipeGestureRecognizer *)swipeRecognizer

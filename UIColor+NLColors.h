@@ -15,5 +15,6 @@
 + (UIColor *)navBarTint;
 + (UIColor *)baseViewBackgroundColor;
 + (UIColor *)playlistBarBackgroundColor;
++ (UIColor *)playlistBarColor;
 
 @end

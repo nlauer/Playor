@@ -15,19 +15,29 @@
     return [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:1];
 }
 
++ (UIColor *)colorWithPatternImageForName:(NSString *)name
+{
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:name]];
+}
+
 + (UIColor *)navBarTint
 {
-    return [UIColor darkGrayColor];
+    return [UIColor blackColor];
 }
 
 + (UIColor *)baseViewBackgroundColor
 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg"]];
+    return [self colorWithPatternImageForName:@"background"];
 }
 
 + (UIColor *)playlistBarBackgroundColor
 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_bg"]];
+    return [self colorWithPatternImageForName:@"playlist_bar_background"];
+}
+
++ (UIColor *)playlistBarColor
+{
+    return [self colorWithPatternImageForName:@"playlist_bar"];
 }
 
 @end
