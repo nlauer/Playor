@@ -61,6 +61,10 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
     
+    UIImageView *shadowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"playlist_bar_top_shadow"]];
+    [shadowView setFrame:CGRectMake(0, -shadowView.frame.size.height, shadowView.frame.size.width, shadowView.frame.size.height)];
+    [self.view addSubview:shadowView];
+    
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
     [playlistTitleView setBackgroundColor:[UIColor playlistBarColor]];
     [self.view addSubview:playlistTitleView];

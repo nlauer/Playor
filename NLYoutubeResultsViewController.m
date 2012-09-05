@@ -21,6 +21,7 @@
 @implementation NLYoutubeResultsViewController {
     UILabel *addToPlaylistLabel_;
     BOOL isLoadingVideos_;
+    BOOL shouldAllowPan_;
 }
 @synthesize tableView = _tableView, youtubeLinksArray = _youtubeLinksArray;
 
@@ -37,6 +38,7 @@
 {
     [super viewDidLoad];
     [self.view setFrame:[NLUtils getContainerTopControllerFrame]];
+    shouldAllowPan_ = YES;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
@@ -254,6 +256,7 @@
             [addToPlaylistLabel_ setTextColor:[UIColor blackColor]];
         }
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+        shouldAllowPan_ = YES;
         BOOL shouldAddVideo = panGesture.view.center.x >= self.view.frame.size.width-60 ? YES : NO;
         [UIView animateWithDuration:0.3 animations:^{
             panGesture.view.center = CGPointMake(self.view.frame.size.width/2, panGesture.view.center.y);
@@ -278,8 +281,16 @@
 #pragma mark UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panGestureRecognizer {
-    CGPoint translation = [panGestureRecognizer translationInView:self.view];
-    return fabs(translation.x) > fabs(translation.y);
+    if (shouldAllowPan_) {
+        CGPoint translation = [panGestureRecognizer translationInView:self.view];
+        BOOL shouldBegin = fabs(translation.x) > fabs(translation.y);
+        if (shouldBegin) {
+            shouldAllowPan_ = NO;
+        }
+        return shouldBegin;
+    } else {
+        return NO;
+    }
 }
 
 
