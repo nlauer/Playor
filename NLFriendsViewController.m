@@ -42,7 +42,7 @@
     [self.view setBackgroundColor:[UIColor blackColor]];
     
     iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 170)];
-    [carousel setType:iCarouselTypeRotary];
+    [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
     [carousel setHidden:YES];
@@ -69,8 +69,8 @@
 - (void)setupICarousel
 {
     [_iCarousel setHidden:NO];
-    [_iCarousel setCurrentItemIndex:0];
     [_iCarousel reloadData];
+    [_iCarousel setCurrentItemIndex:0];
 }
 
 - (NSString *)friendNameForIndex:(NSUInteger)index
@@ -135,7 +135,15 @@
     {
         case iCarouselOptionWrap:
         {
-            return YES;
+            if ([_carouselArray count] > 3) {
+                return YES;
+            } else {
+                return NO;
+            }
+        }
+        case iCarouselOptionSpacing:
+        {
+            return value * 1.1f;
         }
         default:
         {
@@ -192,13 +200,6 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
-    
-    if ([searchBar.text isEqualToString:@""]) {
-        _carouselArray = _facebookFriends;
-    } else {
-        _carouselArray = [_facebookFriends filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K contains[cd] %@", @"name", searchBar.text]];
-    }
-    [self setupICarousel];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar

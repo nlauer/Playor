@@ -77,7 +77,6 @@
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
 		85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45D515E0CB7000349534 /* UIColor+NLColors.m */; };
 		85FB45E315E1DB3C00349534 /* NLSearchQueriesFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */; };
-		85FB45E615E303CC00349534 /* NLPlaylistEditorPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */; };
 		85FB45EF15E4520200349534 /* NLVideoLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45EE15E4520200349534 /* NLVideoLoadingView.m */; };
 /* End PBXBuildFile section */
 
@@ -203,8 +202,6 @@
 		85FB45D515E0CB7000349534 /* UIColor+NLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NLColors.m"; sourceTree = "<group>"; };
 		85FB45DF15E1CAA300349534 /* NLSearchQueriesFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLSearchQueriesFactory.h; sourceTree = "<group>"; };
 		85FB45E215E1DB3C00349534 /* NLSearchQueriesFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLSearchQueriesFactory.m; sourceTree = "<group>"; };
-		85FB45E415E303CC00349534 /* NLPlaylistEditorPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistEditorPictureView.h; sourceTree = "<group>"; };
-		85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistEditorPictureView.m; sourceTree = "<group>"; };
 		85FB45ED15E4520200349534 /* NLVideoLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLVideoLoadingView.h; sourceTree = "<group>"; };
 		85FB45EE15E4520200349534 /* NLVideoLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLVideoLoadingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -305,8 +302,6 @@
 		853FEB3615BB88D0002A1EB5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				85FB45E415E303CC00349534 /* NLPlaylistEditorPictureView.h */,
-				85FB45E515E303CC00349534 /* NLPlaylistEditorPictureView.m */,
 				85FB45ED15E4520200349534 /* NLVideoLoadingView.h */,
 				85FB45EE15E4520200349534 /* NLVideoLoadingView.m */,
 			);
@@ -646,7 +641,6 @@
 				85FB45B815DDF3E200349534 /* NLUtils.m in Sources */,
 				85FB45D615E0CB7000349534 /* UIColor+NLColors.m in Sources */,
 				85FB45E315E1DB3C00349534 /* NLSearchQueriesFactory.m in Sources */,
-				85FB45E615E303CC00349534 /* NLPlaylistEditorPictureView.m in Sources */,
 				85FB45EF15E4520200349534 /* NLVideoLoadingView.m in Sources */,
 				8505AB8A15E600E000DC1B69 /* NLYoutubeSearchViewController.m in Sources */,
 				8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */,

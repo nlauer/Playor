@@ -61,7 +61,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     isShowingEditor_ = NO;
 	[self.view setFrame:CGRectMake(0, 0, self.view.frame.size.width, 128)];
     
-    UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 20 - 64)];
+    UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
     [playlistTitleView setBackgroundColor:[UIColor playlistBarColor]];
     [self.view addSubview:playlistTitleView];
     
@@ -74,7 +74,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
     [playlistTitleView addSubview:playlistTitleLabel_];
     
-    UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 44, 0, 44, 44)];
+    UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 45, 0, 45, 45)];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background"] forState:UIControlStateNormal];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_highlighted"] forState:UIControlStateHighlighted];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_selected"] forState:UIControlStateSelected];
@@ -257,8 +257,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark Receiving and Deleting Methods
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
-    int index = [_playlist.videos indexOfVideo:video];
-    [_iCarousel scrollToItemAtIndex:index animated:YES];
+    if (![_playlist.videos containsVideo:video]) {
+        [_playlist.videos addObject:video];
+        [self updateICarousel];
+        [_iCarousel scrollToItemAtIndex:[_playlist.videos count] - 1 animated:YES];
+    } else {
+        int index = [_playlist.videos indexOfVideo:video];
+        [_iCarousel scrollToItemAtIndex:index animated:YES];
+    }
 }
 
 - (void)deletePlaylistItem:(UISwipeGestureRecognizer *)swipeRecognizer

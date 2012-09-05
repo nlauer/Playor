@@ -12,7 +12,7 @@
 #import "NLPlaylistManager.h"
 #import "NLPlaylist.h"
 #import "NLUtils.h"
-#import "NLPlaylistEditorPictureView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface NLPlaylistEditorViewController ()
 @property (strong, nonatomic) UITableView *tableView;
@@ -50,7 +50,7 @@
     [_tableView setDataSource:self];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [_tableView setRowHeight:60];
+    [_tableView setRowHeight:48];
     [self.view addSubview:_tableView];
 }
 
@@ -94,7 +94,7 @@
     [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
     NSIndexPath *oldIndexPath = selectedIndexPath_;
     selectedIndexPath_ = indexPath;
-    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -
@@ -121,63 +121,23 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellID = @"playlistCell";
-    NLPlaylistEditorPictureView *pictureView = nil;
-    UILabel *titleLabel = nil;
-    UIView *titleView = nil;
-    UIImageView *checkmarkImageView = nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        [cell setSelectionStyle:UITableViewCellEditingStyleNone];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        pictureView = [[NLPlaylistEditorPictureView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
-        [pictureView setTag:1337];
-        [cell addSubview:pictureView];
-        
-        titleView = [[UIView alloc] initWithFrame:pictureView.frame];
-        [titleView setTag:999];
-        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
-        [cell addSubview:titleView];
-        
-        titleLabel = [[UILabel alloc] init];
-        [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextColor:[UIColor whiteColor]];
-        [titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
-        [titleLabel setTag:13371337];
-        [cell addSubview:titleLabel];
-        
-        CAGradientLayer *topShadow = [CAGradientLayer layer];
-        topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
-        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
-        [cell.layer insertSublayer:topShadow atIndex:0];
-        
-        CAGradientLayer *bottomShadow = [CAGradientLayer layer];
-        bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
-        bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.7] CGColor], nil];
-        [cell.layer insertSublayer:bottomShadow atIndex:0];
-        
-        checkmarkImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
-        [checkmarkImageView setCenter:CGPointMake(cell.frame.size.width - 30, tableView.rowHeight/2)];
-        [checkmarkImageView setTag:99999];
-        [cell addSubview:checkmarkImageView];
-    } else {
-        pictureView = (NLPlaylistEditorPictureView *)[cell viewWithTag:1337];
-        titleLabel = (UILabel *)[cell viewWithTag:13371337];
-        titleView = [cell viewWithTag:999];
-        checkmarkImageView = (UIImageView *)[cell viewWithTag:99999];
+        [cell.textLabel setFont:[UIFont systemFontOfSize:16]];
+        [cell setIndentationLevel:2];
     }
-    NLPlaylist *playlist = [[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row];
-    [pictureView updatePlaylistVideos:playlist.videos];
-    
-    [titleLabel setText:[playlist name]];
-    [titleLabel sizeToFit];
-    [titleLabel setFrame:CGRectMake(10, tableView.rowHeight/2 - titleLabel.frame.size.height/2, cell.frame.size.width - 20, titleLabel.frame.size.height)];
     
     if (indexPath.row == selectedIndexPath_.row) {
-        [checkmarkImageView setHidden:NO];
+        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
     } else {
-        [checkmarkImageView setHidden:YES];
+        [cell.textLabel setTextColor:[UIColor whiteColor]];
     }
+    
+    NLPlaylist *playlist = [[[NLPlaylistManager sharedInstance] playlists] objectAtIndex:indexPath.row];
+    [cell.textLabel setText:playlist.name];
     
     return cell;
 }
@@ -214,15 +174,19 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor clearColor]];
+    if (indexPath.row == selectedIndexPath_.row) {
+            [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_cell_selected"]]];
+    } else {
+        [cell setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"playlist_cell"]]];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row != selectedIndexPath_.row) {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (selectedIndexPath_.row != indexPath.row) {
         [self selectIndexPath:indexPath];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 @end
