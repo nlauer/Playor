@@ -11,7 +11,7 @@
 #import "NSMutableArray+Shuffle.h"
 
 @implementation NLPlaylist
-@synthesize name = _name, videos = _videos, isContinuous = _isContinuous, isShuffled = _isShuffled;
+@synthesize name = _name, videos = _videos, isContinuous = _isContinuous;
 
 - (id)init
 {
@@ -38,7 +38,6 @@
         _videos = [decoder decodeObjectForKey:@"videos"];
         _name = [decoder decodeObjectForKey:@"name"];
         _isContinuous = [decoder decodeBoolForKey:@"continuous"];
-        _isShuffled = [decoder decodeBoolForKey:@"shuffle"];
     }
     
     return self;
@@ -48,7 +47,6 @@
     [encoder encodeObject:_videos forKey:@"videos"];
     [encoder encodeObject:_name forKey:@"name"];
     [encoder encodeBool:_isContinuous forKey:@"continuous"];
-    [encoder encodeBool:_isShuffled forKey:@"shuffle"];
 }
 
 @end

@@ -13,7 +13,6 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *videos;
 @property BOOL isContinuous;
-@property BOOL isShuffled;
 
 - (void)shuffle;
 
