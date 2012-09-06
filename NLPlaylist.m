@@ -8,8 +8,10 @@
 
 #import "NLPlaylist.h"
 
+#import "NSMutableArray+Shuffle.h"
+
 @implementation NLPlaylist
-@synthesize name = _name, videos = _videos;
+@synthesize name = _name, videos = _videos, isContinuous = _isContinuous, isShuffled = _isShuffled;
 
 - (id)init
 {
@@ -22,6 +24,11 @@
     return self;
 }
 
+- (void)shuffle
+{
+    [_videos shuffle];
+}
+
 #pragma mark -
 #pragma mark NSCoding
 
@@ -30,6 +37,8 @@
     if (self) {
         _videos = [decoder decodeObjectForKey:@"videos"];
         _name = [decoder decodeObjectForKey:@"name"];
+        _isContinuous = [decoder decodeBoolForKey:@"continuous"];
+        _isShuffled = [decoder decodeBoolForKey:@"shuffle"];
     }
     
     return self;
@@ -38,6 +47,8 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_videos forKey:@"videos"];
     [encoder encodeObject:_name forKey:@"name"];
+    [encoder encodeBool:_isContinuous forKey:@"continuous"];
+    [encoder encodeBool:_isShuffled forKey:@"shuffle"];
 }
 
 @end

@@ -30,6 +30,8 @@
 @implementation NLPlaylistBarViewController {
     BOOL isShowingEditor_;
     UILabel *playlistTitleLabel_;
+    UIButton *shuffleButton_;
+    UIButton *continuousButton_;
     int playingItemIndex_;
 }
 @synthesize iCarousel = _iCarousel, playlist = _playlist;
@@ -65,10 +67,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [shadowView setFrame:CGRectMake(0, -shadowView.frame.size.height, shadowView.frame.size.width, shadowView.frame.size.height)];
     [self.view addSubview:shadowView];
     
+    // Top view containing all the buttons and the title
     UIView *playlistTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 45)];
     [playlistTitleView setBackgroundColor:[UIColor playlistBarColor]];
     [self.view addSubview:playlistTitleView];
     
+    // The title label of the playlist
     playlistTitleLabel_ = [[UILabel alloc] init];
     [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
     [playlistTitleLabel_ setText:_playlist.name];
@@ -78,6 +82,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
     [playlistTitleView addSubview:playlistTitleLabel_];
     
+    //The Playlist options buttons
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 45, 0, 45, 45)];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background"] forState:UIControlStateNormal];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_highlighted"] forState:UIControlStateHighlighted];
@@ -87,6 +92,21 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistEditorButton setImage:[UIImage imageNamed:@"arrow_pressed"] forState:UIControlStateSelected];
     [playlistEditorButton addTarget:self action:@selector(togglePlaylistEditor:) forControlEvents:UIControlEventTouchUpInside];
     [playlistTitleView addSubview:playlistEditorButton];
+    
+    UIImage *shuffleImage = [UIImage imageNamed:@"shuffle"];
+    shuffleButton_ = [[UIButton alloc] initWithFrame:CGRectMake(playlistEditorButton.frame.origin.x - 3 - shuffleImage.size.width, 0, shuffleImage.size.width, shuffleImage.size.height)];
+    [shuffleButton_ addTarget:self action:@selector(shuffleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [shuffleButton_ setBackgroundImage:shuffleImage forState:UIControlStateNormal];
+    [shuffleButton_ setBackgroundImage:[UIImage imageNamed:@"shuffle_pressed"] forState:UIControlStateHighlighted];
+    [playlistTitleView addSubview:shuffleButton_];
+    
+    UIImage *continuousImage = [UIImage imageNamed:@"continuous"];
+    continuousButton_ = [[UIButton alloc] initWithFrame:CGRectMake(shuffleButton_.frame.origin.x - continuousImage.size.width, 0, continuousImage.size.width, continuousImage.size.height)];
+    [continuousButton_ addTarget:self action:@selector(continuousButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [continuousButton_ setBackgroundImage:continuousImage forState:UIControlStateNormal];
+    [continuousButton_ setBackgroundImage:[UIImage imageNamed:@"continuous_pressed"] forState:UIControlStateSelected];
+    [continuousButton_ setSelected:_playlist.isContinuous];
+    [playlistTitleView addSubview:continuousButton_];
     
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, playlistTitleView.frame.size.height, playlistTitleView.frame.size.width, self.view.frame.size.height - playlistTitleView.frame.size.height)];
     [contentView setBackgroundColor:[UIColor playlistBarBackgroundColor]];
@@ -138,6 +158,19 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     isShowingEditor_ = !isShowingEditor_;
 }
 
+- (void)shuffleButtonPressed:(UIButton *)shuffleButton
+{
+    [_playlist shuffle];
+    [_iCarousel reloadData];
+}
+
+- (void)continuousButtonPressed:(UIButton *)continuousButton
+{
+    BOOL isSelected = !continuousButton.selected;
+    [continuousButton setSelected:isSelected];
+    [_playlist setIsContinuous:isSelected];
+}
+
 - (void)updateICarousel
 {
     [_iCarousel insertItemAtIndex:[_playlist.videos count]-1 animated:YES];
@@ -149,6 +182,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         _playlist = playlist;
         [_iCarousel reloadData];
         [playlistTitleLabel_ setText:playlist.name];
+        [continuousButton_ setSelected:_playlist.isContinuous];
     }
     [_iCarousel scrollToItemAtIndex:0 animated:NO];
 }
@@ -159,6 +193,12 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 - (void)videoPlaybackDidEnd
 {
     playingItemIndex_ ++;
+    
+    // Mod the result so that it will scroll back to first position
+    if (_playlist.isContinuous) {
+        playingItemIndex_ = playingItemIndex_ % [_playlist.videos count];
+    }
+    
     if (playingItemIndex_ < [_playlist.videos count]) {
         [_iCarousel scrollToItemAtIndex:playingItemIndex_ animated:YES];
         [self loadNewVideoWithIndex:playingItemIndex_];
