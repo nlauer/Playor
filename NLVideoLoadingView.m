@@ -123,14 +123,6 @@
     [self dismissLoadingView];
 }
 
-- (void)hideDismissButton
-{
-    [dismissButton_ setUserInteractionEnabled:NO];
-    [UIView animateWithDuration:0.3 animations:^{
-        [dismissButton_ setAlpha:0.0];
-    }];
-}
-
 - (void)removeFromSuperview
 {
     [super removeFromSuperview];

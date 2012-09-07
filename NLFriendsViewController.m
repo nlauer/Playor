@@ -240,7 +240,7 @@
 
 - (void)movedToMainView
 {
-    if (!isPastFirstRun_) {
+    if (!isPastFirstRun_ || ![[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
         [[NLFacebookManager sharedInstance] performBlockAfterFBLogin:^{
             [[NLFacebookFriendFactory sharedInstance] createFacebookFriendsWithDelegate:self];
         }];

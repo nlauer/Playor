@@ -86,8 +86,7 @@
         [self finishLoading];
         return;
     }
-    if ([self.youtubeLinksArray count] != 0) {
-        // One array has already been returned, meaning the current array was the last array.  Stop loading
+    if (numberOfActiveFactories == 0) {
         [self finishLoading];
     }
     [self insertNewLinksIntoTableView:links];

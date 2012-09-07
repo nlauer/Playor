@@ -74,7 +74,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [self.view addSubview:playlistTitleView];
     
     //The Playlist options buttons
-    UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 45, 0, 45, 45)];
+    UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 51, 0, 51, 45)];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background"] forState:UIControlStateNormal];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_highlighted"] forState:UIControlStateHighlighted];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background_selected"] forState:UIControlStateSelected];
@@ -85,7 +85,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleView addSubview:playlistEditorButton];
     
     UIImage *shuffleImage = [UIImage imageNamed:@"shuffle"];
-    shuffleButton_ = [[UIButton alloc] initWithFrame:CGRectMake(playlistEditorButton.frame.origin.x - 3 - shuffleImage.size.width, 0, shuffleImage.size.width, shuffleImage.size.height)];
+    shuffleButton_ = [[UIButton alloc] initWithFrame:CGRectMake(playlistEditorButton.frame.origin.x - shuffleImage.size.width, 0, shuffleImage.size.width, shuffleImage.size.height)];
     [shuffleButton_ addTarget:self action:@selector(shuffleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [shuffleButton_ setBackgroundImage:shuffleImage forState:UIControlStateNormal];
     [shuffleButton_ setBackgroundImage:[UIImage imageNamed:@"shuffle_pressed"] forState:UIControlStateSelected];
@@ -141,15 +141,14 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     if (playlist != _playlist) {
         _playlist = playlist;
-        [_iCarousel reloadData];
+        [self reloadCarouselWithAnimationDrop];
         [playlistTitleLabel_ setText:playlist.name];
         [continuousButton_ setSelected:_playlist.isContinuous];
         [shuffleButton_ setSelected:_playlist.isShuffle];
     }
-    [_iCarousel scrollToItemAtIndex:0 animated:NO];
 }
 
-- (void)reloadCarouselWithAnimation
+- (void)reloadCarouselWithAnimationDrop
 {
     [self.view setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.3 animations:^{
@@ -161,6 +160,22 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [UIView animateWithDuration:0.3 animations:^{
             CGAffineTransform translate = CGAffineTransformMakeTranslation(0, 0);
             [_iCarousel setTransform:translate];
+        } completion:^(BOOL finished) {
+            [self.view setUserInteractionEnabled:YES];
+        }];
+    }];
+}
+
+- (void)reloadCarouselWithAnimationFade
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        [_iCarousel setAlpha:0];
+    } completion:^(BOOL finished) {
+        [_iCarousel reloadData];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            [_iCarousel setAlpha:1];
         } completion:^(BOOL finished) {
             [self.view setUserInteractionEnabled:YES];
         }];
@@ -204,7 +219,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     BOOL isSelected = !shuffleButton.selected;
     [shuffleButton setSelected:isSelected];
     [_playlist setIsShuffle:isSelected];
-    [self reloadCarouselWithAnimation];
+    [self reloadCarouselWithAnimationFade];
 }
 
 - (void)continuousButtonPressed:(UIButton *)continuousButton

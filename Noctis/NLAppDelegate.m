@@ -128,10 +128,10 @@
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(videoDidEnterFullscreen:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
         [notificationCenter addObserver:self selector:@selector(videoDidExitFullscreen:) name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    }
         
-    [self setupLoadingView];
-    [_loadingView showInView:self.containerController.view withVideo:video];
+        [self setupLoadingView];
+        [_loadingView showInView:self.containerController.view withVideo:video];
+    }
     
     [self setupVideoWebView];
     
@@ -159,6 +159,7 @@
     isPlayingVideo_ = NO;
     [_videoWebView stopLoading];
     [_videoWebView loadRequest:nil];
+    [_videoWebView removeFromSuperview];
 }
 
 - (void)loadTimedOut
@@ -180,6 +181,8 @@
     if (!_videoWebView) {
         _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
         [_videoWebView setDelegate:self];
+    }
+    if (![self.containerController.view.subviews containsObject:_videoWebView]) {
         [self.containerController.view addSubview:_videoWebView];
     }
 }
@@ -198,6 +201,7 @@
     
     [_videoWebView stopLoading];
     [_videoWebView loadRequest:nil];
+    [_videoWebView removeFromSuperview];
     
     [_videoPlayerDelegate videoPlaybackDidEnd];
 }
@@ -289,6 +293,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [_videoWebView stopLoading];
         [_videoWebView loadRequest:nil];
+        [_videoWebView removeFromSuperview];
         [_videoPlayerDelegate videoPlaybackDidEnd];
     });
 }
@@ -315,7 +320,6 @@
 #pragma mark UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [_loadingView hideDismissButton];
     UIButton *b = [self findButtonInView:_videoWebView];
     [b sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
