@@ -14,7 +14,7 @@
 #import "NSArray+Videos.h"
 
 #define YOUTUBE_SEARCH_STRING @"https://gdata.youtube.com/feeds/api/videos?q=%@&max-results=%d&start-index=%d&v=2&alt=json&format=6,1,5&category=Music"
-#define YOUTUBE_MOST_POPULAR_MUSIC_QUERY @"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated_Music?v=2&alt=json"
+#define YOUTUBE_MOST_POPULAR_MUSIC_QUERY @"https://gdata.youtube.com/feeds/api/standardfeeds/most_popular_Music?time=this_month&v=2&alt=json"
 
 @implementation NLYoutubeLinksFromFBLikesFactory {
     int numberOfActiveConnections_;

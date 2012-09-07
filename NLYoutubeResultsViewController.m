@@ -274,6 +274,7 @@
 {
     int index = [_tableView indexPathForCell:cell].row;
     NLYoutubeVideo *youtubeVideo = [_youtubeLinksArray objectAtIndex:index];
+    [youtubeVideo setAddedDate:[NSDate date]];
     [[NLPlaylistBarViewController sharedInstance] receiveYoutubeVideo:youtubeVideo];
 }
 

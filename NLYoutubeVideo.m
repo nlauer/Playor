@@ -9,7 +9,7 @@
 #import "NLYoutubeVideo.h"
 
 @implementation NLYoutubeVideo
-@synthesize youtubeID = _youtubeID, thumbnailURL = _thumbnailURL, title = _title, viewCount = _viewCount;
+@synthesize youtubeID = _youtubeID, thumbnailURL = _thumbnailURL, title = _title, addedDate = _addedDate;
 
 - (id)initWithDataDictionary:(NSDictionary *)dataDictionary
 {
@@ -21,7 +21,6 @@
             self.title = [self getVideoTitleFromDictionary:dataDictionary];
             self.youtubeID = [self getYoutubeIDFromDictionary:dataDictionary];
             self.thumbnailURL = [self getVideoThumnailURLFromDictionary:dataDictionary];
-            self.viewCount = [self getVideoViewCountFromDictionary:dataDictionary];
         }
     }
     
@@ -71,12 +70,6 @@
     return [NSURL URLWithString:thumbnailString];
 }
 
-- (int)getVideoViewCountFromDictionary:(NSDictionary *)dataDictionary
-{
-    NSString *viewCount = [[dataDictionary objectForKey:@"yt$statistics"] objectForKey:@"viewCount"];
-    return [viewCount intValue];
-}
-
 #pragma mark -
 #pragma mark PlaylistItemDelegate
 - (NSURL *)getPictureURL
@@ -94,6 +87,7 @@
         _thumbnailURL = [aDecoder decodeObjectForKey:@"thumbnailURL"];
         _title = [aDecoder decodeObjectForKey:@"title"];
         _youtubeID = [aDecoder decodeObjectForKey:@"youtubeID"];
+        _addedDate = [aDecoder decodeObjectForKey:@"addedDate"];
     }
     
     return self;
@@ -104,6 +98,7 @@
     [aCoder encodeObject:_thumbnailURL forKey:@"thumbnailURL"];
     [aCoder encodeObject:_title forKey:@"title"];
     [aCoder encodeObject:_youtubeID forKey:@"youtubeID"];
+    [aCoder encodeObject:_addedDate forKey:@"addedDate"];
 }
 
 @end
