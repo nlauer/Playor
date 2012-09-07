@@ -49,7 +49,7 @@
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
     
-    nameLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, carousel.frame.origin.y + carousel.frame.size.height, self.view.frame.size.width - 20, 30)];
+    nameLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, carousel.frame.origin.y + carousel.frame.size.height + 5, self.view.frame.size.width - 20, 30)];
     [nameLabel_ setTextAlignment:UITextAlignmentCenter];
     [nameLabel_ setBackgroundColor:[UIColor clearColor]];
     [nameLabel_ setTextColor:[UIColor whiteColor]];
@@ -235,7 +235,7 @@
 
 - (NSString *)getNavigationTitle
 {
-    return @"Friends";
+    return @"My Friends";
 }
 
 - (void)movedToMainView

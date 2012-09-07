@@ -21,6 +21,7 @@
 #import "NLAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+NLColors.h"
+#import "UIView+Shadow.h"
 
 @interface NLPlaylistBarViewController ()
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -72,16 +73,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleView setBackgroundColor:[UIColor playlistBarColor]];
     [self.view addSubview:playlistTitleView];
     
-    // The title label of the playlist
-    playlistTitleLabel_ = [[UILabel alloc] init];
-    [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
-    [playlistTitleLabel_ setText:_playlist.name];
-    [playlistTitleLabel_ setFont:[UIFont boldSystemFontOfSize:17]];
-    [playlistTitleLabel_ setTextColor:[UIColor solidColorWithRed:47 green:47 blue:47]];
-    [playlistTitleLabel_ sizeToFit];
-    [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - 44 - 10, playlistTitleLabel_.frame.size.height)];
-    [playlistTitleView addSubview:playlistTitleLabel_];
-    
     //The Playlist options buttons
     UIButton *playlistEditorButton = [[UIButton alloc] initWithFrame:CGRectMake(playlistTitleView.frame.size.width - 45, 0, 45, 45)];
     [playlistEditorButton setBackgroundImage:[UIImage imageNamed:@"arrow_background"] forState:UIControlStateNormal];
@@ -109,11 +100,22 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [continuousButton_ setSelected:_playlist.isContinuous];
     [playlistTitleView addSubview:continuousButton_];
     
+    // The title label of the playlist
+    playlistTitleLabel_ = [[UILabel alloc] init];
+    [playlistTitleLabel_ setBackgroundColor:[UIColor clearColor]];
+    [playlistTitleLabel_ setText:_playlist.name];
+    [playlistTitleLabel_ setFont:[UIFont boldSystemFontOfSize:17]];
+    [playlistTitleLabel_ setTextColor:[UIColor solidColorWithRed:47 green:47 blue:47]];
+    [playlistTitleLabel_ sizeToFit];
+    [playlistTitleLabel_ setFrame:CGRectMake(10, playlistTitleView.frame.size.height/2 - playlistTitleLabel_.frame.size.height/2, playlistTitleView.frame.size.width - continuousButton_.frame.origin.x, playlistTitleLabel_.frame.size.height)];
+    [playlistTitleView addSubview:playlistTitleLabel_];
+    
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, playlistTitleView.frame.size.height, playlistTitleView.frame.size.width, self.view.frame.size.height - playlistTitleView.frame.size.height)];
     [contentView setBackgroundColor:[UIColor playlistBarBackgroundColor]];
     [self.view addSubview:contentView];
     
-    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height - 64 - 10, self.view.frame.size.width, 64)];
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 55)];
+    [carousel setCenter:CGPointMake(self.view.frame.size.width/2, contentView.frame.size.height/2)];
     [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
@@ -228,7 +230,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     FXImageView *imageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 64)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 95, 55)];
         [view setBackgroundColor:[UIColor blackColor]];
         [view setUserInteractionEnabled:YES];
         
@@ -236,6 +238,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         [imageView setAsynchronous:YES];
         [imageView setContentMode:UIViewContentModeScaleAspectFill];
         [imageView setTag:2];
+        [imageView addShadowOfWidth:2];
         [view addSubview:imageView];
         
         UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(deletePlaylistItem:)];
@@ -264,7 +267,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return value*1.05;
+            return value*1.1;
         }
         default:
         {

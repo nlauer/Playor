@@ -170,7 +170,7 @@
 
 - (NSString *)getNavigationTitle
 {
-    return @"Search";
+    return @"Search Music";
 }
 
 - (void)removedFromMainView

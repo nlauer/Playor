@@ -9,13 +9,15 @@
 #import "NLYoutubeResultsViewController.h"
 
 #import "NLAppDelegate.h"
-#import <QuartzCore/QuartzCore.h>
 #import "FXImageView.h"
 #import "NLYoutubeVideo.h"
 #import "NLUtils.h"
 #import "UIColor+NLColors.h"
+#import "UIView+Shadow.h"
 
 @interface NLYoutubeResultsViewController ()
+- (UITableViewCell *)getLoadingCell;
+- (UITableViewCell *)getVideoCellForIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation NLYoutubeResultsViewController {
@@ -43,7 +45,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44) style:UITableViewStylePlain];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
-    [_tableView setRowHeight:122];
+    [_tableView setRowHeight:132];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tableView];
@@ -90,7 +92,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor baseViewBackgroundColor]];
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -98,93 +100,91 @@
     return isLoadingVideos_ ? [_youtubeLinksArray count] + 1 : [_youtubeLinksArray count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getLoadingCell
 {
     UITableViewCell *cell = nil;
-    if (indexPath.row == [_youtubeLinksArray count]) {
-        NSString *loadingCellID = @"loadingCellReuseId";
-        cell = [tableView dequeueReusableCellWithIdentifier:loadingCellID];
+    NSString *loadingCellID = @"loadingCellReuseId";
+    cell = [_tableView dequeueReusableCellWithIdentifier:loadingCellID];
+    
+    UILabel *loadingLabel = nil;
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:loadingCellID];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell bringSubviewToFront:cell.selectedBackgroundView];
         
-        UILabel *loadingLabel = nil;
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:loadingCellID];
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            
-            loadingLabel = [[UILabel alloc] init];
-            [loadingLabel setTextColor:[UIColor whiteColor]];
-            [loadingLabel setBackgroundColor:[UIColor clearColor]];
-            [loadingLabel setFont:[UIFont boldSystemFontOfSize:24]];
-            [loadingLabel setText:@"Loading Videos..."];
-            [loadingLabel sizeToFit];
-            [loadingLabel setCenter:CGPointMake(cell.frame.size.width/2 - 30, tableView.rowHeight/2)];
-            [cell addSubview:loadingLabel];
-            
-            UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-            [loadingIndicator setCenter:CGPointMake(loadingLabel.frame.origin.x + loadingLabel.frame.size.width + loadingIndicator.frame.size.width/2 + 20, loadingLabel.center.y)];
-            [loadingIndicator startAnimating];
-            [loadingIndicator setHidden:NO];
-            [cell addSubview:loadingIndicator];
-            
-            CAGradientLayer *topShadow = [CAGradientLayer layer];
-            topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
-            topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
-            [cell.layer insertSublayer:topShadow atIndex:0];
-            
-            CAGradientLayer *bottomShadow = [CAGradientLayer layer];
-            bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
-            bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
-            [cell.layer insertSublayer:bottomShadow atIndex:0];
-        }
-    } else {
-        NSString *cellID = @"friendDetailReuseId";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        loadingLabel = [[UILabel alloc] init];
+        [loadingLabel setTextColor:[UIColor whiteColor]];
+        [loadingLabel setBackgroundColor:[UIColor clearColor]];
+        [loadingLabel setFont:[UIFont boldSystemFontOfSize:24]];
+        [loadingLabel setText:@"Loading Videos..."];
+        [loadingLabel sizeToFit];
+        [loadingLabel setCenter:CGPointMake(cell.frame.size.width/2 - 30, _tableView.rowHeight/2)];
+        [cell addSubview:loadingLabel];
         
-        UILabel *titleLabel = nil;
-        FXImageView *thumbnailImageView = nil;
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
-            
-            thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 5, cell.frame.size.width, tableView.rowHeight-10)];
-            [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
-            [thumbnailImageView setTag:2];
-            [thumbnailImageView setAsynchronous:YES];
-            [cell addSubview:thumbnailImageView];
-            
-            UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, tableView.rowHeight - 30 - 5, cell.frame.size.width, 30)];
-            [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
-            [cell addSubview:titleView];
-            
-            titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, tableView.rowHeight - 20 - 10, cell.frame.size.width - 20, 20)];
-            [titleLabel setBackgroundColor:[UIColor clearColor]];
-            [titleLabel setTextColor:[UIColor whiteColor]];
-            [titleLabel setFont:[UIFont systemFontOfSize:14]];
-            [titleLabel setTag:1];
-            [cell addSubview:titleLabel];
-            
-            CAGradientLayer *topShadow = [CAGradientLayer layer];
-            topShadow.frame = CGRectMake(0, 0, cell.frame.size.width, 5);
-            topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], nil];
-            [cell.layer insertSublayer:topShadow atIndex:0];
-            
-            CAGradientLayer *bottomShadow = [CAGradientLayer layer];
-            bottomShadow.frame = CGRectMake(0, tableView.rowHeight-5, cell.frame.size.width, 5);
-            bottomShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.5f] CGColor], (id)[[UIColor colorWithWhite:0.3 alpha:0.5] CGColor], nil];
-            [cell.layer insertSublayer:bottomShadow atIndex:0];
-            
-            UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panVideoView:)];
-            [panRecognizer setDelegate:self];
-            [cell addGestureRecognizer:panRecognizer];
-        } else {
-            titleLabel = (UILabel *)[cell viewWithTag:1];
-            thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
-        }
-        
-        [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
-        [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
+        UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [loadingIndicator setCenter:CGPointMake(loadingLabel.frame.origin.x + loadingLabel.frame.size.width + loadingIndicator.frame.size.width/2 + 20, loadingLabel.center.y)];
+        [loadingIndicator startAnimating];
+        [loadingIndicator setHidden:NO];
+        [cell addSubview:loadingIndicator];
     }
     
     return cell;
+}
+
+- (UITableViewCell *)getVideoCellForIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = nil;
+    NSString *cellID = @"friendDetailReuseId";
+    cell = [_tableView dequeueReusableCellWithIdentifier:cellID];
+    
+    UILabel *titleLabel = nil;
+    FXImageView *thumbnailImageView = nil;
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width, _tableView.rowHeight)];
+        [selectedBackgroundView setBackgroundColor:[UIColor greenColor]];
+        [cell setSelectedBackgroundView:selectedBackgroundView];
+        [cell bringSubviewToFront:cell.selectedBackgroundView];
+        
+        thumbnailImageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 10, cell.frame.size.width, _tableView.rowHeight-20)];
+        [thumbnailImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [thumbnailImageView setTag:2];
+        [thumbnailImageView setAsynchronous:YES];
+        [thumbnailImageView addShadowOfWidth:5];
+        [cell addSubview:thumbnailImageView];
+        
+        UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, thumbnailImageView.frame.origin.y + thumbnailImageView.frame.size.height - 30, cell.frame.size.width, 30)];
+        [titleView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        [cell addSubview:titleView];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, titleView.frame.origin.y + 5, cell.frame.size.width - 20, 20)];
+        [titleLabel setBackgroundColor:[UIColor clearColor]];
+        [titleLabel setTextColor:[UIColor whiteColor]];
+        [titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [titleLabel setTag:1];
+        [cell addSubview:titleLabel];
+        
+        UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panVideoView:)];
+        [panRecognizer setDelegate:self];
+        [cell addGestureRecognizer:panRecognizer];
+    } else {
+        titleLabel = (UILabel *)[cell viewWithTag:1];
+        thumbnailImageView = (FXImageView *)[cell viewWithTag:2];
+    }
+    
+    [thumbnailImageView setImageWithContentsOfURL:[[_youtubeLinksArray objectAtIndex:indexPath.row] thumbnailURL]];
+    [titleLabel setText:[[_youtubeLinksArray objectAtIndex:indexPath.row] title]];
+    
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == [_youtubeLinksArray count]) {
+        return [self getLoadingCell];
+    } else {
+        return [self getVideoCellForIndexPath:indexPath];
+    }
 }
 
 #pragma mark -
