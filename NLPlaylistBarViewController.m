@@ -132,6 +132,44 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     _iCarousel = nil;
 }
 
+- (void)updateICarousel
+{
+    [_iCarousel insertItemAtIndex:[_playlist.videos count]-1 animated:YES];
+}
+
+- (void)updatePlaylist:(NLPlaylist *)playlist
+{
+    if (playlist != _playlist) {
+        _playlist = playlist;
+        [_iCarousel reloadData];
+        [playlistTitleLabel_ setText:playlist.name];
+        [continuousButton_ setSelected:_playlist.isContinuous];
+        [shuffleButton_ setSelected:_playlist.isShuffle];
+    }
+    [_iCarousel scrollToItemAtIndex:0 animated:NO];
+}
+
+- (void)reloadCarouselWithAnimation
+{
+    [self.view setUserInteractionEnabled:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        CGAffineTransform translate = CGAffineTransformMakeTranslation(0, 100);
+        [_iCarousel setTransform:translate];
+    } completion:^(BOOL finished) {
+        [_iCarousel reloadData];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            CGAffineTransform translate = CGAffineTransformMakeTranslation(0, 0);
+            [_iCarousel setTransform:translate];
+        } completion:^(BOOL finished) {
+            [self.view setUserInteractionEnabled:YES];
+        }];
+    }];
+}
+
+#pragma mark -
+#pragma mark Playlist Button Methods
+
 - (void)togglePlaylistEditor:(UIButton *)button
 {
     [button setSelected:!button.selected];
@@ -166,7 +204,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     BOOL isSelected = !shuffleButton.selected;
     [shuffleButton setSelected:isSelected];
     [_playlist setIsShuffle:isSelected];
-    [_iCarousel reloadData];
+    [self reloadCarouselWithAnimation];
 }
 
 - (void)continuousButtonPressed:(UIButton *)continuousButton
@@ -174,23 +212,6 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     BOOL isSelected = !continuousButton.selected;
     [continuousButton setSelected:isSelected];
     [_playlist setIsContinuous:isSelected];
-}
-
-- (void)updateICarousel
-{
-    [_iCarousel insertItemAtIndex:[_playlist.videos count]-1 animated:YES];
-}
-
-- (void)updatePlaylist:(NLPlaylist *)playlist
-{
-    if (playlist != _playlist) {
-        _playlist = playlist;
-        [_iCarousel reloadData];
-        [playlistTitleLabel_ setText:playlist.name];
-        [continuousButton_ setSelected:_playlist.isContinuous];
-        [shuffleButton_ setSelected:_playlist.isShuffle];
-    }
-    [_iCarousel scrollToItemAtIndex:0 animated:NO];
 }
 
 #pragma mark -

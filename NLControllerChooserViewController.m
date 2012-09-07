@@ -15,6 +15,8 @@
 #import "NLPopularResultsViewController.h"
 #import "iCarousel.h"
 
+#define VIEW_SCALE 0.7f
+
 @interface NLControllerChooserViewController ()
 @property (strong, nonatomic) NSMutableArray *viewControllers;
 @property (strong, nonatomic) iCarousel *iCarousel;
@@ -23,6 +25,7 @@
 @implementation NLControllerChooserViewController {
     UIView *currentShowingView_;
     int currentSelectedIndex_;
+    UILabel *titleLabel_;
 }
 @synthesize viewControllers = _viewControllers, iCarousel = _iCarousel;
 
@@ -51,13 +54,21 @@
     [self.view setClipsToBounds:YES];
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
 
-    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, -10, self.view.frame.size.width, self.view.frame.size.height)];
     [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
     [carousel scrollToItemAtIndex:1 animated:NO];
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
+    
+    titleLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, carousel.frame.size.height - 10 - 30, self.view.frame.size.width - 20, 30)];
+    [titleLabel_ setTextAlignment:UITextAlignmentCenter];
+    [titleLabel_ setBackgroundColor:[UIColor clearColor]];
+    [titleLabel_ setTextColor:[UIColor whiteColor]];
+    [titleLabel_ setFont:[UIFont boldSystemFontOfSize:16]];
+    [self.view addSubview:titleLabel_];
+    [self.view bringSubviewToFront:titleLabel_];
 }
 
 - (void)viewDidUnload
@@ -72,7 +83,7 @@
 {
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.3 animations:^{
-        CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
+        CGAffineTransform tr2 = CGAffineTransformMakeScale(VIEW_SCALE, VIEW_SCALE);
         [currentShowingView_ setTransform:tr2];
         [currentShowingView_ setFrame:[self.view convertRect:[[_iCarousel itemViewAtIndex:currentSelectedIndex_] frame] fromView:[_iCarousel itemViewAtIndex:currentSelectedIndex_]]];
     } completion:^(BOOL finished) {
@@ -104,14 +115,14 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*0.7, carousel.frame.size.height*0.7)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*VIEW_SCALE, carousel.frame.size.height*VIEW_SCALE)];
         [view setClipsToBounds:YES];
     } else {
         [[view viewWithTag:777] removeFromSuperview];
     }
     
     UIViewController *vc = [_viewControllers objectAtIndex:index];
-    CGAffineTransform tr2 = CGAffineTransformMakeScale(0.7, 0.7);
+    CGAffineTransform tr2 = CGAffineTransformMakeScale(VIEW_SCALE, VIEW_SCALE);
     [vc.view setTransform:tr2];
     [vc.view setTag:777];
     [vc.view setFrame:CGRectMake(0, 0, vc.view.frame.size.width, vc.view.frame.size.height)];
@@ -140,6 +151,12 @@
             return value;
         }
     }
+}
+
+- (void)carouselDidScroll:(iCarousel *)carousel
+{
+    UIViewController <ChooserViewController> *vc = [_viewControllers objectAtIndex:[carousel currentItemIndex]];
+    [titleLabel_ setText:[vc getNavigationTitle]];
 }
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index

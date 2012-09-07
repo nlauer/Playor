@@ -10,6 +10,8 @@
 #import "NLYoutubeVideo.h"
 #import "NSObject+SBJSON.h"
 
+#define YOUTUBE_VIDEO_DATA_STRING @"http://gdata.youtube.com/feeds/api/videos/%@?v=2&alt=json"
+
 @implementation NLYoutubeLinksFactory {
     int numberOfActiveConnections_;
 }
@@ -75,7 +77,7 @@ static NLYoutubeLinksFactory *sharedInstance = NULL;
         NSString *link = [friend objectForKey:@"link"];
         if ([link rangeOfString:@"www.youtube.com/watch?v="].length > 0) {
             NSString *videoID = [self getVideoIdFromYoutubeLink:link];
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://gdata.youtube.com/feeds/api/videos/%@?v=2&alt=json", videoID]]];
+            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:YOUTUBE_VIDEO_DATA_STRING, videoID]]];
             NLURLConnectionManager *manager = [[NLURLConnectionManager alloc] initWithDelegate:self];
             NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:manager];
             if (!connection) {
