@@ -73,6 +73,7 @@
 		85F8F42315F55B8400C14754 /* slider_minimum.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F40D15F55B8400C14754 /* slider_minimum.png */; };
 		85F8F42615F95CEF00C14754 /* NSMutableArray+Shuffle.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42515F95CEF00C14754 /* NSMutableArray+Shuffle.m */; };
 		85F8F42915F99EC900C14754 /* UIView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42815F99EC900C14754 /* UIView+Shadow.m */; };
+		85F8F42C15FA99BD00C14754 /* NLVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42B15FA99BD00C14754 /* NLVideoPlayerViewController.m */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -196,6 +197,8 @@
 		85F8F42515F95CEF00C14754 /* NSMutableArray+Shuffle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffle.m"; sourceTree = "<group>"; };
 		85F8F42715F99EC900C14754 /* UIView+Shadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadow.h"; sourceTree = "<group>"; };
 		85F8F42815F99EC900C14754 /* UIView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadow.m"; sourceTree = "<group>"; };
+		85F8F42A15FA99BD00C14754 /* NLVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLVideoPlayerViewController.h; sourceTree = "<group>"; };
+		85F8F42B15FA99BD00C14754 /* NLVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLVideoPlayerViewController.m; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -351,6 +354,8 @@
 				85FB45B715DDF3E200349534 /* NLUtils.m */,
 				8505AB8B15E61A2200DC1B69 /* NLYoutubeResultsViewController.h */,
 				8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */,
+				85F8F42A15FA99BD00C14754 /* NLVideoPlayerViewController.h */,
+				85F8F42B15FA99BD00C14754 /* NLVideoPlayerViewController.m */,
 			);
 			name = "Base Classes";
 			sourceTree = "<group>";
@@ -655,6 +660,7 @@
 				85F8F3CB15EB0B4300C14754 /* NLPopularResultsViewController.m in Sources */,
 				85F8F42615F95CEF00C14754 /* NSMutableArray+Shuffle.m in Sources */,
 				85F8F42915F99EC900C14754 /* UIView+Shadow.m in Sources */,
+				85F8F42C15FA99BD00C14754 /* NLVideoPlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

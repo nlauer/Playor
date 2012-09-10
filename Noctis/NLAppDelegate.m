@@ -15,6 +15,7 @@
 #import "UIColor+NLColors.h"
 #import "NLYoutubeVideo.h"
 #import "NLVideoLoadingView.h"
+#import "NLVideoPlayerViewController.h"
 
 @implementation NLAppDelegate {
     UIBackgroundTaskIdentifier bgTask_;
@@ -182,9 +183,6 @@
         _videoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(-1, -1, 1, 1)];
         [_videoWebView setDelegate:self];
     }
-    if (![self.containerController.view.subviews containsObject:_videoWebView]) {
-        [self.containerController.view addSubview:_videoWebView];
-    }
 }
 
 - (void)videoDidEnterFullscreen:(NSNotification *)note
@@ -194,6 +192,7 @@
 
 - (void)videoDidExitFullscreen:(NSNotification *)note
 {
+    [self.containerController dismissModalViewControllerAnimated:!isBackgrounded_];
     isPlayingVideo_ = NO;
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
@@ -279,6 +278,7 @@
 // Start playing next video with a background task
 - (void)videoDidExitFullscreenInBackground
 {
+    [self.containerController dismissModalViewControllerAnimated:!isBackgrounded_];
     isPlayingVideo_ = NO;
     UIApplication *app = [UIApplication sharedApplication];
     if (bgTask_ != UIBackgroundTaskInvalid) {
@@ -321,6 +321,11 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     UIButton *b = [self findButtonInView:_videoWebView];
+    if (b) {
+        NLVideoPlayerViewController *vc = [[NLVideoPlayerViewController alloc] init];
+        [vc.view addSubview:_videoWebView];
+        [self.containerController presentModalViewController:vc animated:!isBackgrounded_];
+    }
     [b sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
