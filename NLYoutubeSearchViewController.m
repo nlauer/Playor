@@ -164,6 +164,12 @@
 
 #pragma mark -
 #pragma mark ChooserViewController Methods
+
+- (UIImage *)getPlaceholderImage
+{
+    return [UIImage imageNamed:@"search_music"];
+}
+
 - (UIView *)getTitleView
 {
     if (!searchBar_) {

@@ -18,7 +18,7 @@
     self.layer.masksToBounds = NO;
     self.layer.shadowOffset = CGSizeMake(-shadowWidth, -shadowWidth);
     self.layer.shadowRadius = shadowWidth;
-    self.layer.shadowOpacity = 0.7;
+    self.layer.shadowOpacity = 0.5;
     self.layer.shadowPath = [UIBezierPath bezierPathWithRect:expandedFrame].CGPath;
 }
 

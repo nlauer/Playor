@@ -22,6 +22,7 @@
 
 @implementation NLYoutubeResultsViewController {
     UILabel *addToPlaylistLabel_;
+    UIImageView *addToPlaylistBackgroundImageView_;
     BOOL isLoadingVideos_;
     BOOL shouldAllowPan_;
 }
@@ -220,6 +221,7 @@
 {
 	CGPoint delta = [panGesture translationInView: panGesture.view.superview];
     if (panGesture.state == UIGestureRecognizerStateBegan) {
+        // Add the text and background
         if (!addToPlaylistLabel_) {
             addToPlaylistLabel_ = [[UILabel alloc] init];
             [addToPlaylistLabel_ setNumberOfLines:2];
@@ -229,9 +231,16 @@
             [addToPlaylistLabel_ setLineBreakMode:UILineBreakModeWordWrap];
             [addToPlaylistLabel_ setText:@"Add to playlist"];
         }
+        if (!addToPlaylistBackgroundImageView_) {
+            addToPlaylistBackgroundImageView_ = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"add_to_playlist_background"]];
+        }
         [addToPlaylistLabel_ setFrame:CGRectMake(10, panGesture.view.center.y - 25, self.view.frame.size.width/2-50, 50)];
         [_tableView addSubview:addToPlaylistLabel_];
         [_tableView sendSubviewToBack:addToPlaylistLabel_];
+        
+        [addToPlaylistBackgroundImageView_ setCenter:CGPointMake(addToPlaylistBackgroundImageView_.frame.size.width/2, panGesture.view.center.y)];
+        [_tableView addSubview:addToPlaylistBackgroundImageView_];
+        [_tableView sendSubviewToBack:addToPlaylistBackgroundImageView_];
     }
     else if (panGesture.state == UIGestureRecognizerStateChanged) {
         CGPoint center = panGesture.view.center;
@@ -251,7 +260,7 @@
         
         // Change the text colour
         if (center.x > self.view.frame.size.width-60) {
-            [addToPlaylistLabel_ setTextColor:[UIColor greenColor]];
+            [addToPlaylistLabel_ setTextColor:[UIColor whiteColor]];
         } else if (center.x <= self.view.frame.size.width-60) {
             [addToPlaylistLabel_ setTextColor:[UIColor blackColor]];
         }
@@ -265,6 +274,7 @@
             if (shouldAddVideo) {
                 [self addVideoToPlaylistFromCell:(UITableViewCell *)panGesture.view];
             }
+            [addToPlaylistBackgroundImageView_ removeFromSuperview];
             [addToPlaylistLabel_ removeFromSuperview];
         }];
     }

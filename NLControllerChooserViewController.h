@@ -10,6 +10,7 @@
 #import "iCarousel.h"
 
 @protocol ChooserViewController <NSObject>
+- (UIImage *)getPlaceholderImage;
 @optional
 - (UIView *)getTitleView;
 - (NSString *)getNavigationTitle;

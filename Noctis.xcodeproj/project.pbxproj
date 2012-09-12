@@ -74,6 +74,16 @@
 		85F8F42615F95CEF00C14754 /* NSMutableArray+Shuffle.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42515F95CEF00C14754 /* NSMutableArray+Shuffle.m */; };
 		85F8F42915F99EC900C14754 /* UIView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42815F99EC900C14754 /* UIView+Shadow.m */; };
 		85F8F42C15FA99BD00C14754 /* NLVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F8F42B15FA99BD00C14754 /* NLVideoPlayerViewController.m */; };
+		85F8F43715FE86DC00C14754 /* icon_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42D15FE86D400C14754 /* icon_button@2x.png */; };
+		85F8F43815FE86DC00C14754 /* icon_itunes.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42E15FE86D500C14754 /* icon_itunes.png */; };
+		85F8F43915FE86DC00C14754 /* icon_itunes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */; };
+		85F8F43A15FE86DC00C14754 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43015FE86D700C14754 /* icon.png */; };
+		85F8F43B15FE86DC00C14754 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43115FE86D700C14754 /* icon@2x.png */; };
+		85F8F43C15FE86DC00C14754 /* my_friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43215FE86D900C14754 /* my_friends@2x.png */; };
+		85F8F43D15FE86DC00C14754 /* placeholder_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43315FE86D900C14754 /* placeholder_background@2x.png */; };
+		85F8F43E15FE86DC00C14754 /* placeholder_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */; };
+		85F8F43F15FE86DC00C14754 /* popular_songs@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43515FE86DA00C14754 /* popular_songs@2x.png */; };
+		85F8F44015FE86DC00C14754 /* search_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43615FE86DB00C14754 /* search_music@2x.png */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -199,6 +209,16 @@
 		85F8F42815F99EC900C14754 /* UIView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadow.m"; sourceTree = "<group>"; };
 		85F8F42A15FA99BD00C14754 /* NLVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLVideoPlayerViewController.h; sourceTree = "<group>"; };
 		85F8F42B15FA99BD00C14754 /* NLVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLVideoPlayerViewController.m; sourceTree = "<group>"; };
+		85F8F42D15FE86D400C14754 /* icon_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_button@2x.png"; path = "Assets/icon_button@2x.png"; sourceTree = "<group>"; };
+		85F8F42E15FE86D500C14754 /* icon_itunes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_itunes.png; path = Assets/icon_itunes.png; sourceTree = "<group>"; };
+		85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_itunes@2x.png"; path = "Assets/icon_itunes@2x.png"; sourceTree = "<group>"; };
+		85F8F43015FE86D700C14754 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Assets/icon.png; sourceTree = "<group>"; };
+		85F8F43115FE86D700C14754 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Assets/icon@2x.png"; sourceTree = "<group>"; };
+		85F8F43215FE86D900C14754 /* my_friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "my_friends@2x.png"; path = "Assets/my_friends@2x.png"; sourceTree = "<group>"; };
+		85F8F43315FE86D900C14754 /* placeholder_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder_background@2x.png"; path = "Assets/placeholder_background@2x.png"; sourceTree = "<group>"; };
+		85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder_shadow@2x.png"; path = "Assets/placeholder_shadow@2x.png"; sourceTree = "<group>"; };
+		85F8F43515FE86DA00C14754 /* popular_songs@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "popular_songs@2x.png"; path = "Assets/popular_songs@2x.png"; sourceTree = "<group>"; };
+		85F8F43615FE86DB00C14754 /* search_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search_music@2x.png"; path = "Assets/search_music@2x.png"; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -285,9 +305,9 @@
 				8595692715E9C179005A89F3 /* NLControllerChooserViewController.m */,
 				85FB45B315DCB58600349534 /* NLContainerViewController.h */,
 				85FB45B415DCB58600349534 /* NLContainerViewController.m */,
-				85F8F3C815EB0B0B00C14754 /* Youtube Popular Songs View Controllers */,
 				8595692A15E9C17F005A89F3 /* Youtube Search View Controllers */,
 				8595692B15E9C18D005A89F3 /* Friends Music View Controllers */,
+				85F8F3C815EB0B0B00C14754 /* Youtube Popular Songs View Controllers */,
 				8595692C15E9C1A1005A89F3 /* Playlist Bar View Controllers */,
 			);
 			name = "View Controllers";
@@ -507,6 +527,16 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				85F8F42D15FE86D400C14754 /* icon_button@2x.png */,
+				85F8F42E15FE86D500C14754 /* icon_itunes.png */,
+				85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */,
+				85F8F43015FE86D700C14754 /* icon.png */,
+				85F8F43115FE86D700C14754 /* icon@2x.png */,
+				85F8F43215FE86D900C14754 /* my_friends@2x.png */,
+				85F8F43315FE86D900C14754 /* placeholder_background@2x.png */,
+				85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */,
+				85F8F43515FE86DA00C14754 /* popular_songs@2x.png */,
+				85F8F43615FE86DB00C14754 /* search_music@2x.png */,
 				85F8F3F815F55B8400C14754 /* add_to_playlist_background@2x.png */,
 				85F8F3F915F55B8400C14754 /* arrow_background_highlighted@2x.png */,
 				85F8F3FA15F55B8400C14754 /* arrow_background_selected@2x.png */,
@@ -606,6 +636,16 @@
 				85F8F42115F55B8400C14754 /* shuffle@2x.png in Resources */,
 				85F8F42215F55B8400C14754 /* slider_maximum.png in Resources */,
 				85F8F42315F55B8400C14754 /* slider_minimum.png in Resources */,
+				85F8F43715FE86DC00C14754 /* icon_button@2x.png in Resources */,
+				85F8F43815FE86DC00C14754 /* icon_itunes.png in Resources */,
+				85F8F43915FE86DC00C14754 /* icon_itunes@2x.png in Resources */,
+				85F8F43A15FE86DC00C14754 /* icon.png in Resources */,
+				85F8F43B15FE86DC00C14754 /* icon@2x.png in Resources */,
+				85F8F43C15FE86DC00C14754 /* my_friends@2x.png in Resources */,
+				85F8F43D15FE86DC00C14754 /* placeholder_background@2x.png in Resources */,
+				85F8F43E15FE86DC00C14754 /* placeholder_shadow@2x.png in Resources */,
+				85F8F43F15FE86DC00C14754 /* popular_songs@2x.png in Resources */,
+				85F8F44015FE86DC00C14754 /* search_music@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

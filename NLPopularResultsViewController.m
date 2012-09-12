@@ -8,6 +8,8 @@
 
 #import "NLPopularResultsViewController.h"
 
+#import "NLUtils.h"
+
 @interface NLPopularResultsViewController ()
 
 @end
@@ -19,6 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
 }
 
 - (void)viewDidUnload
@@ -39,6 +42,12 @@
 
 #pragma mark -
 #pragma mark ChooserViewController Methods
+
+- (UIImage *)getPlaceholderImage
+{
+    return [UIImage imageNamed:@"popular_songs"];
+}
+
 - (NSString *)getNavigationTitle
 {
     return @"Popular Songs";
