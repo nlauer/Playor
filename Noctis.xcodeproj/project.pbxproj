@@ -77,13 +77,40 @@
 		85F8F43715FE86DC00C14754 /* icon_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42D15FE86D400C14754 /* icon_button@2x.png */; };
 		85F8F43815FE86DC00C14754 /* icon_itunes.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42E15FE86D500C14754 /* icon_itunes.png */; };
 		85F8F43915FE86DC00C14754 /* icon_itunes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */; };
-		85F8F43A15FE86DC00C14754 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43015FE86D700C14754 /* icon.png */; };
-		85F8F43B15FE86DC00C14754 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43115FE86D700C14754 /* icon@2x.png */; };
 		85F8F43C15FE86DC00C14754 /* my_friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43215FE86D900C14754 /* my_friends@2x.png */; };
 		85F8F43D15FE86DC00C14754 /* placeholder_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43315FE86D900C14754 /* placeholder_background@2x.png */; };
 		85F8F43E15FE86DC00C14754 /* placeholder_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */; };
 		85F8F43F15FE86DC00C14754 /* popular_songs@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43515FE86DA00C14754 /* popular_songs@2x.png */; };
 		85F8F44015FE86DC00C14754 /* search_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F43615FE86DB00C14754 /* search_music@2x.png */; };
+		85F8F4431600F00100C14754 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F4411600EFF100C14754 /* icon.png */; };
+		85F8F4441600F00100C14754 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F4421600EFF400C14754 /* icon@2x.png */; };
+		85F8F46016013E5000C14754 /* add_to_playlist_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44516013E3600C14754 /* add_to_playlist_background.png */; };
+		85F8F46116013E5000C14754 /* arrow_background_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44616013E3800C14754 /* arrow_background_highlighted.png */; };
+		85F8F46216013E5000C14754 /* arrow_background_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44716013E3A00C14754 /* arrow_background_selected.png */; };
+		85F8F46316013E5000C14754 /* arrow_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44816013E3A00C14754 /* arrow_background.png */; };
+		85F8F46416013E5000C14754 /* arrow_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44916013E3B00C14754 /* arrow_highlighted.png */; };
+		85F8F46516013E5000C14754 /* arrow_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44A16013E3C00C14754 /* arrow_pressed.png */; };
+		85F8F46616013E5000C14754 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44B16013E3D00C14754 /* arrow.png */; };
+		85F8F46716013E5000C14754 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44C16013E3F00C14754 /* background.png */; };
+		85F8F46816013E5000C14754 /* continuous_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44D16013E3F00C14754 /* continuous_pressed.png */; };
+		85F8F46916013E5000C14754 /* continuous.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44E16013E4000C14754 /* continuous.png */; };
+		85F8F46A16013E5000C14754 /* delete_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F44F16013E4100C14754 /* delete_button.png */; };
+		85F8F46B16013E5000C14754 /* delete_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45016013E4200C14754 /* delete_button@2x.png */; };
+		85F8F46C16013E5000C14754 /* icon_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45116013E4300C14754 /* icon_button.png */; };
+		85F8F46D16013E5000C14754 /* my_friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45216013E4400C14754 /* my_friends.png */; };
+		85F8F46E16013E5000C14754 /* placeholder_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45316013E4500C14754 /* placeholder_background.png */; };
+		85F8F46F16013E5000C14754 /* placeholder_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45416013E4500C14754 /* placeholder_shadow.png */; };
+		85F8F47016013E5000C14754 /* playlist_bar_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45516013E4700C14754 /* playlist_bar_background.png */; };
+		85F8F47116013E5000C14754 /* playlist_bar_top_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45616013E4700C14754 /* playlist_bar_top_shadow.png */; };
+		85F8F47216013E5000C14754 /* playlist_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45716013E4800C14754 /* playlist_bar.png */; };
+		85F8F47316013E5000C14754 /* playlist_cell_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45816013E4900C14754 /* playlist_cell_selected.png */; };
+		85F8F47416013E5000C14754 /* playlist_cell.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45916013E4A00C14754 /* playlist_cell.png */; };
+		85F8F47516013E5000C14754 /* popular_songs.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45A16013E4B00C14754 /* popular_songs.png */; };
+		85F8F47616013E5000C14754 /* search_music.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45B16013E4B00C14754 /* search_music.png */; };
+		85F8F47716013E5000C14754 /* shuffle_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45C16013E4D00C14754 /* shuffle_pressed.png */; };
+		85F8F47816013E5000C14754 /* shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45D16013E4D00C14754 /* shuffle.png */; };
+		85F8F47916013E5000C14754 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45E16013E4E00C14754 /* splash.png */; };
+		85F8F47A16013E5000C14754 /* splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F8F45F16013E4F00C14754 /* splash@2x.png */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -97,7 +124,7 @@
 		8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeSearchViewController.m; sourceTree = "<group>"; };
 		8505AB8B15E61A2200DC1B69 /* NLYoutubeResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeResultsViewController.h; sourceTree = "<group>"; };
 		8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeResultsViewController.m; sourceTree = "<group>"; };
-		853FEB1315BB8561002A1EB5 /* Noctis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noctis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		853FEB1315BB8561002A1EB5 /* Playor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Playor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853FEB1715BB8561002A1EB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		853FEB1915BB8561002A1EB5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -212,13 +239,40 @@
 		85F8F42D15FE86D400C14754 /* icon_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_button@2x.png"; path = "Assets/icon_button@2x.png"; sourceTree = "<group>"; };
 		85F8F42E15FE86D500C14754 /* icon_itunes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_itunes.png; path = Assets/icon_itunes.png; sourceTree = "<group>"; };
 		85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_itunes@2x.png"; path = "Assets/icon_itunes@2x.png"; sourceTree = "<group>"; };
-		85F8F43015FE86D700C14754 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Assets/icon.png; sourceTree = "<group>"; };
-		85F8F43115FE86D700C14754 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Assets/icon@2x.png"; sourceTree = "<group>"; };
 		85F8F43215FE86D900C14754 /* my_friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "my_friends@2x.png"; path = "Assets/my_friends@2x.png"; sourceTree = "<group>"; };
 		85F8F43315FE86D900C14754 /* placeholder_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder_background@2x.png"; path = "Assets/placeholder_background@2x.png"; sourceTree = "<group>"; };
 		85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder_shadow@2x.png"; path = "Assets/placeholder_shadow@2x.png"; sourceTree = "<group>"; };
 		85F8F43515FE86DA00C14754 /* popular_songs@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "popular_songs@2x.png"; path = "Assets/popular_songs@2x.png"; sourceTree = "<group>"; };
 		85F8F43615FE86DB00C14754 /* search_music@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search_music@2x.png"; path = "Assets/search_music@2x.png"; sourceTree = "<group>"; };
+		85F8F4411600EFF100C14754 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Assets/icon.png; sourceTree = "<group>"; };
+		85F8F4421600EFF400C14754 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Assets/icon@2x.png"; sourceTree = "<group>"; };
+		85F8F44516013E3600C14754 /* add_to_playlist_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_to_playlist_background.png; path = Assets/add_to_playlist_background.png; sourceTree = "<group>"; };
+		85F8F44616013E3800C14754 /* arrow_background_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_background_highlighted.png; path = Assets/arrow_background_highlighted.png; sourceTree = "<group>"; };
+		85F8F44716013E3A00C14754 /* arrow_background_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_background_selected.png; path = Assets/arrow_background_selected.png; sourceTree = "<group>"; };
+		85F8F44816013E3A00C14754 /* arrow_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_background.png; path = Assets/arrow_background.png; sourceTree = "<group>"; };
+		85F8F44916013E3B00C14754 /* arrow_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_highlighted.png; path = Assets/arrow_highlighted.png; sourceTree = "<group>"; };
+		85F8F44A16013E3C00C14754 /* arrow_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_pressed.png; path = Assets/arrow_pressed.png; sourceTree = "<group>"; };
+		85F8F44B16013E3D00C14754 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow.png; path = Assets/arrow.png; sourceTree = "<group>"; };
+		85F8F44C16013E3F00C14754 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Assets/background.png; sourceTree = "<group>"; };
+		85F8F44D16013E3F00C14754 /* continuous_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = continuous_pressed.png; path = Assets/continuous_pressed.png; sourceTree = "<group>"; };
+		85F8F44E16013E4000C14754 /* continuous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = continuous.png; path = Assets/continuous.png; sourceTree = "<group>"; };
+		85F8F44F16013E4100C14754 /* delete_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete_button.png; path = Assets/delete_button.png; sourceTree = "<group>"; };
+		85F8F45016013E4200C14754 /* delete_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete_button@2x.png"; path = "Assets/delete_button@2x.png"; sourceTree = "<group>"; };
+		85F8F45116013E4300C14754 /* icon_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_button.png; path = Assets/icon_button.png; sourceTree = "<group>"; };
+		85F8F45216013E4400C14754 /* my_friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = my_friends.png; path = Assets/my_friends.png; sourceTree = "<group>"; };
+		85F8F45316013E4500C14754 /* placeholder_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder_background.png; path = Assets/placeholder_background.png; sourceTree = "<group>"; };
+		85F8F45416013E4500C14754 /* placeholder_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder_shadow.png; path = Assets/placeholder_shadow.png; sourceTree = "<group>"; };
+		85F8F45516013E4700C14754 /* playlist_bar_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playlist_bar_background.png; path = Assets/playlist_bar_background.png; sourceTree = "<group>"; };
+		85F8F45616013E4700C14754 /* playlist_bar_top_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playlist_bar_top_shadow.png; path = Assets/playlist_bar_top_shadow.png; sourceTree = "<group>"; };
+		85F8F45716013E4800C14754 /* playlist_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playlist_bar.png; path = Assets/playlist_bar.png; sourceTree = "<group>"; };
+		85F8F45816013E4900C14754 /* playlist_cell_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playlist_cell_selected.png; path = Assets/playlist_cell_selected.png; sourceTree = "<group>"; };
+		85F8F45916013E4A00C14754 /* playlist_cell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playlist_cell.png; path = Assets/playlist_cell.png; sourceTree = "<group>"; };
+		85F8F45A16013E4B00C14754 /* popular_songs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = popular_songs.png; path = Assets/popular_songs.png; sourceTree = "<group>"; };
+		85F8F45B16013E4B00C14754 /* search_music.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = search_music.png; path = Assets/search_music.png; sourceTree = "<group>"; };
+		85F8F45C16013E4D00C14754 /* shuffle_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shuffle_pressed.png; path = Assets/shuffle_pressed.png; sourceTree = "<group>"; };
+		85F8F45D16013E4D00C14754 /* shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shuffle.png; path = Assets/shuffle.png; sourceTree = "<group>"; };
+		85F8F45E16013E4E00C14754 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = Assets/splash.png; sourceTree = "<group>"; };
+		85F8F45F16013E4F00C14754 /* splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "splash@2x.png"; path = "Assets/splash@2x.png"; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -270,7 +324,7 @@
 		853FEB1415BB8561002A1EB5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				853FEB1315BB8561002A1EB5 /* Noctis.app */,
+				853FEB1315BB8561002A1EB5 /* Playor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -527,11 +581,38 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				85F8F44516013E3600C14754 /* add_to_playlist_background.png */,
+				85F8F44616013E3800C14754 /* arrow_background_highlighted.png */,
+				85F8F44716013E3A00C14754 /* arrow_background_selected.png */,
+				85F8F44816013E3A00C14754 /* arrow_background.png */,
+				85F8F44916013E3B00C14754 /* arrow_highlighted.png */,
+				85F8F44A16013E3C00C14754 /* arrow_pressed.png */,
+				85F8F44B16013E3D00C14754 /* arrow.png */,
+				85F8F44C16013E3F00C14754 /* background.png */,
+				85F8F44D16013E3F00C14754 /* continuous_pressed.png */,
+				85F8F44E16013E4000C14754 /* continuous.png */,
+				85F8F44F16013E4100C14754 /* delete_button.png */,
+				85F8F45016013E4200C14754 /* delete_button@2x.png */,
+				85F8F45116013E4300C14754 /* icon_button.png */,
+				85F8F45216013E4400C14754 /* my_friends.png */,
+				85F8F45316013E4500C14754 /* placeholder_background.png */,
+				85F8F45416013E4500C14754 /* placeholder_shadow.png */,
+				85F8F45516013E4700C14754 /* playlist_bar_background.png */,
+				85F8F45616013E4700C14754 /* playlist_bar_top_shadow.png */,
+				85F8F45716013E4800C14754 /* playlist_bar.png */,
+				85F8F45816013E4900C14754 /* playlist_cell_selected.png */,
+				85F8F45916013E4A00C14754 /* playlist_cell.png */,
+				85F8F45A16013E4B00C14754 /* popular_songs.png */,
+				85F8F45B16013E4B00C14754 /* search_music.png */,
+				85F8F45C16013E4D00C14754 /* shuffle_pressed.png */,
+				85F8F45D16013E4D00C14754 /* shuffle.png */,
+				85F8F45E16013E4E00C14754 /* splash.png */,
+				85F8F45F16013E4F00C14754 /* splash@2x.png */,
+				85F8F4411600EFF100C14754 /* icon.png */,
+				85F8F4421600EFF400C14754 /* icon@2x.png */,
 				85F8F42D15FE86D400C14754 /* icon_button@2x.png */,
 				85F8F42E15FE86D500C14754 /* icon_itunes.png */,
 				85F8F42F15FE86D600C14754 /* icon_itunes@2x.png */,
-				85F8F43015FE86D700C14754 /* icon.png */,
-				85F8F43115FE86D700C14754 /* icon@2x.png */,
 				85F8F43215FE86D900C14754 /* my_friends@2x.png */,
 				85F8F43315FE86D900C14754 /* placeholder_background@2x.png */,
 				85F8F43415FE86D900C14754 /* placeholder_shadow@2x.png */,
@@ -579,7 +660,7 @@
 			);
 			name = Noctis;
 			productName = Noctis;
-			productReference = 853FEB1315BB8561002A1EB5 /* Noctis.app */;
+			productReference = 853FEB1315BB8561002A1EB5 /* Playor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -639,13 +720,40 @@
 				85F8F43715FE86DC00C14754 /* icon_button@2x.png in Resources */,
 				85F8F43815FE86DC00C14754 /* icon_itunes.png in Resources */,
 				85F8F43915FE86DC00C14754 /* icon_itunes@2x.png in Resources */,
-				85F8F43A15FE86DC00C14754 /* icon.png in Resources */,
-				85F8F43B15FE86DC00C14754 /* icon@2x.png in Resources */,
 				85F8F43C15FE86DC00C14754 /* my_friends@2x.png in Resources */,
 				85F8F43D15FE86DC00C14754 /* placeholder_background@2x.png in Resources */,
 				85F8F43E15FE86DC00C14754 /* placeholder_shadow@2x.png in Resources */,
 				85F8F43F15FE86DC00C14754 /* popular_songs@2x.png in Resources */,
 				85F8F44015FE86DC00C14754 /* search_music@2x.png in Resources */,
+				85F8F4431600F00100C14754 /* icon.png in Resources */,
+				85F8F4441600F00100C14754 /* icon@2x.png in Resources */,
+				85F8F46016013E5000C14754 /* add_to_playlist_background.png in Resources */,
+				85F8F46116013E5000C14754 /* arrow_background_highlighted.png in Resources */,
+				85F8F46216013E5000C14754 /* arrow_background_selected.png in Resources */,
+				85F8F46316013E5000C14754 /* arrow_background.png in Resources */,
+				85F8F46416013E5000C14754 /* arrow_highlighted.png in Resources */,
+				85F8F46516013E5000C14754 /* arrow_pressed.png in Resources */,
+				85F8F46616013E5000C14754 /* arrow.png in Resources */,
+				85F8F46716013E5000C14754 /* background.png in Resources */,
+				85F8F46816013E5000C14754 /* continuous_pressed.png in Resources */,
+				85F8F46916013E5000C14754 /* continuous.png in Resources */,
+				85F8F46A16013E5000C14754 /* delete_button.png in Resources */,
+				85F8F46B16013E5000C14754 /* delete_button@2x.png in Resources */,
+				85F8F46C16013E5000C14754 /* icon_button.png in Resources */,
+				85F8F46D16013E5000C14754 /* my_friends.png in Resources */,
+				85F8F46E16013E5000C14754 /* placeholder_background.png in Resources */,
+				85F8F46F16013E5000C14754 /* placeholder_shadow.png in Resources */,
+				85F8F47016013E5000C14754 /* playlist_bar_background.png in Resources */,
+				85F8F47116013E5000C14754 /* playlist_bar_top_shadow.png in Resources */,
+				85F8F47216013E5000C14754 /* playlist_bar.png in Resources */,
+				85F8F47316013E5000C14754 /* playlist_cell_selected.png in Resources */,
+				85F8F47416013E5000C14754 /* playlist_cell.png in Resources */,
+				85F8F47516013E5000C14754 /* popular_songs.png in Resources */,
+				85F8F47616013E5000C14754 /* search_music.png in Resources */,
+				85F8F47716013E5000C14754 /* shuffle_pressed.png in Resources */,
+				85F8F47816013E5000C14754 /* shuffle.png in Resources */,
+				85F8F47916013E5000C14754 /* splash.png in Resources */,
+				85F8F47A16013E5000C14754 /* splash@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -775,7 +883,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/facebook-ios-sdk\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Playor;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -794,7 +902,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/facebook-ios-sdk\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Playor;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;

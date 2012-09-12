@@ -58,7 +58,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Noctis";
+    self.title = @"Playor";
     [self.view setClipsToBounds:YES];
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"placeholder_background"]]];
@@ -71,12 +71,7 @@
     [self setICarousel:carousel];
     [self.view addSubview:carousel];
     
-    UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"placeholder_shadow"]];
-    [shadowImageView setCenter:CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height - (self.view.frame.size.height - (self.view.frame.size.height*VIEW_SCALE))/2) - shadowImageView.frame.size.height/2 + 5)];
-    [self.view addSubview:shadowImageView];
-    [self.view sendSubviewToBack:shadowImageView];
-    
-    titleLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, shadowImageView.frame.origin.y + shadowImageView.frame.size.height, self.view.frame.size.width - 20, 30)];
+    titleLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - 50, self.view.frame.size.width - 20, 30)];
     [titleLabel_ setTextAlignment:UITextAlignmentCenter];
     [titleLabel_ setBackgroundColor:[UIColor clearColor]];
     [titleLabel_ setTextColor:[UIColor whiteColor]];
@@ -122,13 +117,14 @@
             if ([[_viewControllers objectAtIndex:currentSelectedIndex_] respondsToSelector:@selector(removedFromMainView)]) {
                 [[_viewControllers objectAtIndex:currentSelectedIndex_] removedFromMainView];
             }
-            [[_iCarousel itemViewAtIndex:currentSelectedIndex_] addSubview:currentShowingView_];
-            [self transitionFromViewController:[_viewControllers objectAtIndex:currentSelectedIndex_] toViewController:[_placholderViewControllers objectAtIndex:currentSelectedIndex_] duration:0.3 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:^(BOOL finished) {
+            [currentShowingView_ setFrame:CGRectMake(0, 0, currentShowingView_.frame.size.width, currentShowingView_.frame.size.height)];
+            [[[_iCarousel itemViewAtIndex:currentSelectedIndex_] viewWithTag:8778] addSubview:currentShowingView_];
+            [self transitionFromViewController:[_viewControllers objectAtIndex:currentSelectedIndex_] toViewController:[_placholderViewControllers objectAtIndex:currentSelectedIndex_] duration:0.4 options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:^(BOOL finished) {
                 currentShowingView_ = nil;
                 currentSelectedIndex_ = -1;
                 // Reset the navigation to originals
                 [self.navigationItem setTitleView:nil];
-                self.title = @"Noctis";
+                self.title = @"Playor";
                 
                 [self.navigationController.navigationBar setUserInteractionEnabled:YES];
             }];
@@ -148,18 +144,31 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    UIViewController *vc = [_placholderViewControllers objectAtIndex:index];
+    UIViewController *vc = [_placholderViewControllers objectAtIndex:index];\
+    UIView *contentView = nil;
     if (view == nil) {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*VIEW_SCALE, carousel.frame.size.height*VIEW_SCALE)];
-        NSLog(@"view frame width:%f height:%f", view.frame.size.width, view.frame.size.height);
+        [view setBackgroundColor:[UIColor clearColor]];
         [view addShadowOfWidth:3];
-        [view setClipsToBounds:YES];
+        
+        contentView = [[UIView alloc] initWithFrame:view.frame];
+        [contentView setBackgroundColor:[UIColor clearColor]];
+        [contentView setTag:8778];
+        [contentView addShadowOfWidth:3];
+        [contentView setClipsToBounds:YES];
+        [view addSubview:contentView];
+        
+        UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"placeholder_shadow"]];
+        [shadowImageView setCenter:CGPointMake(view.frame.size.width/2, view.frame.size.height - 2)];
+        [view addSubview:shadowImageView];
+        [view sendSubviewToBack:shadowImageView];
     } else {
         [[view viewWithTag:777] removeFromSuperview];
+        contentView = [view viewWithTag:8778];
     }
     UIView *placeholderViewControllerView = vc.view;
     [placeholderViewControllerView setTag:777];
-    [view addSubview:placeholderViewControllerView];
+    [contentView addSubview:placeholderViewControllerView];
     
     return view;
 }
@@ -176,7 +185,7 @@
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return value * 1.1f;
+            return value * 1.15f;
         }
         default:
         {
@@ -194,12 +203,14 @@
 - (void)showViewAtIndex:(int)index
 {
     [self.view setUserInteractionEnabled:NO];
+    [self.navigationController.navigationBar setUserInteractionEnabled:NO];
+    
     UIView *smallerView = ((UIViewController *)[_viewControllers objectAtIndex:index]).view;
     CGAffineTransform tr2 = CGAffineTransformMakeScale(VIEW_SCALE, VIEW_SCALE);
     [smallerView setTransform:tr2];
     [smallerView setFrame:CGRectMake(0, 0, smallerView.frame.size.width, smallerView.frame.size.height)];
     
-    [self transitionFromViewController:[_placholderViewControllers objectAtIndex:index] toViewController:[_viewControllers objectAtIndex:index] duration:0.3 options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
+    [self transitionFromViewController:[_placholderViewControllers objectAtIndex:index] toViewController:[_viewControllers objectAtIndex:index] duration:0.4 options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
         currentSelectedIndex_ = index;
         currentShowingView_ = ((UIViewController *)[_viewControllers objectAtIndex:index]).view;
         CGRect viewFrame = [NLUtils getContainerTopInnerFrame];
@@ -226,6 +237,7 @@
                 // Set the nav bar's title
                 self.title = [[_viewControllers objectAtIndex:index] getNavigationTitle];
             }
+            [self.navigationController.navigationBar setUserInteractionEnabled:YES];
             [self.view setUserInteractionEnabled:YES];
         }];
     }];

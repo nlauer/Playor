@@ -85,7 +85,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [playlistTitleView addSubview:playlistEditorButton];
     
     UIImage *shuffleImage = [UIImage imageNamed:@"shuffle"];
-    shuffleButton_ = [[UIButton alloc] initWithFrame:CGRectMake(playlistEditorButton.frame.origin.x - shuffleImage.size.width, 0, shuffleImage.size.width, shuffleImage.size.height)];
+    shuffleButton_ = [[UIButton alloc] initWithFrame:CGRectMake(playlistEditorButton.frame.origin.x - shuffleImage.size.width - 5, 0, shuffleImage.size.width, shuffleImage.size.height)];
     [shuffleButton_ addTarget:self action:@selector(shuffleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [shuffleButton_ setBackgroundImage:shuffleImage forState:UIControlStateNormal];
     [shuffleButton_ setBackgroundImage:[UIImage imageNamed:@"shuffle_pressed"] forState:UIControlStateSelected];
@@ -189,7 +189,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 {
     [button setSelected:!button.selected];
     UIImageView *arrowImageView = button.imageView;
-    arrowImageView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    arrowImageView.layer.anchorPoint = CGPointMake(0.51, 0.5);
     if (!isShowingEditor_) {
         [arrowImageView setImage:[UIImage imageNamed:@"arrow_pressed"]];
         [UIView animateWithDuration:0.3 animations:^{
@@ -266,7 +266,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     FXImageView *imageView = nil;
     
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 95, 55)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 115, 55)];
         [view setBackgroundColor:[UIColor blackColor]];
         [view setUserInteractionEnabled:YES];
         

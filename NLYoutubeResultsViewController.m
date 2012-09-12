@@ -116,7 +116,7 @@
         loadingLabel = [[UILabel alloc] init];
         [loadingLabel setTextColor:[UIColor whiteColor]];
         [loadingLabel setBackgroundColor:[UIColor clearColor]];
-        [loadingLabel setFont:[UIFont boldSystemFontOfSize:24]];
+        [loadingLabel setFont:[UIFont boldSystemFontOfSize:20]];
         [loadingLabel setText:@"Loading Videos..."];
         [loadingLabel sizeToFit];
         [loadingLabel setCenter:CGPointMake(cell.frame.size.width/2 - 30, _tableView.rowHeight/2)];
@@ -264,7 +264,7 @@
         } else if (center.x <= self.view.frame.size.width-60) {
             [addToPlaylistLabel_ setTextColor:[UIColor blackColor]];
         }
-    } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+    } else if (panGesture.state == UIGestureRecognizerStateEnded || panGesture.state == UIGestureRecognizerStateCancelled) {
         shouldAllowPan_ = YES;
         BOOL shouldAddVideo = panGesture.view.center.x >= self.view.frame.size.width-60 ? YES : NO;
         [UIView animateWithDuration:0.3 animations:^{
