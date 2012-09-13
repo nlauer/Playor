@@ -16,6 +16,7 @@
 #import "NLYoutubeVideo.h"
 #import "NLVideoLoadingView.h"
 #import "NLVideoPlayerViewController.h"
+#import "NLUtils.h"
 
 @implementation NLAppDelegate {
     UIBackgroundTaskIdentifier bgTask_;
@@ -188,6 +189,7 @@
 - (void)videoDidEnterFullscreen:(NSNotification *)note
 {
     [_loadingView dismissLoadingView];
+    [NLUtils showInstructionWithMessage:@"Press the home button while a video is playing to listen to songs/playlists in the background" andKey:@"play_in_background"];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note

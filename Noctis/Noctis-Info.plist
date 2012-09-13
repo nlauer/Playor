@@ -41,6 +41,8 @@
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleBlackOpaque</string>
+	<key>UILaunchImageFile</key>
+	<string>splash</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

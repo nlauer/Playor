@@ -12,5 +12,6 @@
 
 + (CGRect)getContainerTopControllerFrame;
 + (CGRect)getContainerTopInnerFrame;
++ (void)showInstructionWithMessage:(NSString *)message andKey:(NSString *)key;
 
 @end

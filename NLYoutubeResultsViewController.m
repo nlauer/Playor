@@ -64,6 +64,12 @@
     _tableView = nil;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [NLUtils showInstructionWithMessage:@"Swipe right on songs to add to playlist" andKey:@"swipe_to_add"];
+}
+
 - (void)loadNewVideoWithIndex:(int)index
 {
     [[NLAppDelegate appDelegate] playYoutubeVideo:[_youtubeLinksArray objectAtIndex:index] withDelegate:nil];

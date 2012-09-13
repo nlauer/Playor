@@ -21,6 +21,7 @@
 #import "NLAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+NLColors.h"
+#import "NLUtils.h"
 #import "UIView+Shadow.h"
 
 @interface NLPlaylistBarViewController ()
@@ -344,6 +345,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
 #pragma mark Receiving and Deleting Methods
 - (void)receiveYoutubeVideo:(NLYoutubeVideo *)video
 {
+    [NLUtils showInstructionWithMessage:@"Remove videos from a playlist by swiping up on playlist items" andKey:@"swipe_to_remove_items"];
     if (![_playlist.videos containsVideo:video]) {
         [_playlist.videos addObject:video];
         [self updateICarousel];
