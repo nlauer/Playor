@@ -29,7 +29,8 @@
         self.loadingViewDelegate = loadingViewDelegate;
         [self setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:0.7]];
         
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(50, 100, self.frame.size.width - 100, self.frame.size.height - 260)];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 100, 220)];
+        [contentView setCenter:CGPointMake(self.frame.size.width/2, self.frame.size.height/2)];
         [contentView setBackgroundColor:[UIColor baseViewBackgroundColor]];
         [contentView.layer setCornerRadius:6];
         [contentView setClipsToBounds:YES];

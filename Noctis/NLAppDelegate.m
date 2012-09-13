@@ -153,14 +153,14 @@
 
 - (void)stopLoadingVideo
 {
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
-    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
-    shouldLoadWebview_ = NO;
-    isPlayingVideo_ = NO;
     [_videoWebView stopLoading];
     [_videoWebView loadRequest:nil];
     [_videoWebView removeFromSuperview];
+    shouldLoadWebview_ = NO;
+    isPlayingVideo_ = NO;
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+    [notificationCenter removeObserver:self name:@"UIMoviePlayerControllerDidExitFullscreenNotification" object:nil];
 }
 
 - (void)loadTimedOut
@@ -321,7 +321,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     UIButton *b = [self findButtonInView:_videoWebView];
-    if (b) {
+    if (b && shouldLoadWebview_) {
         NLVideoPlayerViewController *vc = [[NLVideoPlayerViewController alloc] init];
         [vc.view addSubview:_videoWebView];
         [self.containerController presentModalViewController:vc animated:!isBackgrounded_];

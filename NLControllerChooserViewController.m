@@ -144,10 +144,10 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    UIViewController *vc = [_placholderViewControllers objectAtIndex:index];\
+    UIViewController *vc = [_placholderViewControllers objectAtIndex:index];
     UIView *contentView = nil;
     if (view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, carousel.frame.size.width*VIEW_SCALE, carousel.frame.size.height*VIEW_SCALE)];
+        view = [[UIView alloc] initWithFrame:vc.view.frame];
         [view setBackgroundColor:[UIColor clearColor]];
         [view addShadowOfWidth:3];
         
@@ -221,8 +221,8 @@
         
         [UIView animateWithDuration:0.3 animations:^{
             CGAffineTransform tr2 = CGAffineTransformMakeScale(1, 1);
-            [currentShowingView_ setCenter:CGPointMake(viewFrame.size.width/2, viewFrame.size.height/2)];
             [currentShowingView_ setTransform:tr2];
+            [currentShowingView_ setFrame:viewFrame];
         } completion:^(BOOL finished) {
             if ([[_viewControllers objectAtIndex:currentSelectedIndex_] respondsToSelector:@selector(movedToMainView)]) {
                 [[_viewControllers objectAtIndex:currentSelectedIndex_] movedToMainView];

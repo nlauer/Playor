@@ -22,6 +22,7 @@
 {
     [super viewDidLoad];
     [self.view setFrame:[NLUtils getContainerTopInnerFrame]];
+    [self.view setClipsToBounds:YES];
 }
 
 - (void)viewDidUnload

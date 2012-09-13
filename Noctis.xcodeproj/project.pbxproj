@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8505AB8A15E600E000DC1B69 /* NLYoutubeSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */; };
 		8505AB8D15E61A2200DC1B69 /* NLYoutubeResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */; };
+		853B2AF0160180C0005D1659 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 853B2AEF160180C0005D1659 /* Default-568h@2x.png */; };
+		853B2AF216018419005D1659 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1715BB8561002A1EB5 /* UIKit.framework */; };
 		853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1915BB8561002A1EB5 /* Foundation.framework */; };
 		853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853FEB1B15BB8561002A1EB5 /* CoreGraphics.framework */; };
@@ -41,7 +43,6 @@
 		85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CA415CA36FD00C17639 /* NLPlaylist.m */; };
 		85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CAE15CF5D5400C17639 /* NLPlaylistEditorViewController.m */; };
 		85B55CB215CF66E200C17639 /* NLPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CB115CF66E200C17639 /* NLPlaylistManager.m */; };
-		85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9419715BB987A009EF609 /* libfacebook_ios_sdk.a */; };
 		85D941A815BB98B1009EF609 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 85D9419C15BB98B1009EF609 /* FBDialog.bundle */; };
 		85D941AB15BB9EF8009EF609 /* NLFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941AA15BB9EF8009EF609 /* NLFriendsViewController.m */; };
 		85D941B915BBA535009EF609 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D941B815BBA535009EF609 /* iCarousel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -124,6 +125,7 @@
 		8505AB8915E600E000DC1B69 /* NLYoutubeSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeSearchViewController.m; sourceTree = "<group>"; };
 		8505AB8B15E61A2200DC1B69 /* NLYoutubeResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLYoutubeResultsViewController.h; sourceTree = "<group>"; };
 		8505AB8C15E61A2200DC1B69 /* NLYoutubeResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLYoutubeResultsViewController.m; sourceTree = "<group>"; };
+		853B2AEF160180C0005D1659 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		853FEB1315BB8561002A1EB5 /* Playor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Playor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853FEB1715BB8561002A1EB5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		853FEB1915BB8561002A1EB5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -292,8 +294,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853B2AF216018419005D1659 /* libfacebook_ios_sdk.a in Frameworks */,
 				85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */,
-				85D9419815BB987A009EF609 /* libfacebook_ios_sdk.a in Frameworks */,
 				853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */,
 				853FEB1A15BB8561002A1EB5 /* Foundation.framework in Frameworks */,
 				853FEB1C15BB8561002A1EB5 /* CoreGraphics.framework in Frameworks */,
@@ -306,6 +308,7 @@
 		853FEB0815BB8560002A1EB5 = {
 			isa = PBXGroup;
 			children = (
+				853B2AEF160180C0005D1659 /* Default-568h@2x.png */,
 				85D9419215BB97F7009EF609 /* Libraries */,
 				853FEB4D15BB8FE1002A1EB5 /* Managers */,
 				853FEB3715BB88D5002A1EB5 /* Categories */,
@@ -754,6 +757,7 @@
 				85F8F47816013E5000C14754 /* shuffle.png in Resources */,
 				85F8F47916013E5000C14754 /* splash.png in Resources */,
 				85F8F47A16013E5000C14754 /* splash@2x.png in Resources */,
+				853B2AF0160180C0005D1659 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -874,6 +878,7 @@
 		853FEB3215BB8561002A1EB5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Noctis/Noctis-Prefix.pch";
@@ -892,6 +897,7 @@
 		853FEB3315BB8561002A1EB5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -41,7 +41,8 @@
     [self.view setClipsToBounds:YES];
     [self.view setBackgroundColor:[UIColor blackColor]];
     
-    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 170)];
+    iCarousel *carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 170)];
+    [carousel setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 20)];
     [carousel setType:iCarouselTypeLinear];
     [carousel setDataSource:self];
     [carousel setDelegate:self];
