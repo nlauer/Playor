@@ -242,7 +242,7 @@
 
 - (NSString *)getNavigationTitle
 {
-    return @"My Friends";
+    return @"Friends";
 }
 
 - (void)movedToMainView

@@ -140,16 +140,6 @@
     if ([[searchBar text] isEqualToString:@"KhallilMangalji"]) {
         [searchBar setText:@"One Direction"];
     }
-    if ([[searchBar text] rangeOfString:@"NLSpinIt"].length > 0) {
-        [searchBar setText:[[searchBar text] stringByReplacingOccurrencesOfString:@"NLSpinIt" withString:@""]];
-        for (UIView *view in [self.view subviews]) {
-            [UIView animateWithDuration:0.3 animations:^{
-                CGAffineTransform rotationTransform = CGAffineTransformIdentity;
-                rotationTransform = CGAffineTransformRotate(rotationTransform, M_PI);
-                view.transform = rotationTransform;
-            }];
-        }
-    }
     
     currentSearchText_ = [searchBar text];
     currentBatchStartIndex_ = 0;

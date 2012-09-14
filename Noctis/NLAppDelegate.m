@@ -123,7 +123,6 @@
 {
     isPlayingVideo_ = YES;
     _videoPlayerDelegate = videoPlayerDelegate;
-    shouldLoadWebview_= YES;
     NSLog(@"PLAYING VIDEO");
     
     if (!isBackgrounded_) {
@@ -138,18 +137,8 @@
     [self setupVideoWebView];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://m.youtube.com/watch?v=%@", [video youtubeID]]]];
-    if (isBackgrounded_) {
-        [self loadVideoWebview:request];
-    } else {
-        [self performSelector:@selector(loadVideoWebview:) withObject:request afterDelay:1];
-    }
-}
-
-- (void)loadVideoWebview:(NSURLRequest *)urlRequest
-{
-    if (shouldLoadWebview_) {
-        [_videoWebView loadRequest:urlRequest];
-    }
+    shouldLoadWebview_= YES;
+    [_videoWebView loadRequest:request];
 }
 
 - (void)stopLoadingVideo

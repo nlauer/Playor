@@ -192,10 +192,11 @@ static NSString *const iRateMacAppStoreURLFormat = @"macappstore://itunes.apple.
         self.onlyPromptIfLatestVersion = YES;
         self.onlyPromptIfMainWindowIsAvailable = YES;
         self.promptAtLaunch = YES;
-        self.usesUntilPrompt = 5;
+        self.usesUntilPrompt = 3;
         self.eventsUntilPrompt = 10;
-        self.daysUntilPrompt = 5.0f;
+        self.daysUntilPrompt = 2.0f;
         self.remindPeriod = 1.0f;
+        self.appStoreID = 562152204;
         
         //message text, you may wish to customise these, e.g. for localisation
         self.messageTitle = nil; //set lazily so that appname can be included
@@ -247,7 +248,7 @@ static NSString *const iRateMacAppStoreURLFormat = @"macappstore://itunes.apple.
     }
     else
     {
-        return [NSString stringWithFormat:[self localizedStringForKey:@"If you enjoy using %@, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!"], self.applicationName];
+        return [NSString stringWithFormat:[self localizedStringForKey:@"If you enjoy using %@, would you like to rate it 5 stars?"], self.applicationName];
 
     }   
 }
