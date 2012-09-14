@@ -94,7 +94,7 @@ static NLFacebookManager *sharedInstance = NULL;
 
 - (void)fbSessionInvalidated
 {
-    [self signInWithFacebook];
+    
 }
 
 - (void)fbDidLogout

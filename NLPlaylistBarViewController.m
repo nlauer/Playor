@@ -90,7 +90,7 @@ static NLPlaylistBarViewController *sharedInstance = NULL;
     [shuffleButton_ addTarget:self action:@selector(shuffleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [shuffleButton_ setBackgroundImage:shuffleImage forState:UIControlStateNormal];
     [shuffleButton_ setBackgroundImage:[UIImage imageNamed:@"shuffle_pressed"] forState:UIControlStateSelected];
-        [continuousButton_ setSelected:_playlist.isShuffle];
+    [shuffleButton_ setSelected:_playlist.isShuffle];
     [playlistTitleView addSubview:shuffleButton_];
     
     UIImage *continuousImage = [UIImage imageNamed:@"continuous"];
