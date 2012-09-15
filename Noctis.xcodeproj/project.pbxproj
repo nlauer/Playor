@@ -39,6 +39,7 @@
 		856AF91D15BE52A100529F5C /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91115BE52A100529F5C /* SBJsonWriter.m */; };
 		856AF92015BE650400529F5C /* NLURLConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF91F15BE650400529F5C /* NLURLConnectionManager.m */; };
 		856AF96515C0C59400529F5C /* NLPlaylistBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */; };
+		858DE28116040D540061EE87 /* splash-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 858DE28016040D540061EE87 /* splash-568h@2x.png */; };
 		8595692815E9C179005A89F3 /* NLControllerChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8595692715E9C179005A89F3 /* NLControllerChooserViewController.m */; };
 		85B55CA515CA36FD00C17639 /* NLPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CA415CA36FD00C17639 /* NLPlaylist.m */; };
 		85B55CAF15CF5D5400C17639 /* NLPlaylistEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B55CAE15CF5D5400C17639 /* NLPlaylistEditorViewController.m */; };
@@ -182,6 +183,7 @@
 		856AF91F15BE650400529F5C /* NLURLConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLURLConnectionManager.m; sourceTree = "<group>"; };
 		856AF96315C0C59300529F5C /* NLPlaylistBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylistBarViewController.h; sourceTree = "<group>"; };
 		856AF96415C0C59400529F5C /* NLPlaylistBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLPlaylistBarViewController.m; sourceTree = "<group>"; };
+		858DE28016040D540061EE87 /* splash-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "splash-568h@2x.png"; path = "Assets/splash-568h@2x.png"; sourceTree = "<group>"; };
 		8595692615E9C179005A89F3 /* NLControllerChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLControllerChooserViewController.h; sourceTree = "<group>"; };
 		8595692715E9C179005A89F3 /* NLControllerChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLControllerChooserViewController.m; sourceTree = "<group>"; };
 		85B55CA315CA36FD00C17639 /* NLPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLPlaylist.h; sourceTree = "<group>"; };
@@ -586,6 +588,7 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				858DE28016040D540061EE87 /* splash-568h@2x.png */,
 				85FB370B1603FC4C001B7DC9 /* iTunesArtwork.png */,
 				85FB37071603FBD8001B7DC9 /* Icon-Small.png */,
 				85FB37081603FBD8001B7DC9 /* Icon-Small@2x.png */,
@@ -762,6 +765,7 @@
 				85FB37091603FBD8001B7DC9 /* Icon-Small.png in Resources */,
 				85FB370A1603FBD8001B7DC9 /* Icon-Small@2x.png in Resources */,
 				85FB370C1603FC4C001B7DC9 /* iTunesArtwork.png in Resources */,
+				858DE28116040D540061EE87 /* splash-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,6 +898,7 @@
 				);
 				PRODUCT_NAME = Playor;
 				PROVISIONING_PROFILE = "";
+				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -915,6 +920,7 @@
 				PRODUCT_NAME = Playor;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
