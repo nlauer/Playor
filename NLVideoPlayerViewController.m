@@ -36,6 +36,15 @@
     // Release any retained subviews of the main view.
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    //manually adjust the frame of the main view to prevent it from appearing under the status bar.
+    [super viewDidAppear:animated];
+    UIApplication *app = [UIApplication sharedApplication];
+    if(!app.statusBarHidden) {
+        [self.view setFrame:CGRectMake(0.0,app.statusBarFrame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - app.statusBarFrame.size.height)];
+    }
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);

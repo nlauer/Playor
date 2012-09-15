@@ -23,6 +23,7 @@
     BOOL isPlayingVideo_;
     BOOL isBackgrounded_;
     BOOL shouldLoadWebview_;
+    BOOL isVideoFullscreen_;
 }
 
 @synthesize window = _window;
@@ -75,6 +76,11 @@
 {
     if ([[NLFacebookManager sharedInstance] isSignedInWithFacebook]) {
         [[[NLFacebookManager sharedInstance] facebook] extendAccessTokenIfNeeded];
+    }
+    if (!isVideoFullscreen_) {
+        [[self containerController] dismissModalViewControllerAnimated:YES];
+        [_loadingView dismissLoadingView];
+        [self stopLoadingVideo];
     }
 }
 
@@ -177,12 +183,14 @@
 
 - (void)videoDidEnterFullscreen:(NSNotification *)note
 {
+    isVideoFullscreen_ = YES;
     [_loadingView dismissLoadingView];
     [NLUtils showInstructionWithMessage:@"Press the home button while a video is playing to listen to songs/playlists in the background" andKey:@"play_in_background"];
 }
 
 - (void)videoDidExitFullscreen:(NSNotification *)note
 {
+    isVideoFullscreen_ = NO;
     [self.containerController dismissModalViewControllerAnimated:!isBackgrounded_];
     isPlayingVideo_ = NO;
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -263,12 +271,14 @@
 
 - (void)videoDidEnterFullscreenInBackground
 {
+    isVideoFullscreen_ = YES;
     [_loadingView dismissLoadingView];
 }
 
 // Start playing next video with a background task
 - (void)videoDidExitFullscreenInBackground
 {
+    isVideoFullscreen_ = NO;
     [self.containerController dismissModalViewControllerAnimated:!isBackgrounded_];
     isPlayingVideo_ = NO;
     UIApplication *app = [UIApplication sharedApplication];
