@@ -113,7 +113,7 @@
 		85FB37061603D3EC001B7DC9 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB37021603D3EC001B7DC9 /* Icon@2x.png */; };
 		85FB37091603FBD8001B7DC9 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB37071603FBD8001B7DC9 /* Icon-Small.png */; };
 		85FB370A1603FBD8001B7DC9 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB37081603FBD8001B7DC9 /* Icon-Small@2x.png */; };
-		85FB370C1603FC4C001B7DC9 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FB370B1603FC4C001B7DC9 /* iTunesArtwork.png */; };
+		85FB370C1603FC4C001B7DC9 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 85FB370B1603FC4C001B7DC9 /* iTunesArtwork */; };
 		85FB458D15D4CAA200349534 /* NSArray+Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB458C15D4CAA200349534 /* NSArray+Videos.m */; };
 		85FB45B515DCB58600349534 /* NLContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B415DCB58600349534 /* NLContainerViewController.m */; };
 		85FB45B815DDF3E200349534 /* NLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FB45B715DDF3E200349534 /* NLUtils.m */; };
@@ -278,7 +278,7 @@
 		85FB37021603D3EC001B7DC9 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Assets/Icon@2x.png"; sourceTree = "<group>"; };
 		85FB37071603FBD8001B7DC9 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Assets/Icon-Small.png"; sourceTree = "<group>"; };
 		85FB37081603FBD8001B7DC9 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Assets/Icon-Small@2x.png"; sourceTree = "<group>"; };
-		85FB370B1603FC4C001B7DC9 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Assets/iTunesArtwork.png; sourceTree = "<group>"; };
+		85FB370B1603FC4C001B7DC9 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = Assets/iTunesArtwork; sourceTree = "<group>"; };
 		85FB458B15D4CAA200349534 /* NSArray+Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Videos.h"; sourceTree = "<group>"; };
 		85FB458C15D4CAA200349534 /* NSArray+Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Videos.m"; sourceTree = "<group>"; };
 		85FB45B315DCB58600349534 /* NLContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLContainerViewController.h; sourceTree = "<group>"; };
@@ -588,8 +588,7 @@
 		85FB45BD15E05E4C00349534 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				858DE28016040D540061EE87 /* splash-568h@2x.png */,
-				85FB370B1603FC4C001B7DC9 /* iTunesArtwork.png */,
+				85FB370B1603FC4C001B7DC9 /* iTunesArtwork */,
 				85FB37071603FBD8001B7DC9 /* Icon-Small.png */,
 				85FB37081603FBD8001B7DC9 /* Icon-Small@2x.png */,
 				85FB37011603D3EC001B7DC9 /* Icon.png */,
@@ -621,6 +620,7 @@
 				85F8F45D16013E4D00C14754 /* shuffle.png */,
 				85F8F45E16013E4E00C14754 /* splash.png */,
 				85F8F45F16013E4F00C14754 /* splash@2x.png */,
+				858DE28016040D540061EE87 /* splash-568h@2x.png */,
 				85F8F42D15FE86D400C14754 /* icon_button@2x.png */,
 				85F8F43215FE86D900C14754 /* my_friends@2x.png */,
 				85F8F43315FE86D900C14754 /* placeholder_background@2x.png */,
@@ -764,7 +764,7 @@
 				85FB37061603D3EC001B7DC9 /* Icon@2x.png in Resources */,
 				85FB37091603FBD8001B7DC9 /* Icon-Small.png in Resources */,
 				85FB370A1603FBD8001B7DC9 /* Icon-Small@2x.png in Resources */,
-				85FB370C1603FC4C001B7DC9 /* iTunesArtwork.png in Resources */,
+				85FB370C1603FC4C001B7DC9 /* iTunesArtwork in Resources */,
 				858DE28116040D540061EE87 /* splash-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -844,6 +844,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -859,6 +860,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -869,7 +871,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Nicholas Lauer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nicholas Lauer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -878,6 +881,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "751E7801-B54E-4321-A316-817D305164C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "751E7801-B54E-4321-A316-817D305164C6";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -920,6 +925,7 @@
 				PRODUCT_NAME = Playor;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};

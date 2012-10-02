@@ -75,8 +75,8 @@ static NLPlaylistManager *sharedInstance = NULL;
 - (NLPlaylist *)getCurrentPlaylist
 {
     int currentPlaylistIndex;
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"]) {
-        currentPlaylistIndex = [[[NSUserDefaults standardUserDefaults] objectForKey:@"currentIndex"] integerValue];
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"currentIndex"]) {
+        currentPlaylistIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"currentIndex"];
     } else {
         currentPlaylistIndex = 0;
     }
@@ -90,7 +90,7 @@ static NLPlaylistManager *sharedInstance = NULL;
 
 - (void)setCurrentPlaylist:(int)index
 {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:index] forKey:@"currentIndex"];
+    [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"currentIndex"];
     [[NLPlaylistBarViewController sharedInstance] updatePlaylist:[_playlists objectAtIndex:index]];
 }
 

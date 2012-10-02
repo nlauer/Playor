@@ -92,9 +92,8 @@
 - (void)selectIndexPath:(NSIndexPath *)indexPath
 {
     [[NLPlaylistManager sharedInstance] setCurrentPlaylist:indexPath.row];
-    NSIndexPath *oldIndexPath = selectedIndexPath_;
     selectedIndexPath_ = indexPath;
-    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:oldIndexPath, selectedIndexPath_, nil] withRowAnimation:UITableViewRowAnimationFade];
+    [_tableView reloadData];
 }
 
 #pragma mark -
