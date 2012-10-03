@@ -17,6 +17,7 @@
 #import "NLVideoLoadingView.h"
 #import "NLVideoPlayerViewController.h"
 #import "NLUtils.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation NLAppDelegate {
     UIBackgroundTaskIdentifier bgTask_;
@@ -46,6 +47,12 @@
                                        forState:UIControlStateNormal];
     [[UISlider appearance] setMinimumTrackImage:minImage 
                                        forState:UIControlStateNormal];
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    BOOL ok;
+    NSError *setCategoryError = nil;
+    ok = [audioSession setCategory:AVAudioSessionCategoryPlayback
+                             error:&setCategoryError];
     
     isPlayingVideo_ = NO;
     
@@ -78,7 +85,7 @@
         [[[NLFacebookManager sharedInstance] facebook] extendAccessTokenIfNeeded];
     }
     if (!isVideoFullscreen_) {
-        [[self containerController] dismissModalViewControllerAnimated:YES];
+        [[self containerController] dismissViewControllerAnimated:!isBackgrounded_ completion:nil];
         [_loadingView dismissLoadingView];
         [self stopLoadingVideo];
     }
@@ -325,7 +332,7 @@
     if (b && shouldLoadWebview_) {
         NLVideoPlayerViewController *vc = [[NLVideoPlayerViewController alloc] init];
         [vc.view addSubview:_videoWebView];
-        [self.containerController presentModalViewController:vc animated:!isBackgrounded_];
+        [self.containerController presentViewController:vc animated:!isBackgrounded_ completion:nil];
     }
     [b sendActionsForControlEvents:UIControlEventTouchUpInside];
 }

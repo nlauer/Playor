@@ -19,6 +19,7 @@
 		853FEB2815BB8561002A1EB5 /* NLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2715BB8561002A1EB5 /* NLAppDelegate.m */; };
 		853FEB2B15BB8561002A1EB5 /* NLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB2A15BB8561002A1EB5 /* NLViewController.m */; };
 		853FEB7115BB9588002A1EB5 /* NLFacebookManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 853FEB7015BB9588002A1EB5 /* NLFacebookManager.m */; };
+		855774C6161BF9C80024D194 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855774C5161BF9C80024D194 /* AVFoundation.framework */; };
 		856AF8E415BC616100529F5C /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E115BC616100529F5C /* FXImageView.m */; };
 		856AF8E515BC616100529F5C /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E315BC616100529F5C /* UIImage+FX.m */; };
 		856AF8E815BC7CD100529F5C /* NLFriendsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 856AF8E715BC7CD100529F5C /* NLFriendsDetailViewController.m */; };
@@ -142,6 +143,7 @@
 		853FEB2A15BB8561002A1EB5 /* NLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NLViewController.m; path = Noctis/NLViewController.m; sourceTree = "<group>"; };
 		853FEB6F15BB9588002A1EB5 /* NLFacebookManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NLFacebookManager.h; sourceTree = "<group>"; };
 		853FEB7015BB9588002A1EB5 /* NLFacebookManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NLFacebookManager.m; sourceTree = "<group>"; };
+		855774C5161BF9C80024D194 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		856AF8E015BC616100529F5C /* FXImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FXImageView.h; path = FXImageView/FXImageView.h; sourceTree = "<group>"; };
 		856AF8E115BC616100529F5C /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FXImageView.m; path = FXImageView/FXImageView.m; sourceTree = "<group>"; };
 		856AF8E215BC616100529F5C /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+FX.h"; path = "FXImageView/UIImage+FX.h"; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				855774C6161BF9C80024D194 /* AVFoundation.framework in Frameworks */,
 				853B2AF216018419005D1659 /* libfacebook_ios_sdk.a in Frameworks */,
 				85D941BB15BBA5A1009EF609 /* QuartzCore.framework in Frameworks */,
 				853FEB1815BB8561002A1EB5 /* UIKit.framework in Frameworks */,
@@ -339,6 +342,7 @@
 		853FEB1615BB8561002A1EB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				855774C5161BF9C80024D194 /* AVFoundation.framework */,
 				85D941BA15BBA5A1009EF609 /* QuartzCore.framework */,
 				853FEB1715BB8561002A1EB5 /* UIKit.framework */,
 				853FEB1915BB8561002A1EB5 /* Foundation.framework */,
@@ -881,8 +885,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "751E7801-B54E-4321-A316-817D305164C6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "751E7801-B54E-4321-A316-817D305164C6";
+				PROVISIONING_PROFILE = "26A25C6B-C0EE-4430-8768-22544BF047FD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "26A25C6B-C0EE-4430-8768-22544BF047FD";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -912,8 +916,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Nicholas Lauer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nicholas Lauer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Noctis/Noctis-Prefix.pch";
 				INFOPLIST_FILE = "Noctis/Noctis-Info.plist";
@@ -923,8 +927,8 @@
 					"\"$(SRCROOT)/facebook-ios-sdk\"",
 				);
 				PRODUCT_NAME = Playor;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "26A25C6B-C0EE-4430-8768-22544BF047FD";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "26A25C6B-C0EE-4430-8768-22544BF047FD";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
