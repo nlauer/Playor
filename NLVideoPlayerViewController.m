@@ -60,8 +60,4 @@
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationLandscapeLeft;
-}
-
 @end
